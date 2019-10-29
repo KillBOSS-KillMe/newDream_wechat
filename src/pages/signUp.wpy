@@ -1,0 +1,147 @@
+/*
+ * @Author: luow 
+ * @Date: 2019-10-29 11:05:01 
+ * @Last Modified by: luow
+ * @Last Modified time: 2019-10-29 11:19:10
+ */
+
+<template>
+  <view class="infoList">
+    <view class="item">
+      <label>姓名：</label>
+      <text>{{signUpInfo.name}}</text>
+    </view>
+    <view class="item">
+      <label>性别：</label>
+      <text>{{signUpInfo.age}}</text>
+    </view>
+    <view class="item">
+      <label>身份证号：</label>
+      <text>{{signUpInfo.IDCard}}</text>
+    </view>
+    <view class="item">
+      <label>联系方式：</label>
+      <text>{{signUpInfo.phone}}</text>
+    </view>
+    <view class="item">
+      <label>所属区县：</label>
+      <text>{{signUpInfo.address}}</text>
+    </view>
+    <view class="item">
+      <label>学校：</label>
+      <text>{{signUpInfo.school}}</text>
+    </view>
+    <view class="item">
+      <label>指导老师：</label>
+      <text>{{signUpInfo.teacher}}</text>
+    </view>
+    <view class="item">
+      <label>指导老师联系方式：</label>
+      <text>{{signUpInfo.teacherPhone}}</text>
+    </view>
+    <view class="item">
+      <label>自我介绍：</label>
+      <text>{{signUpInfo.introduction}}</text>
+    </view>
+    <view class="item">
+      <label>参赛宣言：</label>
+      <text>{{signUpInfo.declaration}}</text>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import nav from '../components/nav' // 底部导航
+  export default class SignUp extends wepy.page {
+    config = {
+      navigationBarTitleText: '报名情况'
+    }
+    components = {
+      nav: nav
+    }
+
+    mixins = []
+
+    data = {
+      signUpInfo: {
+        name: '二狗子',
+        age: '女',
+        IDCard: '61012419931111111111',
+        phone: '1999999999',
+        address: '陕西省西安市',
+        school: '西北大学',
+        teacher: '二狗子',
+        teacherPhone: '1999999999',
+        introduction: '二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子',
+        declaration: '二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子',
+      },
+    }
+
+    computed = {
+
+    }
+
+    methods = {
+    }
+
+    events = {
+
+    }
+
+    onLoad(options) {
+    }
+
+    // 下拉刷新
+    onPullDownRefresh() {
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+    }
+  }
+</script>
+<style lang="less">
+page{
+  border-top: 1rpx solid #D5D5D5;
+}
+.item{
+  width: 690rpx;
+  padding: 20rpx 30rpx;
+  font-size: 27rpx;
+  color: #666;
+  label{
+    font-weight: 600;
+    color: #333;
+  }
+}
+.swiper {
+  width: 690rpx;
+  height: 315rpx;
+  padding: 20rpx 30rpx;
+  border-radius: 20rpx;
+  overflow: hidden;
+  image {
+    width: 100%;
+    height: 100%;
+    border-radius: 10rpx;
+  }
+}
+.pageNav{
+  width: 690rpx;
+  height: auto;
+  padding: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: solid #F0F2F3;
+  border-width: 10rpx 0 10rpx 0;
+  .item{
+    width: 330rpx;
+    height: 170rpx;
+    border-radius: 10rpx;
+    background-color: #000;
+  }
+}
+</style>

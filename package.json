@@ -1,7 +1,7 @@
 {
-  "name": "putinwedding",
+  "name": "newdream",
   "version": "0.0.2",
-  "description": "普京婚庆",
+  "description": "丝路新梦想",
   "main": "dist/app.js",
   "scripts": {
     "dev": "wepy build --watch",

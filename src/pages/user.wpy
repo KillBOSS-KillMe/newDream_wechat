@@ -1,0 +1,170 @@
+/*
+ * @Author: luow 
+ * @Date: 2019-10-29 10:40:48 
+ * @Last Modified by: luow
+ * @Last Modified time: 2019-10-29 11:04:14
+ */
+<template>
+  <view>
+    <view class="userInfo">
+      <image class="bg" src="../image/daw.jpg" />
+      <view class="con">
+        <view class="name">
+          <image src="../image/daw.jpg" />
+          二狗子
+        </view>
+        <icon class="iconfont iconduihao"></icon>
+      </view>
+    </view>
+    <view class="navList">
+      <repeat for="{{navList}}" item="item">
+        <view class="item {{item.type == '0'?'border':''}}" data-id="{{item.id}}" @tap="pageNav">
+          <text>{{item.name}}</text>
+          <icon class="iconfont iconduihao"></icon>
+        </view>
+      </repeat>
+    </view>
+    <nav @childFn.user="goPage" @childFnOrReturn.user="goModifyUserInfo" />
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import nav from '../components/nav' // 底部导航
+  export default class User extends wepy.page {
+    config = {
+      navigationBarTitleText: '我的',
+      navigationStyle: 'custom'
+    }
+    components = {
+      nav: nav
+    }
+
+    mixins = []
+
+    data = {
+      userInfo: {},
+      navList: [
+        {id: '0', name: '已上传的作品', type: '0'},
+        {id: '1', name: '报名情况', type: '1'},
+        {id: '2', name: '我的点赞', type: '0'},
+        {id: '3', name: '我的评论', type: '1'},
+        {id: '4', name: '浏览记录', type: '0'},
+        {id: '5', name: '系统设置', type: '1'}
+      ]
+    }
+
+    computed = {
+
+    }
+
+    methods = {
+      // 底部导航跳转
+      // 底部导航跳转
+      goPage (url, evt) {
+        // if (this.verificationUserInfo()) {
+        //   return 
+        // }
+        // 销毁当前页{跳转}
+        this.$redirect(url)
+      },
+      pageNav(e) {
+        console.log(e)
+      }
+    }
+
+    events = {
+
+    }
+
+    onLoad(options) {
+    }
+    // 下拉刷新
+    onPullDownRefresh() {
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+      // 提交用户信息
+      this.getToken()
+      // 获取用户信息
+      this.onGetUserInfo()
+    }
+    
+
+    // 用户信息校验
+    verificationUserInfo() {
+      if (!this.userInfo.hasOwnProperty('id')) {
+        wx.showToast({
+          title: "用户信息加载中...",
+          icon: 'none',
+        });
+        return true
+      }
+    }
+    
+  }
+</script>
+<style lang="less">
+icon{
+  font-size: 25rpx;
+  color: #999;
+}
+.userInfo {
+  width: 750rpx;
+  height: 280rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  icon{
+    color: #fff;
+  }
+  .bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+  .con {
+    width: 690rpx;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+    view{
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    image{
+      width: 114rpx;
+      height: 114rpx;
+      border-radius: 114rpx;
+      margin-right: 20rpx;
+    }
+    .name{
+      font-size: 32rpx;
+      font-weight: 600;
+      color: #fff;
+    }
+  }
+}
+.navList{
+  .item{
+    width: 690rpx;
+    height: auto;
+    padding: 30rpx;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .border{
+    border-top: 10rpx solid #F0F2F3;
+  }
+}
+</style>

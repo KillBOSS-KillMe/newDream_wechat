@@ -1,0 +1,148 @@
+/*
+ * @Author: luow 
+ * @Date: 2019-10-29 11:05:01 
+ * @Last Modified by: luow
+ * @Last Modified time: 2019-10-29 14:47:06
+ */
+
+<template>
+  <view class="infoList">
+    <repeat for="{{commentList}}" item="item">
+      <view class="item">
+        <view class="tiele">
+          <label>{{item.title}}</label>
+          <text>回复</text>
+        </view>
+        <view class="con">
+          <image class="userImg" src="../image/daw.jpg" />
+          <view class="info">
+            <text class="name">二狗子</text>
+            <label>{{item.title}}</label>
+          </view>
+          <image src="../image/daw.jpg" />
+        </view>
+      </view>
+    </repeat>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class CommentList extends wepy.page {
+     config = {
+      navigationBarTitleText: '评论列表'
+    }
+    components = {
+    }
+    mixins = []
+
+    data = {
+      commentList: [
+        {
+          title: '三枪拍案惊奇',
+          userNmae: '萨尔', 
+          userImg: '../image/daw.jpg',
+          con: '内容内容内容内容内容内容内容内容内容',
+          iamge: '../image/daw.jpg' 
+        },{
+          title: '三枪拍案惊奇',
+          userNmae: '萨尔', 
+          userImg: '../image/daw.jpg',
+          con: '内容内容内容内容内容内容内容内容内容',
+          iamge: '../image/daw.jpg' 
+        },{
+          title: '三枪拍案惊奇',
+          userNmae: '萨尔', 
+          userImg: '../image/daw.jpg',
+          con: '内容内容内容内容内容内容内容内容内容',
+          iamge: '../image/daw.jpg' 
+        },{
+          title: '三枪拍案惊奇',
+          userNmae: '萨尔', 
+          userImg: '../image/daw.jpg',
+          con: '内容内容内容内容内容内容内容内容内容',
+          iamge: '../image/daw.jpg' 
+        }
+      ]
+    }
+
+    computed = {
+
+    }
+
+    methods = {
+    }
+
+    events = {
+
+    }
+
+    onLoad(options) {
+    }
+
+    // 下拉刷新
+    onPullDownRefresh() {
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+    }
+  }
+</script>
+<style lang="less">
+page{
+  border-top: 1rpx solid #D5D5D5;
+}
+.item{
+  width: 690rpx;
+  height: auto;
+  padding: 30rpx;
+  border-bottom: 10rpx solid #F0F2F3;
+  .tiele{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    label{
+      width: 590rpx;
+      font-size: 31rpx;
+      font-weight: 600;
+      color: #333333;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    text{
+      padding: 5rpx 10rpx;
+      font-size: 25rpx;
+      color: #494949;
+      border: 1rpx solid #BABABA;
+      border-radius: 5rpx;
+    }
+  }
+  .con{
+    display: flex;
+    // align-items: center;
+    justify-content: space-between;
+    margin-top: 30rpx;
+  }
+  .info{
+    width: 540rpx;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-direction: column;
+  }
+  .userImg{
+    width: 50rpx;
+    height: 50rpx;
+    border-radius: 50rpx;
+  }
+  image{
+    width: 120rpx;
+    height: 120rpx;
+    border-radius: 10rpx;
+  }
+}
+  
+</style>

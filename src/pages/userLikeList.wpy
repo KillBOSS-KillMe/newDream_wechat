@@ -1,26 +1,18 @@
 /*
  * @Author: luow 
- * @Date: 2019-10-29 11:05:01 
+ * @Date: 2019-10-29 15:23:31 
  * @Last Modified by: luow
- * @Last Modified time: 2019-10-29 15:22:49
+ * @Last Modified time: 2019-10-29 15:39:49
  */
-
 <template>
   <view class="infoList">
-    <repeat for="{{commentList}}" item="item">
-      <view class="item">
-        <view class="tiele">
-          <label>{{item.title}}</label>
-          <text>回复</text>
+    <repeat for="{{likeList}}" item="item">
+      <view class="item" data-id="{{item.id}}">
+        <view class="info">
+          <text class="title">{{item.title}}</text>
+          <text class="time">{{item.time}}点赞</text>
         </view>
-        <view class="con">
-          <image class="userImg" src="../image/daw.jpg" />
-          <view class="info">
-            <text class="name">二狗子</text>
-            <label>{{item.title}}</label>
-          </view>
-          <image src="../image/daw.jpg" />
-        </view>
+        <image src="{{item.iamge}}" />
       </view>
     </repeat>
   </view>
@@ -37,30 +29,26 @@
     mixins = []
 
     data = {
-      commentList: [
+      likeList: [
         {
+          id: '1',
           title: '三枪拍案惊奇',
-          userNmae: '萨尔', 
-          userImg: '../image/daw.jpg',
-          con: '内容内容内容内容内容内容内容内容内容',
+          time: '2019.10.10', 
           iamge: '../image/daw.jpg' 
         },{
+          id: '1',
           title: '三枪拍案惊奇',
-          userNmae: '萨尔', 
-          userImg: '../image/daw.jpg',
-          con: '内容内容内容内容内容内容内容内容内容',
+          time: '2019.10.10', 
           iamge: '../image/daw.jpg' 
         },{
+          id: '1',
           title: '三枪拍案惊奇',
-          userNmae: '萨尔', 
-          userImg: '../image/daw.jpg',
-          con: '内容内容内容内容内容内容内容内容内容',
+          time: '2019.10.10',
           iamge: '../image/daw.jpg' 
         },{
+          id: '1',
           title: '三枪拍案惊奇',
-          userNmae: '萨尔', 
-          userImg: '../image/daw.jpg',
-          con: '内容内容内容内容内容内容内容内容内容',
+          time: '2019.10.10',
           iamge: '../image/daw.jpg' 
         }
       ]
@@ -97,57 +85,28 @@ page{
 .item{
   width: 690rpx;
   height: auto;
-  padding: 30rpx;
-  border-bottom: 10rpx solid #F0F2F3;
-  .tiele{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    label{
-      width: 590rpx;
-    }
-    text{
-      padding: 5rpx 10rpx;
-      font-size: 25rpx;
-      color: #494949;
-      border: 1rpx solid #BABABA;
-      border-radius: 5rpx;
-    }
-  }
-  .con{
-    display: flex;
-    // align-items: center;
-    justify-content: flex-start;
-    margin-top: 30rpx;
-  }
+  padding: 30rpx 0;
+  margin: 0 30rpx;
+  border-bottom: 1rpx solid #F0F2F3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   .info{
-    width: 500rpx;
-    padding: 0 10rpx;
+    width: 550rpx;
+    height: 120rpx;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     flex-direction: column;
   }
-  .name{
-    font-size: 26rpx;
-    color: #333333;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-    padding-top: 7rpx;
+  .title{
+    font-size: 33rpx;
+    font-weight: 600;
+    color: #333;
   }
-  label{
-      font-size: 31rpx;
-      font-weight: 600;
-      color: #333333;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      white-space:nowrap;
-    }
-  .userImg{
-    width: 50rpx;
-    height: 50rpx;
-    border-radius: 50rpx;
+  .time{
+    font-size: 20rpx;
+    color: #999;
   }
   image{
     width: 120rpx;

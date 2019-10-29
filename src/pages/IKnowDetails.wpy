@@ -1,0 +1,80 @@
+/*
+ * @Author: luow 
+ * @Date: 2019-10-29 11:05:01 
+ * @Last Modified by: luow
+ * @Last Modified time: 2019-10-29 17:35:06
+ */
+
+<template>
+  <view>
+    <view class="list">
+      <repeat for="{{list}}" item="item">
+        <text>
+          {{index + 1}}.{{item}}
+        </text>
+      </repeat>
+    </view>
+  </view>
+  
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class IKnowDetails extends wepy.page {
+     config = {
+      navigationBarTitleText: '文章标题'
+    }
+    components = {
+    }
+    mixins = []
+
+    data = {
+      list: [
+        '内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容',
+        '内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容',
+        '内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容',
+        '内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容',
+        '内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容',
+        '内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容',
+        '内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容',
+        '内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容',
+      ]
+    }
+
+    computed = {
+
+    }
+
+    methods = {
+    }
+
+    events = {
+
+    }
+
+    onLoad(options) {
+    }
+
+    // 下拉刷新
+    onPullDownRefresh() {
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+    }
+  }
+</script>
+<style lang="less">
+page{
+  border-top: 1rpx solid #D5D5D5;
+}
+.list{
+  width: 690rpx;
+  height: auto;
+  padding: 30rpx;
+  font-size: 28rpx;
+  color: #999;
+}
+  
+</style>

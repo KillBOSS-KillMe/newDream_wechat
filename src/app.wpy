@@ -1,0 +1,607 @@
+// customData = {}  // 自定义数据
+// customFunction ()　{}  // 自定义方法
+// onLoad () {}  // 在Page和Component共用的生命周期函数
+// onShow () {}  // 只在Page中存在的页面生命周期函数
+// config = {};  // 只在Page实例中存在的配置数据，对应于原生的page.json文件
+// data = {};  // 页面所需数据均需在这里声明，可用于模板数据绑定
+// components = {};  // 声明页面中所引用的组件，或声明组件中所引用的子组件
+// mixins = [];  // 声明页面所引用的Mixin实例
+// computed = {};  // 声明计算属性（详见后文介绍）
+// watch = {};  // 声明数据watcher（详见后文介绍）
+// methods = {};  // 声明页面wxml中标签的事件处理函数。注意，此处只用于声明页面wxml中标签的bind、catch事件，自定义方法需以自定义方法的方式声明
+// 普通自定义方法在methods对象外声明，与methods平级
+// events = {};  // 声明组件之间的事件处理函数
+//props  {传值}  在WePY中属于  父子组件之间  传值的一种机制
+
+// 页面跳转，传参写法
+// this.$redirect('./page2', {a: 1, b: 2})
+// this.$redirect({
+//   url: './pages?a=1&b=2'
+// });
+// this.$navigate(url)
+
+// 阴影边框
+// box-shadow: #f1fefb 1rpx 1rpx 10rpx 5rpx;
+
+// flexflexflexflexflexflexflexflex
+// display: flex;
+// align-items: center;
+// justify-content: space-between;
+// 竖向
+// flex-direction: column;
+// 换行
+// display: flex;
+// align-items: center;
+// justify-content: space-between;
+// flex-direction: row;
+// flex-wrap: wrap;
+
+
+
+// 居右
+// flex-direction:row;
+// justify-content:flex-end
+
+// vertical-align:middle;
+
+// overflow:hidden;
+// text-overflow:ellipsis;
+// white-space:nowrap;
+
+// 自动换行
+// word-break:break-all;
+
+// overflow:hidden;
+// text-overflow:ellipsis;
+// white-space:nowrap;
+
+
+<script>
+import wepy from 'wepy';
+import 'wepy-async-function';
+
+import { setStore } from 'wepy-redux';
+import configStore from './store';
+
+const store = configStore();
+setStore(store);
+
+export default class extends wepy.app {
+  config = {
+    pages: [
+      // 首页模块
+      'pages/index', // 首页
+      
+    ],
+    permission: {
+      'scope.userLocation': {
+        desc: '你的位置信息将用于小程序位置接口的效果展示'
+      }
+    },
+    window: {
+      backgroundTextStyle: 'light',
+      navigationBarBackgroundColor: '#fff',
+      navigationBarTitleText: 'WeChat',
+      navigationBarTextStyle: 'black'
+    }
+  };
+
+  globalData = {
+    userInfo: {},
+    // 接口请求路径
+    requestUrl: 'http://192.168.0.101:8083/api/v1/wedding_api',
+    // 图片路径
+    requestImgUrl: 'https://192.168.0.101/api/v1/wedding_api',
+    mapKey: 'GCABZ-J4G64-2WKUX-DNQMK-MVCGK-OSFD4',
+    apikey: '123456',
+    token: '',
+    isTourist: false, // 是否是游客
+    cityGather: '',  // 城市集合
+  };
+
+  constructor() {
+    super();
+    this.use('requestfix');
+  }
+
+  onLaunch() {
+    this.testAsync();
+  }
+  // 获取Token
+  getToken() {
+    wx.login({
+      success: res => {
+        if (res.code) {
+          console.log(res.code)
+          wx.request({
+            url: `${this.globalData.requestUrl}/auth/get_token`,
+            method: 'POST',
+            header: {
+              apikey: this.globalData.apikey
+            },
+            data: {
+              code: res.code
+            },
+            success: data => {
+              wx.hideToast()
+              data = this.$parent.null2str(data)
+              if (data.data.code == '8888') {
+                let token = `${data.data.msg.token_type} ${data.data.msg.token}`
+                this.$parent.globalData.token = token
+              }
+            }
+          })
+        }
+      }
+    })
+  }
+  // 拨打电话
+  runCall(phone) {
+    wx.makePhoneCall({
+      phoneNumber: phone
+    })
+  }
+  sleep(s) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('promise resolved');
+      }, s * 1000);
+    });
+  }
+  // 点击图片放大，长按后可操作
+  shareQRCodeImg(e) {
+    let url =  e.currentTarget.dataset.imgurl
+    wx.previewImage({
+      current: [url], // 当前显示图片的http链接   
+      urls: [url] // 需要预览的图片http链接列表   
+    })
+  }
+  // 删除照片
+  deleImg(that, e) {
+    var idx = e.currentTarget.dataset.idx
+    var imgArr = that.data.imgArr || []
+    imgArr.splice(idx, 1)
+    that.setData({
+      imgArr
+    })
+  }
+  // 上传图片
+  uploadImg(that) {
+    var self = this
+    wx.chooseImage({
+      success: function (res) {
+        wx.showToast({
+          title: '图片上传中',
+          icon: 'loading'
+        });
+        var imgArr = that.data.imgArr || [] // 放图片的数组
+        var imgLength = that.data.imgLength || 9 //默认上传9张图片
+        if (imgArr.length + res.tempFiles.length > imgLength) {
+          wx.showToast({
+            title: `最多上传${imgLength}张图片`,
+            icon: 'none'
+          })
+          return false
+        }
+        Promise.all(res.tempFiles.map(item => {
+          return new Promise((resolve, reject) => {
+            wx.uploadFile({
+              url: `${self.globalData.requestUrl}/work/upload_file`,
+              filePath: item.path,
+              name: 'photo',
+              success(res) {
+                resolve({
+                  path: JSON.parse(res.data).data
+                })
+              }
+            })
+          })
+        })).then(e => {
+          wx.hideToast();
+          that.setData({
+            imgArr: imgArr.concat(e)
+          })
+        }).catch(err => console.log(err))
+      },
+    })
+  }
+  /**
+  * 时间戳转时间
+  */
+  transformTime(timestamp = +new Date()) {
+    if (timestamp) {
+      var time = new Date(timestamp);
+      var y = time.getFullYear(); //getFullYear方法以四位数字返回年份
+      var M = time.getMonth() + 1; // getMonth方法从 Date 对象返回月份 (0 ~ 11)，返回结果需要手动加一
+      var d = time.getDate(); // getDate方法从 Date 对象返回一个月中的某一天 (1 ~ 31)
+      var h = time.getHours(); // getHours方法返回 Date 对象的小时 (0 ~ 23)
+      var m = time.getMinutes(); // getMinutes方法返回 Date 对象的分钟 (0 ~ 59)
+      var s = time.getSeconds(); // getSeconds方法返回 Date 对象的秒数 (0 ~ 59)
+      return y + '-' + M + '-' + d + ' ' + h + ':' + m + ':' + s;
+    } else {
+      return '';
+    }
+  }
+  /**
+  * null => ''
+  * @param {*} data 要处理的数据
+  */
+  null2str(data) {
+    for (let x in data) {
+      if (data[x] === null) { // 如果是null 把直接内容转为 ''
+        data[x] = ''
+      } else {
+        if (Array.isArray(data[x])) { // 是数组遍历数组 递归继续处理
+          data[x] = data[x].map(z => {
+            return this.null2str(z)
+          })
+        }
+        if(typeof(data[x]) === 'object'){ // 是json 递归继续处理
+          data[x] = this.null2str(data[x])
+        }
+      }
+    }
+    return data
+  }
+  async testAsync() {
+    const data = await this.sleep(3);
+    console.log(data);
+  }
+
+  getUserInfo(cb) {
+    const that = this;
+    if (this.globalData.userInfo) {
+      return this.globalData.userInfo;
+    }
+    wepy.getUserInfo({
+      success(res) {
+        that.globalData.userInfo = res.userInfo;
+        cb && cb(res.userInfo);
+      }
+    });
+  }
+  /**
+   * 获取上一个月
+   *
+   * @date 格式为yyyy-mm-dd的日期，如：2014-01-25
+   */
+  getPreMonth(date) {
+      var arr = date.split('-');
+      var year = arr[0]; //获取当前日期的年份
+      var month = arr[1]; //获取当前日期的月份
+      var day = arr[2]; //获取当前日期的日
+      var days = new Date(year, month, 0);
+      days = days.getDate(); //获取当前日期中月的天数
+      var year2 = year;
+      var month2 = parseInt(month) - 1;
+      if (month2 == 0) {
+          year2 = parseInt(year2) - 1;
+          month2 = 12;
+      }
+      var day2 = day;
+      var days2 = new Date(year2, month2, 0);
+      days2 = days2.getDate();
+      if (day2 > days2) {
+          day2 = days2;
+      }
+      if (month2 < 10) {
+          month2 = '0' + month2;
+      }
+      // var t2 = year2 + '-' + month2 + '-' + day2;
+      var t2 = year2 + '-' + month2 + '-' + 0;
+      return t2;
+  }
+  
+  /**
+   * 获取下一个月
+   *
+   * @date 格式为yyyy-mm-dd的日期，如：2014-01-25
+   */        
+  getNextMonth(date) {
+      var arr = date.split('-');
+      var year = arr[0]; //获取当前日期的年份
+      var month = arr[1]; //获取当前日期的月份
+      var day = arr[2]; //获取当前日期的日
+      var days = new Date(year, month, 0);
+      days = days.getDate(); //获取当前日期中的月的天数
+      var year2 = year;
+      var month2 = parseInt(month) + 1;
+      if (month2 == 13) {
+          year2 = parseInt(year2) + 1;
+          month2 = 1;
+      }
+      var day2 = day;
+      var days2 = new Date(year2, month2, 0);
+      days2 = days2.getDate();
+      if (day2 > days2) {
+          day2 = days2;
+      }
+      if (month2 < 10) {
+          month2 = '0' + month2;
+      }
+  
+      // var t2 = year2 + '-' + month2 + '-' + day2;
+      var t2 = year2 + '-' + month2 + '-' + 0;
+      return t2;
+  }
+}
+</script>
+<style lang="less">
+#getUserInfo{
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  opacity: 0;
+  z-index: 999;
+}
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+.sub,
+.submit {
+  // height: 200;
+  width: 690rpx;
+  height: auto;
+  padding: 50rpx 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  view {
+    width: 604rpx;
+    height: 100rpx;
+    border-radius: 5rpx;
+    background-color: #f42652;
+    color: #fff;
+    font-size: 32rpx;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+.sub {
+  // height: 200;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.maskCon {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  .showCon {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: 10rpx;
+    z-index: 999;
+    position: fixed;
+    margin: auto;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+  }
+  .name {
+    font-size: 30rpx;
+    font-weight: 600;
+    color: #1f1f1f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  input {
+    width: 280rpx;
+    height: 80rpx;
+    border-radius: 10rpx;
+    border: 1rpx solid #dfdfdf;
+    color: #1f1f1f;
+    font-size: 28rpx;
+    text-align: center;
+  }
+  .maskSub {
+    width: 280rpx;
+    height: 80rpx;
+    border-radius: 10rpx;
+    background-color: #f42652;
+    color: #fff;
+    font-size: 32rpx;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mask {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 100;
+  }
+}
+.listNull{ 
+  width: 100%; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  padding: 20rpx 0; 
+  font-size: 25rpx; 
+  // font-weight: 600; 
+  color: #898989; 
+ } 
+// 多选框样式
+  checkbox .wx-checkbox-input {
+    border-radius: 50%; /* 圆角 */
+    width: 40rpx; /* 背景的宽 */
+    height: 40rpx; /* 背景的高 */
+  }
+  checkbox .wx-checkbox-input.wx-checkbox-input-checked {
+    border: none;
+    background: #fc6800;
+  }
+  checkbox .wx-checkbox-input.wx-checkbox-input-checked::before {
+    border-radius: 50%; /* 圆角 */
+    width: 40rpx; /* 选中后对勾大小，不要超过背景的尺寸 */
+    height: 40rpx; /* 选中后对勾大小，不要超过背景的尺寸 */
+    line-height: 40rpx;
+    text-align: center;
+    font-size: 40rpx; /* 对勾大小 30rpx */
+    color: #fff; /* 对勾颜色 白色 */
+    background: transparent;
+    // transform:translate(-50%, -50%) scale(1);
+    // -webkit-transform:translate(-50%, -50%) scale(1);
+  }
+  @font-face {font-family: "iconfont";
+    src: url('//at.alicdn.com/t/font_1459873_3bgrifwloe1.eot?t=1571912669347'); /* IE9 */
+    src: url('//at.alicdn.com/t/font_1459873_3bgrifwloe1.eot?t=1571912669347#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('data:application/x-font-woff2;charset=utf-8;base64,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') format('woff2'),
+    url('//at.alicdn.com/t/font_1459873_3bgrifwloe1.woff?t=1571912669347') format('woff'),
+    url('//at.alicdn.com/t/font_1459873_3bgrifwloe1.ttf?t=1571912669347') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+    url('//at.alicdn.com/t/font_1459873_3bgrifwloe1.svg?t=1571912669347#iconfont') format('svg'); /* iOS 4.1- */
+  }
+
+  .iconfont {
+    font-family: "iconfont" !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .iconjiantouarrow486:before {
+    content: "\e6ab";
+  }
+
+  .iconjiantouarrow492:before {
+    content: "\e6b2";
+  }
+
+  .iconduihao:before {
+    content: "\e61e";
+  }
+
+  .iconxin1:before {
+    content: "\e635";
+  }
+
+  .iconxin:before {
+    content: "\e608";
+  }
+
+  .iconshijian:before {
+    content: "\e61a";
+  }
+
+  .iconbuoumaotubiao20:before {
+    content: "\e612";
+  }
+
+  .iconjiantou1:before {
+    content: "\e603";
+  }
+
+  .icondingwei:before {
+    content: "\e639";
+  }
+
+  .icondianhuazhengzaibohao:before {
+    content: "\e76e";
+  }
+
+  .iconguanbi:before {
+    content: "\e616";
+  }
+
+  .iconjiantou_zuo:before {
+    content: "\e663";
+  }
+
+  .iconfabu:before {
+    content: "\e6a4";
+  }
+
+  .iconfanhui:before {
+    content: "\e6a5";
+  }
+
+  .iconfenxiang:before {
+    content: "\e6a6";
+  }
+
+  .iconjiantou:before {
+    content: "\e6a7";
+  }
+
+  .iconkefu:before {
+    content: "\e6a8";
+  }
+
+  .iconsousuo:before {
+    content: "\e6aa";
+  }
+
+  .iconfabu1:before {
+    content: "\e6ac";
+  }
+
+  .iconweixuanzhong:before {
+    content: "\e6ad";
+  }
+
+  .iconweishoucang:before {
+    content: "\e6ae";
+  }
+
+  .iconwode:before {
+    content: "\e6af";
+  }
+
+  .iconshouye:before {
+    content: "\e6b0";
+  }
+
+  .iconxiaoxi:before {
+    content: "\e6b1";
+  }
+
+  .iconxiaoxi1:before {
+    content: "\e6b3";
+  }
+
+  .iconshezhi:before {
+    content: "\e6b4";
+  }
+
+  .icondianhua1:before {
+    content: "\e6b5";
+  }
+
+  .iconchuanzhaopian:before {
+    content: "\e6b7";
+  }
+
+  .iconwode1:before {
+    content: "\e6b8";
+  }
+
+  .iconshouye1:before {
+    content: "\e6ba";
+  }
+
+
+</style>

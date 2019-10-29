@@ -1,0 +1,662 @@
+<template>
+  <view>
+    <view class="index">
+      <view class="address">
+        <view>
+          <icon class="iconfont icondingwei"></icon>
+          <text>{{address}}</text>
+        </view>
+        <icon class="iconfont iconkefu"></icon>
+      </view>
+      <swiper wx:if="{{swiperList.length > 0}}" class='swiper' indicator-dots="true" autoplay='true' interval='5000' duration='2000'>
+        <repeat for="{{swiperList}}" item="item">
+          <swiper-item data-id="{{ item.id }}">
+            <image src="{{ item.image_url }}" bindtap='shareQRCodeImg' data-imgurl="{{requestImgUrl + item.image_url}}" />
+          </swiper-item>
+        </repeat>
+      </swiper>
+      <view class="pageNav">
+        <repeat for="{{pageNav}}" item="item">
+          <view class="item" data-id="{{item.id}}" @tap="pageNavClick">
+            <image src="{{item.img}}" />
+            <text>{{item.name}}</text>
+          </view>
+        </repeat>
+      </view>
+      <view class="VIP">
+        <image src="../image/vip.png" />
+      </view>
+      <view class="listCon">
+        <view class="listTile">
+          <text class="name">服务推荐</text>
+          <view @tap='recommendMore' data-id="1">
+            更多
+            <icon class="iconfont iconjiantou"></icon>
+          </view>
+        </view>
+        <view class="list">
+          <repeat for="{{serviceList}}" item="item">
+            <view class="item" data-id="{{item.id}}" @tap="shopDetail">
+              <image src="{{item.images}}" />
+              <view class="name">{{item.title}}</view>
+              <view class="price">
+                ￥{{item.money}}
+                <text>起</text>
+              </view>
+            </view>
+          </repeat>
+        </view>
+      </view>
+      <view class="listCon">
+        <view class="listTile">
+          <text class="name">人气推荐</text>
+          <view @tap='recommendMore' data-id="2">
+            更多
+            <icon class="iconfont iconjiantou"></icon>
+          </view>
+        </view>
+        <view class="list">
+          <repeat for="{{peopleList}}" item="item">
+            <view class="item" data-id="{{item.id}}" @tap="peopleDetail">
+              <image src="{{item.images}}" />
+              <view class="name">{{item.title}}</view>
+              <view class="price">
+                ￥{{item.money}}
+                <text>起</text>
+              </view>
+            </view>
+          </repeat>
+        </view>
+      </view>
+    </view>
+    <view class="maskCon" wx:if="{{collectionStr}}">
+      <view class="mask" @tap="hideMask"></view>
+      <view class="showCon">
+        <view class="name">为了方便您使用此产品，点击</view>
+        <view class="name">右上角按钮，选择“添加到桌面”</view>
+      </view>
+    </view>
+    <nav @childFn.user="goPage" @childFnOrReturn.user="goModifyUserInfo" />
+    <button open-type="getUserInfo" id='getUserInfo' wx:if="{{userInfoButtonShow}}" lang="zh_CN" @getuserinfo="onGetUserInfo"></button>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import nav from '../components/nav' // 底部导航
+  export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '普京婚庆'
+    }
+    components = {
+      nav: nav
+    }
+
+    mixins = []
+
+    data = {
+      userInfo: {},
+      address: '',
+      userInfoButtonShow: true,
+      swiperList: [],
+      pageNav: [
+        {id: '1', name: '全部商家', img: '../image/allMerchant.png'},
+        {id: '2', name: '抢单', img: '../image/grabOrder.png' },
+        {id: '3', name: '服务', img: '../image/service.png' },
+        {id: '4', name: '同行互换', img: '../image/exchange.png'}
+      ],
+      serviceList: [],
+      peopleList: [],
+      collectionStr: true,
+      
+      cityNode: [],
+      searchList: [],
+      longitude: 0,
+      latitude: 0
+    }
+
+    computed = {
+
+    }
+
+    methods = {
+      // 底部导航跳转
+      // 底部导航跳转
+      goPage (url, evt) {
+        // if (this.verificationUserInfo()) {
+        //   return 
+        // }
+        // 销毁当前页{跳转}
+        this.$redirect(url)
+      },
+      // 页面中部导航点击事件
+      pageNavClick(e) {
+        let id = e.currentTarget.dataset.id
+        if(id=='1'){
+          //全部商品
+          this.$navigate({url:"/pages/productSelIndustry"})
+        }else if(id=='2'){
+          //抢单
+          this.$navigate({url:"/pages/grabOrder"})
+        }else if(id=='3'){
+          //服务
+          this.$navigate({url:"/pages/service"})
+        }else if(id=='4'){
+          //同行互换
+          this.$navigate({url:"/pages/interactive"})
+        }
+        this.$apply()
+      },
+      // 弹框显示
+      hideMask() {
+        wx.setStorage({
+          key: 'addCollection',
+          data: false
+        })
+        if (this.collectionStr) {
+          this.collectionStr = false
+        } else {
+          this.collectionStr = true
+        }
+        this.$apply()
+      },
+      //服务推荐商品详情
+      shopDetail(e){
+         let id = e.currentTarget.dataset.id
+         let url = `/pages/fillOrder?id=${id}`
+         this.$navigate(url)
+         this.$apply()
+      },
+      //人气推荐商品详情
+      peopleDetail(e){
+         let id = e.currentTarget.dataset.id
+         let url = `/pages/fillOrder?id=${id}`
+         this.$navigate(url)
+         this.$apply()
+      },
+      //服务人气推荐更多
+      recommendMore(e){
+        let id = e.currentTarget.dataset.id
+        //1服务推荐 2人气推荐
+        if(id=='1'){
+          let url = `/pages/serviceRecommend`
+          this.$navigate(url)
+        }else if(id=='2'){
+          let url = `/pages/peopleRecommend`
+          this.$navigate(url)
+        }
+        this.$apply()
+      }
+    }
+
+    events = {
+
+    }
+
+    onLoad(options) {
+      // 收藏小程序提示显示
+      this.addCollectionShow()
+      // 分享信息获取
+      if (options.hasOwnProperty("scene")) {
+        let data = options.scene.split('%3D')
+        if (data[0] == 'pid') {
+          this.$parent.globalData.pid = data[1]
+        } else {
+          this.$parent.globalData.admin_id = data[1]
+        }
+      }
+      this.mapKey = this.$parent.globalData.mapKey
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+      
+      // 获取用户信息
+      this.onGetUserInfo()
+      let token = this.$parent.globalData.token
+      if (token != '') {
+        // 轮播图加载
+        this.getSwiperList()
+        // 获取定位及地址
+        this.getLocation()
+        // 用户信息获取
+        this.setUserInfo()
+        // 服务推荐
+        this.getServiceList()
+        // 人气推荐
+        this.getPopularityList()
+      } else {
+        // 获取Token
+        this.getToken()
+      }
+      
+      
+    }
+    // 服务推荐
+    getServiceList() {
+      wx.showToast({
+        title: "加载中...",
+        icon: 'none',
+        duration: 100
+      });
+      wx.request({
+        url: `${this.$parent.globalData.requestUrl}/index/get_order_recommend_list`,
+        method: 'GET',
+        header: {
+          authorization: this.$parent.globalData.token,
+          apikey: this.$parent.globalData.apikey
+        },
+        data: {
+          
+        },
+        success: data => {
+          wx.hideToast()
+          data = this.$parent.null2str(data)
+
+          if (data.data.code == '8888') {
+            this.serviceList = data.data.data
+            this.$apply()
+          }
+          
+        }
+      })
+    }
+    // 人气推荐
+    getPopularityList() {
+      wx.showToast({
+        title: "加载中...",
+        icon: 'none',
+        duration: 100
+      });
+      wx.request({
+        url: `${this.$parent.globalData.requestUrl}/index/get_order_sentiment_list`,
+        method: 'GET',
+        header: {
+          authorization: this.$parent.globalData.token,
+          apikey: this.$parent.globalData.apikey
+        },
+        data: {
+          
+        },
+        success: data => {
+          wx.hideToast()
+          data = this.$parent.null2str(data)
+          if (data.data.code == '8888') {
+            this.peopleList = data.data.data
+            this.$apply()
+          }
+          
+        }
+      })
+    }
+    // 下拉刷新
+    onPullDownRefresh() {
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+      // 提交用户信息
+      this.getToken()
+      // 获取用户信息
+      this.onGetUserInfo()
+    }
+    
+
+    // 用户信息校验
+    verificationUserInfo() {
+      if (!this.userInfo.hasOwnProperty('id')) {
+        wx.showToast({
+          title: "用户信息加载中...",
+          icon: 'none',
+        });
+        return true
+      }
+    }
+    
+    addCollectionShow() {
+      wx.getStorage({
+        key: 'addCollection',
+        success: res => {
+          console.log(res.data)
+          this.collectionStr = res.data
+          this.$apply()
+        } 
+      })
+    }
+
+    // 用户信息获取
+    onGetUserInfo() {
+      // 查看是否授权
+      wx.getSetting({
+        success: res => {
+          if (res.authSetting['scope.userInfo']) {
+            this.userInfoButtonShow = false
+            this.$apply()
+            // 已经授权，可以直接调用 getUserInfo 获取头像昵称
+            wx.getUserInfo({
+              success: res => {
+                this.userInfo = Object.assign(this.userInfo, res.userInfo)
+                this.$parent.globalData.userInfo = this.userInfo
+                this.$apply()
+              }
+            })
+          }
+        }
+      })
+    }
+    // 获取token
+    getToken() {
+      wepy.login({
+        success: res => {
+          if (res.code) {
+            this.code = res.code
+            wx.request({
+              url: `${this.$parent.globalData.requestUrl}/auth/get_token`,
+              method: 'POST',
+              header: {
+                apikey: this.$parent.globalData.apikey
+              },
+              data: {
+                code: res.code
+              },
+              success: data => {
+                wx.hideToast()
+                data = this.$parent.null2str(data)
+                if (data.data.code == '8888') {
+                  let token = `${data.data.msg.token_type} ${data.data.msg.token}`
+                  this.$parent.globalData.token = token
+                  // 轮播图加载
+                  this.getSwiperList()
+                  // 获取定位及地址
+                  this.getLocation()
+                  // 用户信息获取
+                  this.setUserInfo()
+                  // 服务推荐
+                  this.getServiceList()
+                  // 人气推荐
+                  this.getPopularityList()
+                }
+                
+              }
+            })
+            
+          } else {
+            console.log('登录失败！' + res.errMsg)
+          }
+        }
+      })
+    }
+    // 提交用户信息
+    setUserInfo() {
+      wx.request({
+        url: `${this.$parent.globalData.requestUrl}/auth/my`,
+        method: 'GET',
+        header: {
+          'content-type':'application/json',
+          authorization: this.$parent.globalData.token,
+          apikey: this.$parent.globalData.apikey
+        },
+        success: data => {
+          data = this.$parent.null2str(data)
+          if (data.data.code === 8888) {
+            console.log(data)
+            this.userInfo = Object.assign(this.userInfo, data.data.data);
+            this.$parent.globalData.userInfo = this.userInfo
+            this.$apply()
+            // 判断是否进入注册页
+            // isTourist判断是否为游客
+            let isTourist = this.$parent.globalData.isTourist
+            if (this.userInfo.phone == '' && !isTourist) {
+              // 提示注册
+              this.goRegistered()
+            }
+          } else {
+            wx.showModal({
+              title: '',
+              content: data.data.errmsg
+            })
+          }
+        }
+      })
+    }
+    // 提示注册
+    goRegistered() {
+      wx.showToast({
+        title: "检测到用户未注册，进入注册页",
+        icon: 'none',
+        duration: 2000
+      });
+      setTimeout(() => {
+        this.$redirect('/pages/registeredSel')
+      }, 2000)
+    }
+
+    // 获取轮播图
+    getSwiperList() {
+      wx.request({
+        url: `${this.$parent.globalData.requestUrl}/index/get_baner_list`,
+        header: {
+          authorization: this.$parent.globalData.token,
+          apikey: this.$parent.globalData.apikey
+        },
+        method: 'GET',
+        success: data => {
+          data = this.$parent.null2str(data)
+          if (data.data.code === 8888) {
+            this.swiperList = data.data.data
+            this.$parent.globalData.swiperList = this.swiperList
+            console.log(this.swiperList)
+            this.$apply()
+          } else if (data.data.code === 1001) {
+            // 获取Token
+            this.$parent.getToken(this.onLoad())
+          }
+        }
+      })
+    }
+
+    // 定位
+    getLocation() {
+      console.log('-------------------------------------')
+      wx.getLocation({
+        type: 'wgs84',   //默认为 wgs84 返回 gps 坐标，gcj02 返回可用于 wx.openLocation 的坐标 
+        desc: '你的位置信息将用于小程序位置接口的效果展示',
+        success: res => { 
+          this.longitude = res.longitude
+          this.latitude = res.latitude
+          this.$apply()
+          console.log(this.longitude, this.latitude)
+          this.loadCity(this.longitude, this.latitude)
+        },
+        fail: res => {
+          console.log(res)
+          this.longitude = ''
+          this.latitude = ''
+          this.$apply()
+        }
+      })
+    }
+    loadCity(longitude, latitude) {
+      console.log('-------------------------------------')
+      wx.request({
+        url: `https://apis.map.qq.com/ws/geocoder/v1/?location=${latitude},${longitude}&key=${this.$parent.globalData.mapKey}`,
+        data: {},
+        success: (res) => {
+          this.address = res.data.result.address
+          console.log(this.address)
+        }
+      })
+    }
+  }
+</script>
+<style lang="less">
+  .index{
+    padding-bottom: 119rpx;
+  }
+  .address{
+    width: 690rpx;
+    height: auto;
+    padding: 20rpx 30rpx;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1rpx solid #EEEEEE;
+    view{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 32rpx;
+      font-weight: 600;
+      color: #1F1F1F;
+      .iconfont{
+        font-size: 32rpx;
+      }
+    }
+    text{
+      padding-left: 10rpx;
+    }
+    .iconfont{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #999999;
+      font-size: 48rpx;
+    }
+  }
+  .swiper {
+    width: 690rpx;
+    height: 315rpx;
+    padding: 0rpx 30rpx;
+    border-radius: 20rpx;
+    overflow: hidden;
+    image {
+      width: 100%;
+      height: 100%;
+      border-radius: 10rpx;
+    }
+  }
+  .pageNav{
+    width: 690rpx;
+    height: auto;
+    padding: 20rpx 30rpx;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    flex-wrap: wrap;
+    .item{
+      width: 25%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex-direction: column;
+      font-size: 26rpx;
+      color: #494949;
+    }
+    image{
+      width: 106rpx;
+      height: 106rpx;
+    }
+  }
+  .VIP{
+    width: 690rpx;
+    height: auto;
+    padding: 0 30rpx;
+    border-top: 10rpx solid #F8F8F8;
+    image{
+      width: 690rpx;
+      height: 236rpx;
+    }
+  }
+  .listCon{
+    width: 690rpx;
+    height: auto;
+    padding: 0 30rpx;
+    border-top: 10rpx solid #F8F8F8;
+    .listTile{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 26rpx;
+      color: #999999;
+      padding: 20rpx 0;
+      .name{
+        font-size: 32rpx;
+        font-weight: 600;
+        color: #1F1F1F;
+      }
+      view{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      icon{
+        width: 28rpx;
+        font-size: 26rpx;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #999999;
+      }
+    }
+    .list{
+      width: 690rpx;
+      height: auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+    .item:nth-child(3n){
+      margin-right: 0;
+    }
+    .item{
+      width: 216rpx;
+      height: 350rpx;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex-direction: column;
+      border-radius: 10rpx;
+      margin: 10rpx 20rpx 10rpx 0;
+      background-color: #F5F5F5;
+      .name{
+        width: 100%;
+        font-size: 30rpx;
+        font-weight: 600;
+        text-align: center;
+        color: #1F1F1F;
+        padding: 15rpx 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+    image{
+      width: 222rpx;
+      height: 230rpx;
+      border-radius: 10rpx 10rpx 0 0;
+    }
+    .price{
+      font-size: 22rpx;
+      font-weight: 600;
+      color: #F42652;
+      text{
+        font-size: 20rpx;
+        font-weight: 500;
+        color: #999999;
+      }
+    }
+  }
+  // .listCon:last-of-type{
+  //   margin-bottom: 130rpx
+  // }
+  .maskCon .showCon{
+    width: 580rpx;
+    height: 445rpx;
+    justify-content: center;
+  }
+</style>

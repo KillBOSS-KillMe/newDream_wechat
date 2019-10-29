@@ -1,0 +1,117 @@
+{
+	"description": "普京婚庆",
+	"setting": {
+		"urlCheck": false,
+		"es6": false,
+		"postcss": false,
+		"minified": false,
+		"newFeature": true,
+		"coverView": true,
+		"autoAudits": false,
+		"checkInvalidKey": true,
+		"checkSiteMap": true,
+		"uploadWithSourceMap": true,
+		"babelSetting": {
+			"ignore": [],
+			"disablePlugins": [],
+			"outputPath": ""
+		}
+	},
+	"compileType": "miniprogram",
+	"appid": "wx8934a8d454fb5bc0",
+	"projectname": "putinwedding",
+	"miniprogramRoot": "dist/",
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"list": []
+		},
+		"miniprogram": {
+			"current": 9,
+			"list": [
+				{
+					"id": -1,
+					"name": "pages/meSubordinate",
+					"pathName": "pages/meSubordinate",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 1,
+					"name": "pages/postProvide",
+					"pathName": "pages/postProvide",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/fillOrder",
+					"pathName": "pages/fillOrder",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/messageDetail",
+					"pathName": "pages/messageDetail",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": 4,
+					"name": "pages/productSelIndustry",
+					"pathName": "pages/productSelIndustry",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/postNeed",
+					"pathName": "pages/postNeed",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/postNeed",
+					"pathName": "pages/postNeed",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/orderList",
+					"pathName": "pages/orderList",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/orderList",
+					"pathName": "pages/orderList",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "pages/postProvide",
+					"pathName": "pages/postProvide",
+					"scene": null
+				}
+			]
+		}
+	}
+}

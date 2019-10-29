@@ -28,7 +28,7 @@
 
 <script>
   import wepy from 'wepy'
-  export default class CommentList extends wepy.page {
+  export default class UserCommentList extends wepy.page {
      config = {
       navigationBarTitleText: '评论列表'
     }

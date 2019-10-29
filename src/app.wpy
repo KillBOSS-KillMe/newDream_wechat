@@ -79,8 +79,9 @@ export default class extends wepy.app {
   config = {
     pages: [
       // 首页模块
-      'pages/commentList', // 评论列表
-      'pages/signUp', // 报名情况
+      'pages/userLikeList', // 点赞列表
+      'pages/userCommentList', // 评论列表
+      'pages/userSignUp', // 报名情况
       'pages/user', // 我的
       'pages/index', // 首页
       

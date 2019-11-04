@@ -14,8 +14,8 @@
     </view>
     <view class="ft_item {{navAction[2]}}" @tap="goMessage">
       <!-- <view class="iconfont icon-kehu"></view> -->
-      <image wx:if="{{navAction[2] == 'action'}}" src="../image/newImage1.png" />
-      <image wx:if="{{navAction[2] == 'noAction'}}" src="../image/newImage0.png" />
+      <image wx:if="{{navAction[2] == 'action'}}" src="../image/navNewImage1.png" />
+      <image wx:if="{{navAction[2] == 'noAction'}}" src="../image/navNewImage0.png" />
       <text class="text">新影像</text>
     </view>
     <view class="ft_item {{navAction[3]}}" @tap="goUser">
@@ -57,7 +57,7 @@ export default class Nav extends wepy.component {
     goMessage() {
       // 顶部导航状态初始化
       this.$parent.$parent.globalData.navAction = ['noAction','noAction', 'action', 'noAction']
-      this.$emit('childFn', '/pages/messageList')
+      this.$emit('childFn', '/pages/newImage')
     },
     // 我的
     goUser() {

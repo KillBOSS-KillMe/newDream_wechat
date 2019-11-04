@@ -1,8 +1,8 @@
 /*
  * @Author: luow 
- * @Date: 2019-11-04 15:29:55 
+ * @Date: 2019-11-04 15:29:49 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-04 15:34:03
+ * @Last Modified time: 2019-11-04 15:34:21
  */
 <template>
   <view>
@@ -18,9 +18,9 @@
 <script>
   import wepy from 'wepy'
   import nav from '../components/nav' // 底部导航
-  export default class IKnow extends wepy.page {
+  export default class NewImage extends wepy.page {
      config = {
-      navigationBarTitleText: '我知道'
+      navigationBarTitleText: '新影像'
     }
     components = {
       nav: nav
@@ -29,10 +29,8 @@
 
     data = {
       list: [
-        'IKnow1.png',
-        'IKnow2.png',
-        'IKnow3.png',
-        'IKnow4.png'
+        'newImage1.png',
+        'newImage2.png'
       ]
     }
 

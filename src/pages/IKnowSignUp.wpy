@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-11-04 15:50:56 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-04 16:41:11
+ * @Last Modified time: 2019-11-04 16:46:38
  */
 
 <template>
@@ -72,7 +72,7 @@
   import wepy from 'wepy'
   export default class NewImage extends wepy.page {
      config = {
-      navigationBarTitleText: '新影像'
+      navigationBarTitleText: '报名通道'
     }
     components = {
     }

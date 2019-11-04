@@ -14,8 +14,109 @@
       </repeat>
     </swiper>
     <view class="pageNav">
-      <view class="item">123</view>
-      <view class="item">123</view>
+      <view class="item">
+        <image class="bg" src="../image/navIKnow.png" />
+      </view>
+      <view class="item">
+        <image class="bg" src="../image/navNewImage.png" />
+      </view>
+    </view>
+    <view class="articleList">
+      <view class="item type1">
+        <view class="title">内容内容内容内容内容内容内容内容内容内容内容内容内容</view>
+        <view class="articleCon">内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容</view>
+        <view class="operating">
+          <text>狗子</text>
+          <view>
+            <view class="operatItem">
+              <view class="iconfont icondianzan"></view>
+              1233
+            </view>
+            <view class="operatItem">
+              <view class="iconfont iconpinglun"></view>
+              1233
+            </view>
+            <view class="operatItem">
+              <view class="iconfont iconzhuanfa"></view>
+              1233
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="item type2">
+        <view class="info">
+          <view class="con">
+            <view class="title">内容内容内容内容内容内容内容内容内容内容内容内容内容</view>
+            <view class="articleCon">内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容</view>
+          </view>
+          <image src="../image/navNewImage.png" />
+        </view>
+        <view class="operating">
+          <text>狗子</text>
+          <view>
+            <view class="operatItem">
+              <view class="iconfont icondianzan"></view>
+              1233
+            </view>
+            <view class="operatItem">
+              <view class="iconfont iconpinglun"></view>
+              1233
+            </view>
+            <view class="operatItem">
+              <view class="iconfont iconzhuanfa"></view>
+              1233
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="item type3">
+        <view class="title">内容内容内容内容内容内容内容内容内容内容内容内容内容</view>
+        <video id="myVideo" src="http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400" danmu-list="{{danmuList}}" enable-danmu danmu-btn controls></video>
+        <view class="articleCon">内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容</view>
+        <view class="operating">
+          <text>狗子</text>
+          <view>
+            <view class="operatItem">
+              <view class="iconfont icondianzan"></view>
+              1233
+            </view>
+            <view class="operatItem">
+              <view class="iconfont iconpinglun"></view>
+              1233
+            </view>
+            <view class="operatItem">
+              <view class="iconfont iconzhuanfa"></view>
+              1233
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="item type4">
+        <view class="title">内容内容内容内容内容内容内容内容内容内容内容内容内容</view>
+        <view class="imageList">
+          <image src="../image/navNewImage.png" />
+          <image src="../image/navNewImage.png" />
+          <image src="../image/navNewImage.png" />
+        </view>
+        <view class="articleCon">内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容</view>
+        <view class="operating">
+          <text>狗子</text>
+          <view>
+            <view class="operatItem">
+              <view class="iconfont icondianzan"></view>
+              1233
+            </view>
+            <view class="operatItem">
+              <view class="iconfont iconpinglun"></view>
+              1233
+            </view>
+            <view class="operatItem">
+              <view class="iconfont iconzhuanfa"></view>
+              1233
+            </view>
+          </view>
+        </view>
+      </view>
     </view>
     <nav @childFn.user="goPage" @childFnOrReturn.user="goModifyUserInfo" />
     <button open-type="getUserInfo" id='getUserInfo' wx:if="{{userInfoButtonShow}}" lang="zh_CN" @getuserinfo="onGetUserInfo"></button>
@@ -336,7 +437,142 @@
     width: 330rpx;
     height: 170rpx;
     border-radius: 10rpx;
-    background-color: #000;
+    image{
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+.articleList{
+  width: 750rpx;
+  height: auto;
+  margin-bottom: 130rpx;
+  .title{
+    font-size: 33rpx;
+    font-weight: 600;
+    color: #333;
+  }
+  .articleCon{
+    font-size: 27rpx;
+    color: #666666;
+  }
+  .operating{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 30rpx;
+    
+    text{
+      font-size: 23rpx;
+      color: #999;
+    }
+    view{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 23rpx;
+      color: #333;
+      .operatItem{
+        margin-left: 30rpx;
+      }
+    }
+    .iconfont{
+      margin-right: 10rpx;
+    }
+  }
+  .item{
+    width: 690rpx;
+    height: auto;
+    padding: 30rpx 0;
+    margin: 0 30rpx;
+    border-bottom: 1rpx solid #D5D5D5;
+  }
+  .type1{
+    .title{
+      width: 690rpx;
+      height: auto;
+      padding-bottom: 30rpx;
+    }
+    .articleCon{
+      width: 690rpx;
+      height: 70rpx;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      // white-space:nowrap;
+    }
+  }
+  .type2{
+    .info{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .con{
+      width: 420rpx;
+    }
+    image{
+      width: 226rpx;
+      height: 150rpx;
+      border-radius: 10rpx;
+    }
+    .title{
+      height: 80rpx;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      // white-space:nowrap;
+      margin-bottom: 36rpx;
+    }
+    .articleCon{
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+  }
+  .type3{
+    .title{
+      width: 690rpx;
+      height: auto;
+      padding-bottom: 20rpx;
+    }
+    .articleCon{
+      width: 690rpx;
+      margin-top: 20rpx;
+      height: auto;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    video{
+      width: 690rpx;
+      height: 360rpx;
+      border-radius: 10rpx;
+    }
+  }
+  .type4{
+    .title{
+      width: 690rpx;
+      height: auto;
+      padding-bottom: 20rpx;
+    }
+    .articleCon{
+      width: 690rpx;
+      margin-top: 20rpx;
+      height: auto;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .imageList{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      image{
+        width: 226rpx;
+        height: 150rpx;
+        border-radius: 10rpx;
+      }
+    }
   }
 }
 </style>

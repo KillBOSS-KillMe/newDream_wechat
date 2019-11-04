@@ -1,27 +1,27 @@
 <template>
   <view class="footer">
     <view class="ft_item {{navAction[0]}}" @tap="goIndex">
-      <!-- <view class="iconfont icon-shouye"></view> -->
-      <image wx:if="{{navAction[0] == 'action'}}" src="../image/home1.png" />
-      <image wx:if="{{navAction[0] == 'noAction'}}" src="../image/home0.png" />
+      <view class="iconfont iconshouye"></view>
+      <!-- <image wx:if="{{navAction[0] == 'action'}}" src="../image/home1.png" />
+      <image wx:if="{{navAction[0] == 'noAction'}}" src="../image/home0.png" /> -->
       <text class="text">首页</text>
     </view>
     <view class="ft_item {{navAction[1]}}" @tap="goRelease">
       <!-- <view class="iconfont icon-kehu"></view> -->
-      <image wx:if="{{navAction[1] == 'action'}}" src="../image/release1.png" />
-      <image wx:if="{{navAction[1] == 'noAction'}}" src="../image/release0.png" />
-      <text class="text">发布</text>
+      <image wx:if="{{navAction[1] == 'action'}}" src="../image/IKnow1.png" />
+      <image wx:if="{{navAction[1] == 'noAction'}}" src="../image/IKnow0.png" />
+      <text class="text">我知道</text>
     </view>
     <view class="ft_item {{navAction[2]}}" @tap="goMessage">
       <!-- <view class="iconfont icon-kehu"></view> -->
-      <image wx:if="{{navAction[2] == 'action'}}" src="../image/message1.png" />
-      <image wx:if="{{navAction[2] == 'noAction'}}" src="../image/message0.png" />
-      <text class="text">消息</text>
+      <image wx:if="{{navAction[2] == 'action'}}" src="../image/newImage1.png" />
+      <image wx:if="{{navAction[2] == 'noAction'}}" src="../image/newImage0.png" />
+      <text class="text">新影像</text>
     </view>
     <view class="ft_item {{navAction[3]}}" @tap="goUser">
-      <!-- <view class="iconfont icon-wode"></view> -->
-      <image wx:if="{{navAction[3] == 'action'}}" src="../image/user1.png" />
-      <image wx:if="{{navAction[3] == 'noAction'}}" src="../image/user0.png" />
+      <view class="iconfont iconwode"></view>
+      <!-- <image wx:if="{{navAction[3] == 'action'}}" src="../image/user1.png" />
+      <image wx:if="{{navAction[3] == 'noAction'}}" src="../image/user0.png" /> -->
       <text class="text">我的</text>
     </view>
   </view>
@@ -47,13 +47,13 @@ export default class Nav extends wepy.component {
       this.$parent.$parent.globalData.navAction = ['action', 'noAction','noAction', 'noAction']
       this.$emit('childFn', '/pages/index')
     },
-    // 发布
+    // 我知道
     goRelease() {
       // 顶部导航状态初始化
       this.$parent.$parent.globalData.navAction = ['noAction', 'action', 'noAction', 'noAction']
       this.$emit('childFn', '/pages/releaseTypeSel')
     },
-    // 消息
+    // 新影像
     goMessage() {
       // 顶部导航状态初始化
       this.$parent.$parent.globalData.navAction = ['noAction','noAction', 'action', 'noAction']
@@ -62,7 +62,7 @@ export default class Nav extends wepy.component {
     // 我的
     goUser() {
       this.$parent.$parent.globalData.navAction = ['noAction', 'noAction', 'noAction', 'action']
-      this.$emit('childFn', '/pages/me')
+      this.$emit('childFn', '/pages/user')
     }
   };
   onLoad() {
@@ -102,7 +102,15 @@ export default class Nav extends wepy.component {
   height: 46rpx;
   margin: 10rpx;
 }
-
+.footer .ft_item .iconfont {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 46rpx;
+  height: 46rpx;
+  font-size: 46rpx;
+  margin: 10rpx 0;
+}
 .appointment {
   position: absolute;
   top: 200rpx;
@@ -170,7 +178,7 @@ export default class Nav extends wepy.component {
 
 .footer .action .iconfont,
 .footer .action{
-  color: #F42652 !important;
+  color: #F08200 !important;
 }
 .footer,
 .footer .noAction .iconfont{

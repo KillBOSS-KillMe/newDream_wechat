@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-10-29 10:41:00 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-04 15:30:48
+ * @Last Modified time: 2019-11-04 16:44:39
  */
 // customData = {}  // 自定义数据
 // customFunction ()　{}  // 自定义方法
@@ -78,20 +78,25 @@ setStore(store);
 export default class extends wepy.app {
   config = {
     pages: [
-      // 首页模块
       
-      'pages/newImage', // 新影像
+      // 首页模块
+      'pages/index', // 首页
+
+      // 我知道模块
       'pages/IKnow', // 我知道
       'pages/IKnowType', // 文字分类-我知道
-      'pages/index', // 首页
       'pages/IKnowDetails', // 文字分类-我知道-详情
+      'pages/IKnowSignUp', // 报名--我知道
       
+      // 新影像模块
+      'pages/newImage', // 新影像
+      // 'pages/newImageSignUp', // 报名--新影像
+      
+      // 个人中心模块
+      'pages/user', // 我的
       'pages/userLikeList', // 点赞列表
       'pages/userCommentList', // 评论列表
       'pages/userSignUp', // 报名情况
-      'pages/user', // 我的
-      
-      
     ],
     permission: {
       'scope.userLocation': {
@@ -369,35 +374,36 @@ icon{
   justify-content: space-between;
   box-sizing: border-box;
 }
-.sub,
-.submit {
-  // height: 200;
-  width: 690rpx;
-  height: auto;
-  padding: 50rpx 30rpx;
+.sub{
+  z-index: 999;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 750rpx;
+  height: 190rpx;
+  background-color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #fff;
-  view {
-    width: 604rpx;
-    height: 100rpx;
-    border-radius: 5rpx;
-    background-color: #f42652;
+  view{
+    width: 690rpx;
+    height: 90rpx;
     color: #fff;
     font-size: 32rpx;
     font-weight: 600;
+    border-radius: 10rpx;
+    background-color: #F08200;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-}
-.sub {
-  // height: 200;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  icon{
+    font-size: 32rpx;
+    margin-right: 20rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 .maskCon {
   width: 100vw;

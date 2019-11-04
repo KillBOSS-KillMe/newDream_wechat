@@ -1,0 +1,177 @@
+/*
+ * @Author: luow 
+ * @Date: 2019-11-04 15:50:56 
+ * @Last Modified by: luow
+ * @Last Modified time: 2019-11-04 16:41:11
+ */
+
+<template>
+  <view>
+    <view class="list">
+      <view class="item">
+        <label>姓名</label>
+        <input type="text" placeholder="请输入您的姓名" >
+      </view>
+      <view class="item">
+        <label>性别</label>
+        <checkbox-group class="sel" bindchange="selGender" data-index="{{index}}" data-checks="{{item.checks}}">
+          <repeat for="{{genderList}}" item="item">
+            <view class="itemGender">
+              <checkbox data-index="{{index}}" id="{{item.id}}" value="{{index}}" checked="{{item.checks}}"/>
+              <text>{{item.name}}</text>
+            </view>
+          </repeat>
+        </checkbox-group>
+      </view>
+      <view class="item">
+        <label>身份证号</label>
+        <input type="text" placeholder="请输入您的身份证号码" >
+      </view>
+      <view class="item">
+        <label>联系方式</label>
+        <input type="text" placeholder="请输入您的联系方式" >
+      </view>
+      <view class="item">
+        <label>所属区县</label>
+        <input type="text" placeholder="请输入所属区县" >
+      </view>
+      <view class="item">
+        <label>学校</label>
+        <input type="text" placeholder="请输入学校名称" >
+      </view>
+      <view class="item">
+        <label>知道老师</label>
+        <input type="text" placeholder="请输入您的指导老师" >
+      </view>
+      <view class="item">
+        <label>指导老师联系方式</label>
+        <input type="text" placeholder="请输入您的指导老师联系方式" >
+      </view>
+      <view class="item">
+        <label>自我介绍</label>
+        <textarea placeholder="请输入..."></textarea>
+      </view>
+      <view class="item">
+        <label>参赛宣言</label>
+        <textarea placeholder="请输入..."></textarea>
+      </view>
+    </view>
+    <view class="notice">
+      <text>参赛须知</text>
+      <repeat for="{{notice}}" item="item">
+        <text>{{index + 1}}.{{item}}</text>
+      </repeat>
+    </view>
+    <view class="sub">
+      <view>提交</view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class NewImage extends wepy.page {
+     config = {
+      navigationBarTitleText: '新影像'
+    }
+    components = {
+    }
+    mixins = []
+
+    data = {
+      notice: [
+        '提交报名表即为报名成功，出特殊情况外，不得随意退赛。',
+        '比赛过程中不能随意更换队员。',
+        '请所有参赛人员听从组织方指挥和安排，以免引起不必要的冲突。如有不听劝阻导致影响比赛者，工作人员有权取消其比赛资格。',
+        '参赛过程中请注意保障个人安全。'
+      ],
+      genderList: [
+        {name: '男', id: '1', checks: false},
+        {name: '女', id: '2', checks: false}
+      ]
+      
+    }
+
+    computed = {
+
+    }
+
+    methods = {
+      selGender(e) {
+        console.log(e.detail.value)
+        let indexArr = e.detail.value
+        let genderList = this.genderList
+      }
+    }
+
+    events = {
+
+    }
+
+    onLoad(options) {
+    }
+  }
+</script>
+<style lang="less">
+page{
+  border-top: 1rpx solid #D5D5D5;
+}
+
+.list{
+  width: 750rpx;
+  height: auto;
+  .item{
+    width: 690rpx;
+    height: auto;
+    padding: 20rpx 0;
+    margin: 0 30rpx;
+    border-bottom: 1rox solid #E8E8E8;
+  }
+  label{
+    font-size: 23rpx;
+    color: #333;
+    // padding-bottom: 30rpx;
+  }
+  .sel{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 30rpx;
+    color: #999;
+    margin-top: 30rpx;
+    .itemGender{
+      margin-right: 40rpx;
+    }
+  }
+  input, textarea{
+    width: 690rpx;
+    height: 30rpx;
+    font-size: 30rpx;
+    color: #999;
+    margin-top: 30rpx;
+  }
+  textarea{
+    width: 650rpx;
+    height: 185rpx;
+    padding: 20rpx;
+    border: 1rpx solid #E8E8E8;
+  }
+}
+.notice{
+  width: 750rpx;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-bottom: 200rpx;
+  text{
+    width: 690rpx;
+    height: auto;
+    padding: 0 30rpx;
+    font-size: 28rpx;
+    color: #333;
+  }
+}
+</style>

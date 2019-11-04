@@ -79,9 +79,11 @@ export default class extends wepy.app {
   config = {
     pages: [
       // 首页模块
+      'pages/IKnow', // 文字分类-我知道
+      'pages/IKnowType', // 文字分类-我知道
       'pages/index', // 首页
       'pages/IKnowDetails', // 文字分类-我知道-详情
-      'pages/IKnow', // 文字分类-我知道
+      
       'pages/userLikeList', // 点赞列表
       'pages/userCommentList', // 评论列表
       'pages/userSignUp', // 报名情况

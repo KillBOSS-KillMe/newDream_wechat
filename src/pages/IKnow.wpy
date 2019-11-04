@@ -7,63 +7,33 @@
 
 <template>
   <view>
-    <view class="type">
-      <view class="active">
-        <image src="../image/daw.jpg" />
-        视频
-      </view>
-      <view>
-        <image src="../image/daw.jpg" />
-        图文
-      </view>
-      <view>
-        <image src="../image/daw.jpg" />
-        文字
-      </view>
-    </view>
-    <view class="search">
-      <icon class="iconfont iconduihao"></icon>
-      <input type="text" placeholder="请输入搜索内容" />
-    </view>
-    <view class="list">
+    <view class="typeList">
       <repeat for="{{list}}" item="item">
-        <view class="item">
-          {{index + 1}}.{{item.title}}
-        </view>
+        <image data-index="{{index}}" src="../image/{{item}}" />
       </repeat>
     </view>
+    <nav @childFn.user="goPage" @childFnOrReturn.user="goModifyUserInfo" />
   </view>
-  
 </template>
 
 <script>
   import wepy from 'wepy'
+  import nav from '../components/nav' // 底部导航
   export default class IKnow extends wepy.page {
      config = {
       navigationBarTitleText: '我知道'
     }
     components = {
+      nav: nav
     }
     mixins = []
 
     data = {
       list: [
-        {
-          id: '1',
-          title: '三枪拍案惊奇'
-        },{
-          id: '1',
-          title: '三枪拍案惊奇'
-        },{
-          id: '1',
-          title: '三枪拍案惊奇'
-        },{
-          id: '1',
-          title: '三枪拍案惊奇'
-        },{
-          id: '1',
-          title: '三枪拍案惊奇'
-        }
+        'IKnow1.png',
+        'IKnow2.png',
+        'IKnow3.png',
+        'IKnow4.png'
       ]
     }
 
@@ -72,6 +42,14 @@
     }
 
     methods = {
+      // 底部导航跳转
+      goPage (url, evt) {
+        // if (this.verificationUserInfo()) {
+        //   return 
+        // }
+        // 销毁当前页{跳转}
+        this.$redirect(url)
+      },
     }
 
     events = {
@@ -80,73 +58,31 @@
 
     onLoad(options) {
     }
-
-    // 下拉刷新
-    onPullDownRefresh() {
-      wx.showToast({
-        title: "拼命加载中...",
-        icon: 'loading',
-        duration: 1000000
-      });
-    }
   }
 </script>
 <style lang="less">
 page{
   border-top: 1rpx solid #D5D5D5;
+  background-color: #00C2C8;
 }
-.type{
+.typeList{
   width: 750rpx;
-  padding: 30rpx 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  border-bottom: 10rpx solid #F0F2F3;
-  font-size: 31rpx;
-  font-weight: 600;
-  color: #999;
-  .active{
-    color: #333;
-  }
-  view{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  image{
-    width: 33rpx;
-    height: 33rpx;
-    margin-right: 10rpx;
-  }
-}
-.search{
-  width: 690rpx;
-  height: 66rpx;
-  margin: 30rpx;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  background-color: #f8f8f8;
-  border-radius: 10rpx;
-  icon{
-    font-size: 32rpx;
-    width: 66rpx;
-    height: 66rpx;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  input{
-    width: 620rpx;
-  }
-}
-.item{
-  width: 690rpx;
+  padding-top: 20rpx;
   height: auto;
-  padding: 30rpx;
-  font-size: 31rpx;
-  font-weight: 600;
-  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  image{
+    width: 623rpx;
+    height: 239rpx;
+    margin-top: 20rpx;
+  }
 }
+// display: flex;
+//   align-items: center;
+//   justify-content: space-around;
+
   
 </style>

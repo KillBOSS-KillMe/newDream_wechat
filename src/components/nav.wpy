@@ -6,10 +6,10 @@
       <image wx:if="{{navAction[0] == 'noAction'}}" src="../image/home0.png" /> -->
       <text class="text">首页</text>
     </view>
-    <view class="ft_item {{navAction[1]}}" @tap="goRelease">
+    <view class="ft_item {{navAction[1]}}" @tap="goIKnow">
       <!-- <view class="iconfont icon-kehu"></view> -->
-      <image wx:if="{{navAction[1] == 'action'}}" src="../image/IKnow1.png" />
-      <image wx:if="{{navAction[1] == 'noAction'}}" src="../image/IKnow0.png" />
+      <image wx:if="{{navAction[1] == 'action'}}" src="../image/navIKnow1.png" />
+      <image wx:if="{{navAction[1] == 'noAction'}}" src="../image/navIKnow0.png" />
       <text class="text">我知道</text>
     </view>
     <view class="ft_item {{navAction[2]}}" @tap="goMessage">
@@ -48,10 +48,10 @@ export default class Nav extends wepy.component {
       this.$emit('childFn', '/pages/index')
     },
     // 我知道
-    goRelease() {
+    goIKnow() {
       // 顶部导航状态初始化
       this.$parent.$parent.globalData.navAction = ['noAction', 'action', 'noAction', 'noAction']
-      this.$emit('childFn', '/pages/releaseTypeSel')
+      this.$emit('childFn', '/pages/IKnow')
     },
     // 新影像
     goMessage() {

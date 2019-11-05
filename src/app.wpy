@@ -78,14 +78,14 @@ setStore(store);
 export default class extends wepy.app {
   config = {
     pages: [
-      'pages/IKnowType', // 分类-我知道
+      
       // 首页模块
       'pages/index', // 首页
 
       // 我知道模块
       'pages/IKnow', // 我知道
-      
-      'pages/IKnowDetails', // 文字分类-我知道-详情
+      'pages/IKnowType', // 分类-我知道
+      'pages/IKnowDetailsText', // 文字分类-我知道-文字详情
       'pages/IKnowSignUp', // 报名--我知道
       
       // 新影像模块

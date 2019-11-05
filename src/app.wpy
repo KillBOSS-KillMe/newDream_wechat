@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-10-29 10:41:00 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-05 10:19:51
+ * @Last Modified time: 2019-11-05 10:56:40
  */
 // customData = {}  // 自定义数据
 // customFunction ()　{}  // 自定义方法
@@ -118,9 +118,9 @@ export default class extends wepy.app {
   globalData = {
     userInfo: {},
     // 接口请求路径
-    requestUrl: 'http://192.168.0.101:8083/api/v1/wedding_api',
+    requestUrl: 'http://www.silk-road-dreams.com/api',
     // 图片路径
-    requestImgUrl: 'https://192.168.0.101/api/v1/wedding_api',
+    requestImgUrl: 'http://www.silk-road-dreams.com/api',
     mapKey: 'GCABZ-J4G64-2WKUX-DNQMK-MVCGK-OSFD4',
     apikey: '123456',
     token: '',

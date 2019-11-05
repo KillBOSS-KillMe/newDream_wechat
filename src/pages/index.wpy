@@ -1,8 +1,8 @@
 /*
  * @Author: luow 
  * @Date: 2019-10-29 10:40:57 
- * @Last Modified by:   luow 
- * @Last Modified time: 2019-10-29 10:40:57 
+ * @Last Modified by: luow
+ * @Last Modified time: 2019-11-05 11:51:27
  */
 <template>
   <view>
@@ -14,10 +14,10 @@
       </repeat>
     </swiper>
     <view class="pageNav">
-      <view class="item">
+      <view class="item" @tap="goIKnow">
         <image class="bg" src="../image/navIKnow.png" />
       </view>
-      <view class="item">
+      <view class="item" @tap="goNewImage">
         <image class="bg" src="../image/navNewImage.png" />
       </view>
     </view>
@@ -126,6 +126,7 @@
 <script>
   import wepy from 'wepy'
   import nav from '../components/nav' // 底部导航
+import configStore from '../store';
   export default class Index extends wepy.page {
     config = {
       navigationBarTitleText: '丝路首页'
@@ -162,6 +163,18 @@
         // 销毁当前页{跳转}
         this.$redirect(url)
       },
+      // 进入我知道
+      goIKnow() {
+        this.$parent.globalData.navAction = ['noAction', 'action', 'noAction', 'noAction']
+        let url = "/pages/IKnow"
+        this.$redirect(url)
+      },
+      // 进入新影像
+      goNewImage() {
+        this.$parent.globalData.navAction = ['noAction','noAction', 'action', 'noAction']
+        let url = "/pages/newImage"
+        this.$redirect(url)
+      }
     }
 
     events = {
@@ -169,99 +182,19 @@
     }
 
     onLoad(options) {
-      // 分享信息获取
-      if (options.hasOwnProperty("scene")) {
-        let data = options.scene.split('%3D')
-        if (data[0] == 'pid') {
-          this.$parent.globalData.pid = data[1]
-        } else {
-          this.$parent.globalData.admin_id = data[1]
-        }
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+      let token = this.$parent.globalData.token
+      if (token != '') {
+        // 获取首页数据
+        this.getIndexInfo()
+      } else {
+        // 获取用户信息--获取Token
+        this.onGetUserInfo()
       }
-      this.mapKey = this.$parent.globalData.mapKey
-      // wx.showToast({
-      //   title: "拼命加载中...",
-      //   icon: 'loading',
-      //   duration: 1000000
-      // });
-      
-      // 获取用户信息
-      this.onGetUserInfo()
-      // let token = this.$parent.globalData.token
-      // if (token != '') {
-      //   // 轮播图加载·
-      //   this.getSwiperList()
-      //   // 获取定位及地址
-      //   this.getLocation()
-      //   // 用户信息获取
-      //   this.setUserInfo()
-      //   // 服务推荐
-      //   this.getServiceList()
-      //   // 人气推荐
-      //   this.getPopularityList()
-      // } else {
-      //   // 获取Token
-      //   this.getToken()
-      // }
-      
-      
-    }
-    // 服务推荐
-    getServiceList() {
-      wx.showToast({
-        title: "加载中...",
-        icon: 'none',
-        duration: 100
-      });
-      wx.request({
-        url: `${this.$parent.globalData.requestUrl}/index/get_order_recommend_list`,
-        method: 'GET',
-        header: {
-          authorization: this.$parent.globalData.token,
-          apikey: this.$parent.globalData.apikey
-        },
-        data: {
-          
-        },
-        success: data => {
-          wx.hideToast()
-          data = this.$parent.null2str(data)
-
-          if (data.data.code == '8888') {
-            this.serviceList = data.data.data
-            this.$apply()
-          }
-          
-        }
-      })
-    }
-    // 人气推荐
-    getPopularityList() {
-      wx.showToast({
-        title: "加载中...",
-        icon: 'none',
-        duration: 100
-      });
-      wx.request({
-        url: `${this.$parent.globalData.requestUrl}/index/get_order_sentiment_list`,
-        method: 'GET',
-        header: {
-          authorization: this.$parent.globalData.token,
-          apikey: this.$parent.globalData.apikey
-        },
-        data: {
-          
-        },
-        success: data => {
-          wx.hideToast()
-          data = this.$parent.null2str(data)
-          if (data.data.code == '8888') {
-            this.peopleList = data.data.data
-            this.$apply()
-          }
-          
-        }
-      })
     }
     // 下拉刷新
     onPullDownRefresh() {
@@ -270,8 +203,6 @@
         icon: 'loading',
         duration: 1000000
       });
-      // 提交用户信息
-      this.getToken()
       // 获取用户信息
       this.onGetUserInfo()
     }
@@ -287,18 +218,6 @@
         return true
       }
     }
-    
-    addCollectionShow() {
-      wx.getStorage({
-        key: 'addCollection',
-        success: res => {
-          console.log(res.data)
-          this.collectionStr = res.data
-          this.$apply()
-        } 
-      })
-    }
-
     // 用户信息获取
     onGetUserInfo() {
       // 查看是否授权
@@ -312,7 +231,10 @@
               success: res => {
                 this.userInfo = Object.assign(this.userInfo, res.userInfo)
                 this.$parent.globalData.userInfo = this.userInfo
+                console.log('----------')
                 this.$apply()
+                // 登录
+                this.setUserInfo()
               }
             })
           }
@@ -321,28 +243,66 @@
     }
     // 提交用户信息
     setUserInfo() {
+      wx.login({
+        success: res => {
+          wx.request({
+            url: `${this.$parent.globalData.requestUrl}/weapp/authorizations`,
+            method: 'POST',
+            header: {
+              // 'content-type':'application/json',
+            },
+            data: {
+              code: res.code,
+              nickName: this.userInfo.nickName,
+              gender: this.userInfo.gender,
+              avatar: this.userInfo.avatarUrl
+            },
+            success: data => {
+              data = this.$parent.null2str(data)
+              wx.hideToast()
+              if (data.statusCode === 201) {
+                let token = data.data.token_type + data.data.access_token
+                this.$parent.globalData.token = token
+                console.log(token)
+                this.getIndexInfo()
+              } else {
+                wx.showModal({
+                  title: '',
+                  content: data.data.errmsg
+                })
+              }
+            }
+          })
+        }
+      })
+    }
+    getIndexInfo() {
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
       wx.request({
-        url: `${this.$parent.globalData.requestUrl}/auth/my`,
+        url: `${this.$parent.globalData.requestUrl}/index`,
         method: 'GET',
         header: {
-          'content-type':'application/json',
-          authorization: this.$parent.globalData.token,
-          apikey: this.$parent.globalData.apikey
+          // 'content-type':'application/json',
+        },
+        data: {
+          // code: res.code,
+          // nickName: this.userInfo.nickName,
+          // gender: this.userInfo.gender,
+          // avatar: this.userInfo.avatarUrl
         },
         success: data => {
           data = this.$parent.null2str(data)
-          if (data.data.code === 8888) {
-            console.log(data)
-            this.userInfo = Object.assign(this.userInfo, data.data.data);
-            this.$parent.globalData.userInfo = this.userInfo
-            this.$apply()
-            // 判断是否进入注册页
-            // isTourist判断是否为游客
-            let isTourist = this.$parent.globalData.isTourist
-            if (this.userInfo.phone == '' && !isTourist) {
-              // 提示注册
-              this.goRegistered()
-            }
+          console.log(data)
+          wx.hideToast()
+          if (data.statusCode === 201) {
+            // let token = data.data.token_type + data.data.access_token
+            // this.$parent.globalData.token = token
+            // console.log(token)
+            // this.getIndexInfo()
           } else {
             wx.showModal({
               title: '',
@@ -352,7 +312,6 @@
         }
       })
     }
-
     // 获取轮播图
     getSwiperList() {
       wx.request({
@@ -373,39 +332,6 @@
             // 获取Token
             this.$parent.getToken(this.onLoad())
           }
-        }
-      })
-    }
-
-    // 定位
-    getLocation() {
-      console.log('-------------------------------------')
-      wx.getLocation({
-        type: 'wgs84',   //默认为 wgs84 返回 gps 坐标，gcj02 返回可用于 wx.openLocation 的坐标 
-        desc: '你的位置信息将用于小程序位置接口的效果展示',
-        success: res => { 
-          this.longitude = res.longitude
-          this.latitude = res.latitude
-          this.$apply()
-          console.log(this.longitude, this.latitude)
-          this.loadCity(this.longitude, this.latitude)
-        },
-        fail: res => {
-          console.log(res)
-          this.longitude = ''
-          this.latitude = ''
-          this.$apply()
-        }
-      })
-    }
-    loadCity(longitude, latitude) {
-      console.log('-------------------------------------')
-      wx.request({
-        url: `https://apis.map.qq.com/ws/geocoder/v1/?location=${latitude},${longitude}&key=${this.$parent.globalData.mapKey}`,
-        data: {},
-        success: (res) => {
-          this.address = res.data.result.address
-          console.log(this.address)
         }
       })
     }

@@ -2,22 +2,22 @@
  * @Author: luow 
  * @Date: 2019-10-29 11:05:01 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-05 10:20:48
+ * @Last Modified time: 2019-11-05 17:44:26
  */
 
 <template>
   <view>
     <view class="type">
-      <view class="active">
-        <image src="../image/daw.jpg" />
+      <view data-type="1" @tap="selType" class="{{type == 1?'active':''}}">
+        <image src="../image/yingshi{{type == 1?'1':'0'}}.png" />
         视频
       </view>
-      <view>
-        <image src="../image/daw.jpg" />
+      <view data-type="2" @tap="selType" class="{{type == 2?'active':''}}">
+        <image src="../image/donghua{{type == 2?'1':'0'}}.png" />
         动画
       </view>
-      <view>
-        <image src="../image/daw.jpg" />
+      <view data-type="3" @tap="selType" class="{{type == 3?'active':''}}">
+        <image src="../image/tupian{{type == 3?'1':'0'}}.png" />
         图片
       </view>
     </view>
@@ -42,11 +42,11 @@
                 {{item.read}}万阅读
               </view>
               <view>
-                <icon class="iconfont iconzhuanfa"></icon>
+                <icon class="iconfont icondianzan"></icon>
                 {{item.like}}
               </view>
               <view>
-                <icon class="iconfont iconzhuanfa"></icon>
+                <icon class="iconfont iconpinglun"></icon>
                 {{item.comment}}
               </view>
               <view>
@@ -77,11 +77,11 @@
             <text>199万阅读</text>
             <view class="iconItem">
               <view>
-                <icon class="iconfont iconzhuanfa"></icon>
+                <icon class="iconfont icondianzan"></icon>
                 100
               </view>
               <view>
-                <icon class="iconfont iconzhuanfa"></icon>
+                <icon class="iconfont iconpinglun"></icon>
                 100
               </view>
               <view>
@@ -108,7 +108,7 @@
     mixins = []
 
     data = {
-      type: 3,
+      type: 1,
       textList: [
         {
           id: '1',
@@ -165,6 +165,10 @@
     }
 
     methods = {
+      selType(e) {
+        this.type = e.currentTarget.dataset.type
+        this.$apply()
+      }
     }
 
     events = {

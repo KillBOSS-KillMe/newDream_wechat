@@ -70,6 +70,37 @@
       },
       pageNav(e) {
         console.log(e)
+        let type = e.currentTarget.dataset.id
+        let url = ''
+        switch(type) {
+          case '0': 
+            // 已上传的作品
+            url = '/pages/qqqqq'
+            break;
+          case '1': 
+            // 报名情况
+            url = '/pages/userSignUp'
+            break;
+          case '2': 
+            // 我的点赞
+            url = '/pages/userLikeList'
+            break;
+          case '3': 
+             // 我的评论
+            url = '/pages/userCommentList'
+            break;
+          case '4': 
+             // 浏览记录
+            url = '/pages/qqqqq'
+            break;
+          case '5': 
+             // 系统设置
+            url = '/pages/qqqqq'
+            break;
+          default:
+            break;
+        }
+        this.$navigate(url)
       }
     }
 

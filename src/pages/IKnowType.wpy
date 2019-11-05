@@ -9,15 +9,15 @@
   <view>
     <view class="type">
       <view data-type="1" @tap="selType" class="{{type == 1?'active':''}}">
-        <image src="../image/daw.jpg" />
+        <image src="../image/yingshi{{type == 1?'1':'0'}}.png" />
         视频
       </view>
       <view data-type="2" @tap="selType" class="{{type == 2?'active':''}}">
-        <image src="../image/daw.jpg" />
+        <image src="../image/tupian{{type == 2?'1':'0'}}.png" />
         图文
       </view>
       <view data-type="3" @tap="selType" class="{{type == 3?'active':''}}">
-        <image src="../image/daw.jpg" />
+        <image src="../image/wenzi{{type == 3?'1':'0'}}.png" />
         文字
       </view>
     </view>
@@ -27,7 +27,7 @@
     </view>
     <view class="textList" wx:if="{{type == 3}}">
       <repeat for="{{textList}}" item="item">
-        <view class="item">
+        <view class="item" data-id="1" @tap="goText">
           {{index + 1}}.{{item.title}}
         </view>
       </repeat>
@@ -42,11 +42,11 @@
                 {{item.read}}万阅读
               </view>
               <view>
-                <icon class="iconfont iconzhuanfa"></icon>
+                <icon class="iconfont icondianzan"></icon>
                 {{item.like}}
               </view>
               <view>
-                <icon class="iconfont iconzhuanfa"></icon>
+                <icon class="iconfont iconpinglun"></icon>
                 {{item.comment}}
               </view>
               <view>
@@ -77,11 +77,11 @@
             <text>199万阅读</text>
             <view class="iconItem">
               <view>
-                <icon class="iconfont iconzhuanfa"></icon>
+                <icon class="iconfont icondianzan"></icon>
                 100
               </view>
               <view>
-                <icon class="iconfont iconzhuanfa"></icon>
+                <icon class="iconfont iconpinglun"></icon>
                 100
               </view>
               <view>
@@ -169,6 +169,11 @@
       selType(e) {
         this.type = e.currentTarget.dataset.type
         this.$apply()
+      },
+      goText(e) {
+        let id = e.currentTarget.dataset.id
+        let url = `/pages/detailsText?id=${id}`
+        this.$navigate(url)
       }
     }
 

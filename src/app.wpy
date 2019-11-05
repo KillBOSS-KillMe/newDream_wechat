@@ -98,6 +98,8 @@ export default class extends wepy.app {
       'pages/userSignUp', // 报名情况
 
       // 详情部分
+      
+      'pages/detailPhoto', // 文字详情
       'pages/detailsText', // 文字详情
       'pages/detailsImage', // 图片详情
       'pages/detailsVideo', // 视频详情

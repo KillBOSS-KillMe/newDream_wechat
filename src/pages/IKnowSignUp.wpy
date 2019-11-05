@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-11-04 15:50:56 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-04 16:46:38
+ * @Last Modified time: 2019-11-05 16:01:35
  */
 
 <template>
@@ -10,7 +10,7 @@
     <view class="list">
       <view class="item">
         <label>姓名</label>
-        <input type="text" placeholder="请输入您的姓名" >
+        <input data-name="register_name" @input="getSetData" type="text" placeholder="请输入您的姓名" >
       </view>
       <view class="item">
         <label>性别</label>
@@ -25,35 +25,35 @@
       </view>
       <view class="item">
         <label>身份证号</label>
-        <input type="text" placeholder="请输入您的身份证号码" >
+        <input data-name="id_card" @input="getSetData" type="text" placeholder="请输入您的身份证号码" >
       </view>
       <view class="item">
         <label>联系方式</label>
-        <input type="text" placeholder="请输入您的联系方式" >
+        <input data-name="contact" @input="getSetData" type="text" placeholder="请输入您的联系方式" >
       </view>
       <view class="item">
         <label>所属区县</label>
-        <input type="text" placeholder="请输入所属区县" >
+        <input data-name="address" @input="getSetData" type="text" placeholder="请输入所属区县" >
       </view>
       <view class="item">
         <label>学校</label>
-        <input type="text" placeholder="请输入学校名称" >
+        <input data-name="school" @input="getSetData" type="text" placeholder="请输入学校名称" >
       </view>
       <view class="item">
-        <label>知道老师</label>
-        <input type="text" placeholder="请输入您的指导老师" >
+        <label>指导老师</label>
+        <input data-name="teacher" @input="getSetData" type="text" placeholder="请输入您的指导老师" >
       </view>
       <view class="item">
         <label>指导老师联系方式</label>
-        <input type="text" placeholder="请输入您的指导老师联系方式" >
+        <input data-name="teacher_contact" @input="getSetData" type="text" placeholder="请输入您的指导老师联系方式" >
       </view>
       <view class="item">
         <label>自我介绍</label>
-        <textarea placeholder="请输入..."></textarea>
+        <textarea data-name="declaration" @input="getSetData" placeholder="请输入..."></textarea>
       </view>
       <view class="item">
         <label>参赛宣言</label>
-        <textarea placeholder="请输入..."></textarea>
+        <textarea data-name="introduction" @input="getSetData" placeholder="请输入..."></textarea>
       </view>
     </view>
     <view class="notice">
@@ -63,7 +63,7 @@
       </repeat>
     </view>
     <view class="sub">
-      <view>提交</view>
+      <view @tap="submit">提交</view>
     </view>
   </view>
 </template>
@@ -88,7 +88,19 @@
       genderList: [
         {name: '男', id: '1', checks: false},
         {name: '女', id: '2', checks: false}
-      ]
+      ],
+      formNode: {
+        register_name: '',         // 姓名
+        id_card: '',               // 身份证号
+        contact: '',               // 联系方式
+        address: '',               // 地址
+        sex: '',                   // 性别
+        school: '',                // 学校
+        teacher: '',               // 指导老师
+        teacher_contact: '',       // 指导老师联系方式
+        introduction: '',          // 参赛宣言
+        declaration: ''            // 自我介绍
+      },
       
     }
 
@@ -97,11 +109,36 @@
     }
 
     methods = {
+      // 性别选择
       selGender(e) {
-        console.log(e.detail.value)
-        let indexArr = e.detail.value
-        let genderList = this.genderList
-      }
+        let selected = e.detail.value;
+        let genderList = this.genderList;
+        for (let i = 0; i < genderList.length; ++i) {
+          let checks = 'genderList[' + i + '].checks'
+          if (i == selected[selected.length - 1]) {
+            this.setData({
+              [checks]: true
+            })
+          } else {
+            this.setData({
+              [checks]: false
+            })
+          }
+          if (genderList[i].checks) {
+            this.formNode['sex'] = genderList[i].id
+          }
+        }
+        this.$apply()
+      },
+      // 表单数据获取
+      getSetData(e) {
+        let formNode = this.formNode
+        let name = e.currentTarget.dataset.name
+        let value = e.detail.value
+        formNode[name] = value
+        this.formNode = formNode
+        this.$apply()
+      },
     }
 
     events = {
@@ -109,6 +146,55 @@
     }
 
     onLoad(options) {
+    }
+    submit() {
+      let formNode = this.formNode
+      // 校验
+      // 校验
+      // 校验
+      // 校验
+      // 校验
+      // 校验
+      // 校验
+      // 校验
+      // 校验
+      // 校验
+      wx.showToast({
+        title: "数据提交中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+      wx.request({
+        url: `${this.$parent.globalData.requestUrl}/weapp/knowledge/sign_up`,
+        method: 'POST',
+        header: {
+          'content-type':'application/json',
+          Authorization: this.$parent.globalData.token
+        },
+        data: formNode,
+        success: data => {
+          data = this.$parent.null2str(data)
+          console.log(data)
+          wx.hideToast()
+          if (data.statusCode === 201) {
+            wx.showToast({
+              title: data.message,
+              icon: 'success',
+              duration: 2000
+            });
+            setTimeout(() => {
+              wx.navigateBack({
+                delta: -1
+              })
+            }, 2000)
+          } else {
+            wx.showModal({
+              title: '',
+              content: data.data.errmsg
+            })
+          }
+        }
+      })
     }
   }
 </script>

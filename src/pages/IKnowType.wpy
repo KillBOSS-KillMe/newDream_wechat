@@ -2,37 +2,37 @@
  * @Author: luow 
  * @Date: 2019-10-29 11:05:01 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-04 19:07:38
+ * @Last Modified time: 2019-11-05 15:05:55
  */
 
 <template>
   <view>
     <view class="type">
-      <view class="active">
+      <view data-type="1" @tap="selType" class="{{type == 1?'active':''}}">
         <image src="../image/daw.jpg" />
         视频
       </view>
-      <view>
+      <view data-type="2" @tap="selType" class="{{type == 2?'active':''}}">
         <image src="../image/daw.jpg" />
         图文
       </view>
-      <view>
+      <view data-type="3" @tap="selType" class="{{type == 3?'active':''}}">
         <image src="../image/daw.jpg" />
         文字
       </view>
     </view>
-    <view class="search" wx:if="{{type == 1}}">
+    <view class="search" wx:if="{{type == 3}}">
       <icon class="iconfont iconduihao"></icon>
       <input type="text" placeholder="请输入搜索内容" />
     </view>
-    <view class="textList" wx:if="{{type == 1}}">
+    <view class="textList" wx:if="{{type == 3}}">
       <repeat for="{{textList}}" item="item">
         <view class="item">
           {{index + 1}}.{{item.title}}
         </view>
       </repeat>
     </view>
-    <view class="videoList" wx:if="{{type == 2}}">
+    <view class="videoList" wx:if="{{type == 1}}">
       <repeat for="{{videoList}}" item="item">
         <view class="item">
           <view class="info">
@@ -62,7 +62,7 @@
         </view>
       </repeat>
     </view>
-    <view class="imageList" wx:if="{{type == 3}}">
+    <view class="imageList" wx:if="{{type == 2}}">
       <repeat for="{{videoList}}" item="item">
         <view class="item">
           <view class="title">{{item.title}}</view>
@@ -157,7 +157,8 @@
           share: 100,
           video: '../image/daw.jpg'
         }
-      ]
+      ],
+      pageData: [null, null, null]
     }
 
     computed = {
@@ -165,6 +166,10 @@
     }
 
     methods = {
+      selType(e) {
+        this.type = e.currentTarget.dataset.type
+        this.$apply()
+      }
     }
 
     events = {
@@ -172,8 +177,52 @@
     }
 
     onLoad(options) {
+      console.log(options)
+      this.type = options.type
+      this.$apply()
+      this.getData()
     }
-
+    getData() {
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+      let type = this.type
+      wx.request({
+        url: `${this.$parent.globalData.requestUrl}/weapp/knowledge`,
+        method: 'GET',
+        header: {
+          'content-type':'application/json',
+          Authorization: this.$parent.globalData.token
+        },
+        data: {
+          type: type
+        },
+        success: data => {
+          data = this.$parent.null2str(data)
+          console.log(data)
+          wx.hideToast()
+          if (data.statusCode === 200) {
+            if (type == 1) {
+              // 视频
+              this.pageDatap[0] = data.data
+            } else if (type == 2) {
+              // 图文
+              this.pageDatap[1] = data.data
+            } else if (type == 3) {
+              // 文字
+              this.pageDatap[2] = data.data
+            }
+          } else {
+            wx.showModal({
+              title: '',
+              content: data.data.errmsg
+            })
+          }
+        }
+      })
+    }
     // 下拉刷新
     onPullDownRefresh() {
       wx.showToast({

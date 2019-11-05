@@ -78,14 +78,12 @@ setStore(store);
 export default class extends wepy.app {
   config = {
     pages: [
-      
       // 首页模块
       'pages/index', // 首页
 
       // 我知道模块
       'pages/IKnow', // 我知道
       'pages/IKnowType', // 分类-我知道
-      'pages/IKnowDetailsText', // 文字分类-我知道-文字详情
       'pages/IKnowSignUp', // 报名--我知道
       
       // 新影像模块
@@ -97,6 +95,11 @@ export default class extends wepy.app {
       'pages/userLikeList', // 点赞列表
       'pages/userCommentList', // 评论列表
       'pages/userSignUp', // 报名情况
+
+      // 详情部分
+      'pages/detailsText', // 文字详情
+      'pages/detailsImage', // 图片详情
+      'pages/detailsVideo', // 视频详情
     ],
     permission: {
       'scope.userLocation': {

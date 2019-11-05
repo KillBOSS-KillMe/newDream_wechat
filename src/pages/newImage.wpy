@@ -2,13 +2,13 @@
  * @Author: luow 
  * @Date: 2019-11-04 15:29:49 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-04 15:34:21
+ * @Last Modified time: 2019-11-05 16:11:50
  */
 <template>
   <view>
     <view class="typeList">
       <repeat for="{{list}}" item="item">
-        <image data-index="{{index}}" src="../image/{{item}}" />
+        <image @tap="goType" data-index="{{index}}" src="../image/{{item}}" />
       </repeat>
     </view>
     <nav @childFn.user="goPage" @childFnOrReturn.user="goModifyUserInfo" />
@@ -47,6 +47,22 @@
         // 销毁当前页{跳转}
         this.$redirect(url)
       },
+      // 选择进入页
+      goType(e) {
+        let index = e.currentTarget.dataset.index
+        let url = ''
+        switch(index) {
+          case 0: 
+            url = '/pages/newImageSignUp'
+            break;
+          case 1: 
+            url = '/pages/newImageType'
+            break;
+          default:
+            break;
+        }
+        this.$navigate(url)
+      }
     }
 
     events = {

@@ -2,17 +2,18 @@
  * @Author: luow 
  * @Date: 2019-10-29 11:05:01 
  * @Last Modified by: luow
- * @Last Modified time: 2019-10-29 17:35:06
+ * @Last Modified time: 2019-11-06 16:09:55
  */
 
 <template>
   <view>
     <view class="list">
-      <repeat for="{{list}}" item="item">
+      <!-- <repeat for="{{list}}" item="item">
         <text>
           {{index + 1}}.{{item}}
         </text>
-      </repeat>
+      </repeat> -->
+      {{pageData.content}}
     </view>
   </view>
   
@@ -29,17 +30,8 @@
     mixins = []
 
     data = {
-      id: "",
-      list: [
-        '内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容',
-        '内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容',
-        '内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容',
-        '内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容',
-        '内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容',
-        '内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容',
-        '内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容',
-        '内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容',
-      ]
+      options: {},
+      pageData: {}
     }
 
     computed = {
@@ -54,7 +46,44 @@
     }
 
     onLoad(options) {
-      this.id = options.id
+      this.options = options
+      this.userInfo = this.$parent.globalData.userInfo
+      this.requestImgUrl = this.$parent.globalData.requestImgUrl
+      this.getData()
+    }
+    onShow() {
+    }
+    getData() {
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+      wx.request({
+        url: `${this.$parent.globalData.requestUrl}/weapp/knowledge/${this.options.id}`,
+        method: 'GET',
+        header: {
+          'content-type':'application/json',
+          Authorization: this.$parent.globalData.token
+        },
+        success: data => {
+          data = this.$parent.null2str(data)
+          // console.log(data)
+          wx.hideToast()
+          if (data.statusCode === 200) {
+            this.pageDatap = data.data
+            wx.setNavigationBarTitle({
+              title: this.pageDatap.title
+            })
+            this.$apply()
+          } else {
+            wx.showModal({
+              title: '',
+              content: data.data.errmsg
+            })
+          }
+        }
+      })
     }
 
     // 下拉刷新

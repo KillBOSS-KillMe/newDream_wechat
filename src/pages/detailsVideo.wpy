@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-11-06 11:44:22 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-06 15:30:25
+ * @Last Modified time: 2019-11-06 16:09:40
  */
 <template>
   <view>
@@ -15,7 +15,7 @@
       </view>
       <view class="cont">{{pageDatap.content}}</view>
       <view class="userContent">
-        <view>
+        <view wx:if="{{options.type == 'new_image'}}">
           <image src="{{pageDatap.user.avatar}}">
           <text>{{pageDatap.user.name}}</text>
         </view>
@@ -81,16 +81,6 @@
       requestImgUrl: '',
       pageDatap: {},
       options: {},
-      video:{
-        name:"狗子",
-        headImg:'../image/meFxm.png',
-        title:"玉溪澄江小湾村摇身变成“网红”村",
-        content:'湖光山色镜泊湖，这个秋天你约吗,时尚博主王欣湖光山色镜泊湖，这个秋天你约吗,时尚博主王欣湖光山色镜泊湖，这个秋天你约吗,时尚博主王欣湖光山色镜泊湖，这个秋天你约吗,时尚博主王欣湖光山色镜泊湖，这个秋天你约吗,时尚博主王欣湖光山色镜泊湖，这个秋天你约吗,时尚博主王欣湖光山色镜泊湖，这个秋天你约吗,时尚博主王欣湖光山色镜泊湖，这个秋天你约吗,时尚博主王欣',
-        assist:'222',
-        reply:'22',
-        share:'88',
-        video:"http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400"
-      },
       videoList:[
         {
           id:'1',
@@ -142,7 +132,6 @@
     }
 
     onLoad(options) {
-      console.log(options)
       this.options = options
       this.userInfo = this.$parent.globalData.userInfo
       this.requestImgUrl = this.$parent.globalData.requestImgUrl
@@ -160,6 +149,8 @@
       let url = ''
       if (this.options.type == 'new_image') {
         url = `/weapp/new_image/${this.options.id}`
+      } else if (this.options.type == 'iknow') {
+        url = `/weapp/knowledge/${this.options.id}`
       }
       wx.request({
         url: `${this.$parent.globalData.requestUrl + url}`,
@@ -170,11 +161,10 @@
         },
         success: data => {
           data = this.$parent.null2str(data)
-          console.log(data)
+          // console.log(data)
           wx.hideToast()
           if (data.statusCode === 200) {
             this.pageDatap = data.data
-            console.log(this.pageData)
             this.$apply()
           } else {
             wx.showModal({

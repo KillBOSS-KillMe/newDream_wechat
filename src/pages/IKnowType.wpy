@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-10-29 11:05:01 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-06 14:58:54
+ * @Last Modified time: 2019-11-06 15:59:01
  */
 
 <template>
@@ -86,7 +86,7 @@
             </view>
           </view>
           <view class="img">
-            <image src="{{requestImgUrl + item.video}}" />
+            <video id="myVideo" src="{{requestImgUrl + item.video_path}}" enable-danmu danmu-btn controls></video>
             <icon class="iconfont iconzhuanfa"></icon>
           </view>
         </view>
@@ -182,13 +182,13 @@
       // 进入图片详情
       goImage(e) {
         let id = e.currentTarget.dataset.id
-        let url = `/pages/detailPhoto?id=${id}`
+        let url = `/pages/detailPhoto?id=${id}&type=iknow`
         this.$navigate(url)
       },
       // 进入视频详情
       goVideo(e) {
         let id = e.currentTarget.dataset.id
-        let url = `/pages/detailsVideo?id=${id}`
+        let url = `/pages/detailsVideo?id=${id}&type=iknow`
         this.$navigate(url)
       }
     }
@@ -370,7 +370,7 @@ page{
     display: flex;
     align-items: center;
     justify-content: center;
-    image{
+    image, video{
       position: absolute;
       left: 0;
       top: 0;

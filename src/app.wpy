@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-10-29 10:41:00 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-06 11:51:38
+ * @Last Modified time: 2019-11-06 19:38:01
  */
 // customData = {}  // 自定义数据
 // customFunction ()　{}  // 自定义方法
@@ -467,6 +467,30 @@ icon{
     left: 0px;
     background: rgba(0, 0, 0, 0.8);
     z-index: 100;
+  }
+}
+.commentDom{
+  margin-top: 30rpx;
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  input{
+    width: 600rpx;
+    height: 30rpx;
+    padding: 20rpx 0;
+  }
+  view{
+    width: 90rpx;
+    height: 70rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #F08200;
+    color: #fff;
+    font-size: 28rpx;
+    font-weight: 600;
   }
 }
 .listNull{ 

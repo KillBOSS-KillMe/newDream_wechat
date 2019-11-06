@@ -2,28 +2,35 @@
  * @Author: luow 
  * @Date: 2019-10-29 11:05:01 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-06 10:35:04
+ * @Last Modified time: 2019-11-06 20:00:26
  */
 
 <template>
-  <view class="infoList">
-    <repeat for="{{commentList}}" item="item">
-      <view class="item">
-        <view class="tiele">
-          <label>{{item.title}}</label>
-          <text>回复</text>
-        </view>
-        <view class="con">
-          <image class="userImg" src="../image/daw.jpg" />
-          <view class="info">
-            <text class="name">二狗子</text>
+  <view>
+    <view class="infoList">
+      <repeat for="{{commentList}}" item="item">
+        <view class="item">
+          <view class="tiele">
             <label>{{item.title}}</label>
+            <text @tap="commentShow">回复</text>
           </view>
-          <image src="../image/daw.jpg" />
+          <view class="con">
+            <image class="userImg" src="../image/daw.jpg" />
+            <view class="info">
+              <text class="name">二狗子</text>
+              <label>{{item.title}}</label>
+            </view>
+            <image src="../image/daw.jpg" />
+          </view>
         </view>
-      </view>
-    </repeat>
+      </repeat>
+    </view>
+    <view class="commentDom" wx:if="{{commentDomShow}}">
+      <input type="text" placeholder="输入评论内容" @input="getCommentData" />
+      <view @tap="runComment">发表</view>
+    </view>
   </view>
+  
 </template>
 
 <script>
@@ -38,6 +45,8 @@
 
     data = {
       pageDataNode: null,
+      commentDomShow: false,
+      commentData: '',
       commentList: [
         {
           title: '三枪拍案惊奇',
@@ -72,6 +81,20 @@
     }
 
     methods = {
+      // 评论Dom显示
+      commentShow() {
+        if (this.commentDomShow) {
+          this.commentDomShow = false
+        } else {
+          this.commentDomShow = true
+        }
+        this.$apply()
+      },
+      // 获取评论内容
+      getCommentData(e) {
+        this.commentData = e.detail.value
+        this.$apply()
+      }
     }
 
     events = {
@@ -80,6 +103,47 @@
 
     onLoad(options) {
       this.getData()
+    }
+    // 评论
+    runComment(e) {
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+      wx.request({
+        url: `${this.$parent.globalData.requestUrl}/weapp/users_comment_reply`,
+        method: 'POST',
+        header: {
+          'content-type':'application/json',
+          Authorization: this.$parent.globalData.token
+        },
+        data: {
+          comment_id: 'knowledge',
+          content: this.commentData
+        },
+        success: data => {
+          data = this.$parent.null2str(data)
+          console.log(data)
+          wx.hideToast()
+          if (data.data.status_code === 201) {
+            wx.showToast({
+              title: "操作成功",
+              icon: 'success',
+              duration: 2000
+            });
+            this.commentDomShow = false
+            this.$apply()
+            // 数据更新
+            this.getData()
+          } else {
+            wx.showModal({
+              title: '',
+              content: data.data.errmsg
+            })
+          }
+        }
+      })
     }
     getData() {
       wx.showToast({
@@ -128,6 +192,16 @@
 <style lang="less">
 page{
   border-top: 1rpx solid #D5D5D5;
+}
+.commentDom{
+  padding: 30rpx;
+  width: 690rpx;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+}
+.infoList{
+  margin-bottom: 130rpx;
 }
 .item{
   width: 690rpx;

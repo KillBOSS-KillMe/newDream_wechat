@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-10-29 10:40:57 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-06 11:43:27
+ * @Last Modified time: 2019-11-06 20:03:38
  */
 <template>
   <view>
@@ -145,13 +145,6 @@ import configStore from '../store';
       requestImgUrl: '',
       userInfo: {},
       userInfoButtonShow: true,
-      swiperList: [
-        {id: '1' ,image_url: '../image/daw.jpg'},
-        {id: '1' ,image_url: '../image/daw.jpg'},
-        {id: '1' ,image_url: '../image/daw.jpg'},
-        {id: '1' ,image_url: '../image/daw.jpg'}
-      ],
-      latitude: 0
     }
 
     computed = {
@@ -201,7 +194,7 @@ import configStore from '../store';
           default:
             break;
         }
-        this.$redirect(url)
+        this.$navigate(url)
       }
     }
 

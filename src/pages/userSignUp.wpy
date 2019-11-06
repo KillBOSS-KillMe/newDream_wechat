@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-10-29 11:05:01 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-06 10:49:25
+ * @Last Modified time: 2019-11-06 20:10:05
  */
 
 <template>
@@ -15,7 +15,9 @@
         </view>
         <view class="item">
           <label>性别：</label>
-          <text>{{item.sex}}</text>
+          <text wx:if="{{item.sex == 0}}">男</text>
+          <text wx:if="{{item.sex == 1}}">女</text>
+          <text wx:if="{{item.sex == 2}}">其他</text>
         </view>
         <view class="item">
           <label>身份证号：</label>
@@ -70,19 +72,7 @@
     mixins = []
 
     data = {
-      knowledgeList: [],
-      item: {
-        name: '二狗子',
-        age: '女',
-        IDCard: '61012419931111111111',
-        phone: '1999999999',
-        address: '陕西省西安市',
-        school: '西北大学',
-        teacher: '二狗子',
-        teacherPhone: '1999999999',
-        introduction: '二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子',
-        declaration: '二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子二狗子',
-      },
+      knowledgeList: []
     }
 
     computed = {

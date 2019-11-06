@@ -6,10 +6,10 @@
  */
 <template>
   <view>
-    <swiper wx:if="{{swiperList.length > 0}}" class='swiper' indicator-dots="true" autoplay='true' interval='5000' duration='2000'>
-      <repeat for="{{swiperList}}" item="item">
+    <swiper wx:if="{{pageDataNode.index_ad.aditems.length > 0}}" class='swiper' indicator-dots="true" autoplay='true' interval='5000' duration='2000'>
+      <repeat for="{{pageDataNode.index_ad.aditems}}" item="item">
         <swiper-item data-id="{{ item.id }}">
-          <image src="{{ item.image_url }}" />
+          <image src="{{ requestImgUrl + item.image }}" />
         </swiper-item>
       </repeat>
     </swiper>
@@ -138,6 +138,8 @@ import configStore from '../store';
     mixins = []
 
     data = {
+      pageDataNode: null,
+      requestImgUrl: '',
       userInfo: {},
       userInfoButtonShow: true,
       swiperList: [
@@ -182,6 +184,8 @@ import configStore from '../store';
     }
 
     onLoad(options) {
+      this.userInfo = this.$parent.globalData.userInfo
+      this.requestImgUrl = this.$parent.globalData.requestImgUrl
       wx.showToast({
         title: "拼命加载中...",
         icon: 'loading',
@@ -288,49 +292,19 @@ import configStore from '../store';
         header: {
           // 'content-type':'application/json',
         },
-        data: {
-          // code: res.code,
-          // nickName: this.userInfo.nickName,
-          // gender: this.userInfo.gender,
-          // avatar: this.userInfo.avatarUrl
-        },
+        data: {},
         success: data => {
           data = this.$parent.null2str(data)
           console.log(data)
           wx.hideToast()
-          if (data.statusCode === 201) {
-            // let token = data.data.token_type + data.data.access_token
-            // this.$parent.globalData.token = token
-            // console.log(token)
-            // this.getIndexInfo()
+          if (data.statusCode === 200) {
+            this.pageDataNode = data.data
+            this.$apply()
           } else {
             wx.showModal({
               title: '',
               content: data.data.errmsg
             })
-          }
-        }
-      })
-    }
-    // 获取轮播图
-    getSwiperList() {
-      wx.request({
-        url: `${this.$parent.globalData.requestUrl}/index/get_baner_list`,
-        header: {
-          authorization: this.$parent.globalData.token,
-          apikey: this.$parent.globalData.apikey
-        },
-        method: 'GET',
-        success: data => {
-          data = this.$parent.null2str(data)
-          if (data.data.code === 8888) {
-            this.swiperList = data.data.data
-            this.$parent.globalData.swiperList = this.swiperList
-            console.log(this.swiperList)
-            this.$apply()
-          } else if (data.data.code === 1001) {
-            // 获取Token
-            this.$parent.getToken(this.onLoad())
           }
         }
       })

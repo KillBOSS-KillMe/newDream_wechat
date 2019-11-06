@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-10-29 11:05:01 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-05 15:05:55
+ * @Last Modified time: 2019-11-06 10:00:36
  */
 
 <template>
@@ -34,7 +34,7 @@
     </view>
     <view class="videoList" wx:if="{{type == 1}}">
       <repeat for="{{videoList}}" item="item">
-        <view class="item">
+        <view class="item" data-id="1" @tap="goVideo">
           <view class="info">
             <view class="title">{{item.title}}</view>
             <view class="num">
@@ -64,7 +64,7 @@
     </view>
     <view class="imageList" wx:if="{{type == 2}}">
       <repeat for="{{videoList}}" item="item">
-        <view class="item">
+        <view class="item" data-id="1" @tap="goImage">
           <view class="title">{{item.title}}</view>
           <view class="con"></view>
           <view class="imgList">
@@ -170,9 +170,22 @@
         this.type = e.currentTarget.dataset.type
         this.$apply()
       },
+      // 进入文字详情
       goText(e) {
         let id = e.currentTarget.dataset.id
         let url = `/pages/detailsText?id=${id}`
+        this.$navigate(url)
+      },
+      // 进入图片详情
+      goImage(e) {
+        let id = e.currentTarget.dataset.id
+        let url = `/pages/detailPhoto?id=${id}`
+        this.$navigate(url)
+      },
+      // 进入视频详情
+      goVideo(e) {
+        let id = e.currentTarget.dataset.id
+        let url = `/pages/detailsVideo?id=${id}`
         this.$navigate(url)
       }
     }

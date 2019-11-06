@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-10-29 11:05:01 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-05 17:44:26
+ * @Last Modified time: 2019-11-06 10:07:16
  */
 
 <template>
@@ -25,16 +25,39 @@
       <icon class="iconfont iconduihao"></icon>
       <input type="text" placeholder="请输入搜索内容" />
     </view>
-    <view class="textList" wx:if="{{type == 1}}">
-      <repeat for="{{textList}}" item="item">
-        <view class="item">
-          {{index + 1}}.{{item.title}}
+    <view class="videoList" wx:if="{{type == 1}}">
+      <repeat for="{{videoList}}" item="item">
+        <view class="item" data-id="1" @tap="goVideo">
+          <view class="info">
+            <view class="title">{{item.title}}</view>
+            <view class="num">
+              <view>
+                {{item.read}}万阅读
+              </view>
+              <view>
+                <icon class="iconfont icondianzan"></icon>
+                {{item.like}}
+              </view>
+              <view>
+                <icon class="iconfont iconpinglun"></icon>
+                {{item.comment}}
+              </view>
+              <view>
+                <icon class="iconfont iconzhuanfa"></icon>
+                {{item.share}}
+              </view>
+            </view>
+          </view>
+          <view class="img">
+            <image src="{{item.video}}" />
+            <icon class="iconfont iconzhuanfa"></icon>
+          </view>
         </view>
       </repeat>
     </view>
     <view class="videoList" wx:if="{{type == 2}}">
       <repeat for="{{videoList}}" item="item">
-        <view class="item">
+        <view class="item" data-id="1" @tap="goVideo">
           <view class="info">
             <view class="title">{{item.title}}</view>
             <view class="num">
@@ -64,7 +87,7 @@
     </view>
     <view class="imageList" wx:if="{{type == 3}}">
       <repeat for="{{videoList}}" item="item">
-        <view class="item">
+        <view class="item" data-id="1" @tap="goImage">
           <view class="title">{{item.title}}</view>
           <view class="con"></view>
           <view class="imgList">
@@ -109,24 +132,6 @@
 
     data = {
       type: 1,
-      textList: [
-        {
-          id: '1',
-          title: '三枪拍案惊奇'
-        },{
-          id: '1',
-          title: '三枪拍案惊奇'
-        },{
-          id: '1',
-          title: '三枪拍案惊奇'
-        },{
-          id: '1',
-          title: '三枪拍案惊奇'
-        },{
-          id: '1',
-          title: '三枪拍案惊奇'
-        }
-      ],
       videoList: [
         {
           title: '标题标题标题标题标题标题标题',
@@ -168,6 +173,18 @@
       selType(e) {
         this.type = e.currentTarget.dataset.type
         this.$apply()
+      },
+      // 进入图片详情
+      goImage(e) {
+        let id = e.currentTarget.dataset.id
+        let url = `/pages/detailPhoto?id=${id}`
+        this.$navigate(url)
+      },
+      // 进入视频详情
+      goVideo(e) {
+        let id = e.currentTarget.dataset.id
+        let url = `/pages/detailsVideo?id=${id}`
+        this.$navigate(url)
       }
     }
 

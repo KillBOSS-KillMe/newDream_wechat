@@ -10,8 +10,8 @@
       <image class="bg" src="../image/daw.jpg" />
       <view class="con">
         <view class="name">
-          <image src="../image/daw.jpg" />
-          二狗子
+          <image src="{{userInfo.avatarUrl}}" />
+          {{userInfo.nickName}}
         </view>
         <icon class="iconfont iconduihao"></icon>
       </view>
@@ -109,6 +109,8 @@
     }
 
     onLoad(options) {
+      this.userInfo = this.$parent.globalData.userInfo
+      console.log(this.userInfo)
     }
     // 下拉刷新
     onPullDownRefresh() {

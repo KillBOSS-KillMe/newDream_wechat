@@ -2,28 +2,58 @@
  * @Author: luow 
  * @Date: 2019-10-29 11:05:01 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-06 10:29:08
+ * @Last Modified time: 2019-11-06 10:55:45
  */
 
 <template>
   <view>
     <view class="type">
-      <view data-type="1" @tap="selType" class="{{type == 1?'active':''}}">
-        <image src="../image/yingshi{{type == 1?'1':'0'}}.png" />
+      <view data-type="0" @tap="selType" class="{{type == 0?'active':''}}">
+        <image src="../image/yingshi{{type == 0?'1':'0'}}.png" />
         视频
       </view>
-      <view data-type="2" @tap="selType" class="{{type == 2?'active':''}}">
-        <image src="../image/donghua{{type == 2?'1':'0'}}.png" />
+      <view data-type="1" @tap="selType" class="{{type == 1?'active':''}}">
+        <image src="../image/donghua{{type == 1?'1':'0'}}.png" />
         动画
       </view>
-      <view data-type="3" @tap="selType" class="{{type == 3?'active':''}}">
-        <image src="../image/tupian{{type == 3?'1':'0'}}.png" />
+      <view data-type="2" @tap="selType" class="{{type == 2?'active':''}}">
+        <image src="../image/tupian{{type == 2?'1':'0'}}.png" />
         图片
       </view>
     </view>
-    <view class="search" wx:if="{{type == 1}}">
+    <view class="search" wx:if="{{type == 0}}">
       <icon class="iconfont iconduihao"></icon>
       <input type="text" placeholder="请输入搜索内容" />
+    </view>
+    <view class="videoList" wx:if="{{type == 0}}">
+      <repeat for="{{videoList}}" item="item">
+        <view class="item" data-id="1" @tap="goVideo">
+          <view class="info">
+            <view class="title">{{item.title}}</view>
+            <view class="num">
+              <view>
+                {{item.read}}万阅读
+              </view>
+              <view>
+                <icon class="iconfont icondianzan"></icon>
+                {{item.like}}
+              </view>
+              <view>
+                <icon class="iconfont iconpinglun"></icon>
+                {{item.comment}}
+              </view>
+              <view>
+                <icon class="iconfont iconzhuanfa"></icon>
+                {{item.share}}
+              </view>
+            </view>
+          </view>
+          <view class="img">
+            <image src="{{item.video}}" />
+            <icon class="iconfont iconzhuanfa"></icon>
+          </view>
+        </view>
+      </repeat>
     </view>
     <view class="videoList" wx:if="{{type == 1}}">
       <repeat for="{{videoList}}" item="item">
@@ -55,37 +85,7 @@
         </view>
       </repeat>
     </view>
-    <view class="videoList" wx:if="{{type == 2}}">
-      <repeat for="{{videoList}}" item="item">
-        <view class="item" data-id="1" @tap="goVideo">
-          <view class="info">
-            <view class="title">{{item.title}}</view>
-            <view class="num">
-              <view>
-                {{item.read}}万阅读
-              </view>
-              <view>
-                <icon class="iconfont icondianzan"></icon>
-                {{item.like}}
-              </view>
-              <view>
-                <icon class="iconfont iconpinglun"></icon>
-                {{item.comment}}
-              </view>
-              <view>
-                <icon class="iconfont iconzhuanfa"></icon>
-                {{item.share}}
-              </view>
-            </view>
-          </view>
-          <view class="img">
-            <image src="{{item.video}}" />
-            <icon class="iconfont iconzhuanfa"></icon>
-          </view>
-        </view>
-      </repeat>
-    </view>
-    <view class="imageList" wx:if="{{type == 3}}">
+    <view class="imageList" wx:if="{{type == 2}}">
       <repeat for="{{videoList}}" item="item">
         <view class="item" data-id="1" @tap="goImage">
           <view class="title">{{item.title}}</view>

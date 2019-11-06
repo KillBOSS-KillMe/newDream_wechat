@@ -2,52 +2,58 @@
  * @Author: luow 
  * @Date: 2019-10-29 11:05:01 
  * @Last Modified by: luow
- * @Last Modified time: 2019-10-29 15:16:22
+ * @Last Modified time: 2019-11-06 10:49:25
  */
 
 <template>
-  <view class="infoList">
-    <view class="item">
-      <label>姓名：</label>
-      <text>{{signUpInfo.name}}</text>
-    </view>
-    <view class="item">
-      <label>性别：</label>
-      <text>{{signUpInfo.age}}</text>
-    </view>
-    <view class="item">
-      <label>身份证号：</label>
-      <text>{{signUpInfo.IDCard}}</text>
-    </view>
-    <view class="item">
-      <label>联系方式：</label>
-      <text>{{signUpInfo.phone}}</text>
-    </view>
-    <view class="item">
-      <label>所属区县：</label>
-      <text>{{signUpInfo.address}}</text>
-    </view>
-    <view class="item">
-      <label>学校：</label>
-      <text>{{signUpInfo.school}}</text>
-    </view>
-    <view class="item">
-      <label>指导老师：</label>
-      <text>{{signUpInfo.teacher}}</text>
-    </view>
-    <view class="item">
-      <label>指导老师联系方式：</label>
-      <text>{{signUpInfo.teacherPhone}}</text>
-    </view>
-    <view class="item">
-      <label>自我介绍：</label>
-      <text>{{signUpInfo.introduction}}</text>
-    </view>
-    <view class="item">
-      <label>参赛宣言：</label>
-      <text>{{signUpInfo.declaration}}</text>
-    </view>
+  <view>
+    <repeat for="{{knowledgeList}}" item="item">
+      <view class="infoList">
+        <view class="item">
+          <label>姓名：</label>
+          <text>{{item.register_name}}</text>
+        </view>
+        <view class="item">
+          <label>性别：</label>
+          <text>{{item.sex}}</text>
+        </view>
+        <view class="item">
+          <label>身份证号：</label>
+          <text>{{item.id_card}}</text>
+        </view>
+        <view class="item">
+          <label>联系方式：</label>
+          <text>{{item.contact}}</text>
+        </view>
+        <view class="item">
+          <label>所属区县：</label>
+          <text>{{item.address}}</text>
+        </view>
+        <view class="item">
+          <label>学校：</label>
+          <text>{{item.school}}</text>
+        </view>
+        <view class="item">
+          <label>指导老师：</label>
+          <text>{{item.teacher}}</text>
+        </view>
+        <view class="item">
+          <label>指导老师联系方式：</label>
+          <text>{{item.teacher_contact}}</text>
+        </view>
+        <view class="item">
+          <label>自我介绍：</label>
+          <text>{{item.declaration}}</text>
+        </view>
+        <view class="item">
+          <label>参赛宣言：</label>
+          <text>{{item.introduction}}</text>
+        </view>
+      </view>
+    </repeat>
+      
   </view>
+    
 </template>
 
 <script>
@@ -64,7 +70,8 @@
     mixins = []
 
     data = {
-      signUpInfo: {
+      knowledgeList: [],
+      item: {
         name: '二狗子',
         age: '女',
         IDCard: '61012419931111111111',
@@ -90,6 +97,38 @@
     }
 
     onLoad(options) {
+      this.getData()
+    }
+    getData() {
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+      let type = this.type
+      wx.request({
+        url: `${this.$parent.globalData.requestUrl}/weapp/users_registrations`,
+        method: 'GET',
+        header: {
+          'content-type':'application/json',
+          Authorization: this.$parent.globalData.token
+        },
+        data: {},
+        success: data => {
+          data = this.$parent.null2str(data)
+          console.log(data)
+          wx.hideToast()
+          if (data.data.status_code === 200) {
+            this.knowledgeList = data.data.data.knowledge
+            this.$apply()
+          } else {
+            wx.showModal({
+              title: '',
+              content: data.data.errmsg
+            })
+          }
+        }
+      })
     }
 
     // 下拉刷新

@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-11-04 15:50:56 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-05 16:09:45
+ * @Last Modified time: 2019-11-06 10:18:19
  */
 
 <template>
@@ -175,7 +175,7 @@
         success: data => {
           data = this.$parent.null2str(data)
           wx.hideToast()
-          if (data.statusCode === 201) {
+          if (data.status_code === 201) {
             wx.showToast({
               title: data.message,
               icon: 'success',

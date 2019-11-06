@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-10-29 11:05:01 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-06 10:00:36
+ * @Last Modified time: 2019-11-06 10:29:04
  */
 
 <template>
@@ -215,7 +215,7 @@
           Authorization: this.$parent.globalData.token
         },
         data: {
-          type: type
+          type: 2
         },
         success: data => {
           data = this.$parent.null2str(data)

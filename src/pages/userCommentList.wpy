@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-10-29 11:05:01 
  * @Last Modified by: luow
- * @Last Modified time: 2019-10-29 14:47:06
+ * @Last Modified time: 2019-11-06 10:35:04
  */
 
 <template>
@@ -37,6 +37,7 @@
     mixins = []
 
     data = {
+      pageDataNode: null,
       commentList: [
         {
           title: '三枪拍案惊奇',
@@ -78,6 +79,40 @@
     }
 
     onLoad(options) {
+      this.getData()
+    }
+    getData() {
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+      let type = this.type
+      wx.request({
+        url: `${this.$parent.globalData.requestUrl}/weapp/user_comments_list`,
+        method: 'GET',
+        header: {
+          'content-type':'application/json',
+          Authorization: this.$parent.globalData.token
+        },
+        data: {
+          page: 1,
+          page_size: 2
+        },
+        success: data => {
+          data = this.$parent.null2str(data)
+          console.log(data)
+          wx.hideToast()
+          if (data.status_code === 200) {
+            this.pageDataNode = data.data.knowledge
+          } else {
+            wx.showModal({
+              title: '',
+              content: data.data.errmsg
+            })
+          }
+        }
+      })
     }
 
     // 下拉刷新

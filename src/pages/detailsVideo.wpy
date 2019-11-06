@@ -1,381 +1,273 @@
 /*
  * @Author: luow 
- * @Date: 2019-11-05 10:15:11 
+ * @Date: 2019-11-06 11:44:22 
  * @Last Modified by:   luow 
- * @Last Modified time: 2019-11-05 10:15:11 
+ * @Last Modified time: 2019-11-06 11:44:22 
  */
-
 <template>
   <view>
-    <view class="type">
-      <view class="active">
-        <image src="../image/daw.jpg" />
-        视频
+    <!-- 视频 -->
+    <video id="myVideo" src="{{video.video}}" danmu-list="{{danmuList}}" enable-danmu danmu-btn controls></video>
+    <view class="video">
+      <view class="content">
+        <text>{{video.title}}</text>
+        <icon class="iconfont iconjiantou"></icon>
       </view>
-      <view>
-        <image src="../image/daw.jpg" />
-        图文
-      </view>
-      <view>
-        <image src="../image/daw.jpg" />
-        文字
-      </view>
-    </view>
-    <view class="search" wx:if="{{type == 1}}">
-      <icon class="iconfont iconduihao"></icon>
-      <input type="text" placeholder="请输入搜索内容" />
-    </view>
-    <view class="textList" wx:if="{{type == 1}}">
-      <repeat for="{{textList}}" item="item">
-        <view class="item">
-          {{index + 1}}.{{item.title}}
+      <view class="cont">{{video.content}}</view>
+      <view class="userContent">
+        <view>
+          <image src="{{video.headImg}}">
+          <text>{{video.name}}</text>
         </view>
-      </repeat>
+        <view class="videoIcon">
+          <view>
+            <icon class="iconfont iconjiantou"></icon>
+            <text>{{video.assist}}</text>
+          </view>
+          <view>
+            <icon class="iconfont iconjiantou"></icon>
+            <text>{{video.reply}}</text>
+          </view>
+          <view>
+            <icon class="iconfont iconjiantou"></icon>
+            <text>{{video.share}}</text>
+          </view>
+        </view>
+      </view>
     </view>
-    <view class="videoList" wx:if="{{type == 2}}">
+    <view class="line"></view>
+    <view class="videoList">
       <repeat for="{{videoList}}" item="item">
         <view class="item">
-          <view class="info">
-            <view class="title">{{item.title}}</view>
-            <view class="num">
-              <view>
-                {{item.read}}万阅读
-              </view>
-              <view>
-                <icon class="iconfont iconzhuanfa"></icon>
-                {{item.like}}
-              </view>
-              <view>
-                <icon class="iconfont iconzhuanfa"></icon>
-                {{item.comment}}
-              </view>
-              <view>
-                <icon class="iconfont iconzhuanfa"></icon>
-                {{item.share}}
+          <view class="itemL">
+            <text class="replyTitle">{{item.replyTitle}}</text>
+            <view class="itemLIcon">
+              <text class="replyname">{{item.replyname}}</text>
+              <view class="itemLIconItem">
+                <view>
+                  <icon class="iconfont iconjiantou"></icon>
+                  <text>{{item.replyAssist}}</text>
+                </view>
+                <view>
+                  <icon class="iconfont iconjiantou"></icon>
+                  <text>{{item.replyReply}}</text>
+                </view>
+                <view>
+                  <icon class="iconfont iconjiantou"></icon>
+                  <text>{{item.replyShare}}</text>
+                </view>
               </view>
             </view>
           </view>
-          <view class="img">
-            <image src="{{item.video}}" />
-            <icon class="iconfont iconzhuanfa"></icon>
-          </view>
-        </view>
-      </repeat>
-    </view>
-    <view class="imageList" wx:if="{{type == 3}}">
-      <repeat for="{{videoList}}" item="item">
-        <view class="item">
-          <view class="title">{{item.title}}</view>
-          <view class="con"></view>
-          <view class="imgList">
-            <image src="../image/daw.jpg" />
-            <image src="../image/daw.jpg" />
-            <image src="../image/daw.jpg" />
-            <image src="../image/daw.jpg" />
-          </view>
-          <view class="operating">
-            <text>199万阅读</text>
-            <view class="iconItem">
-              <view>
-                <icon class="iconfont iconzhuanfa"></icon>
-                100
-              </view>
-              <view>
-                <icon class="iconfont iconzhuanfa"></icon>
-                100
-              </view>
-              <view>
-                <icon class="iconfont iconzhuanfa"></icon>
-                100
-              </view>
-            </view>
-          </view>
+          <video src="{{item.replyVideo}}"></video>
         </view>
       </repeat>
     </view>
   </view>
-  
 </template>
 
 <script>
   import wepy from 'wepy'
   export default class DetailsVideo extends wepy.page {
-     config = {
+    config = {
       navigationBarTitleText: '视频详情'
     }
-    components = {
-    }
+    components = {}
+
     mixins = []
 
     data = {
-      type: 3,
-      textList: [
+      video:{
+        name:"狗子",
+        headImg:'../image/meFxm.png',
+        title:"玉溪澄江小湾村摇身变成“网红”村",
+        content:'湖光山色镜泊湖，这个秋天你约吗,时尚博主王欣湖光山色镜泊湖，这个秋天你约吗,时尚博主王欣湖光山色镜泊湖，这个秋天你约吗,时尚博主王欣湖光山色镜泊湖，这个秋天你约吗,时尚博主王欣湖光山色镜泊湖，这个秋天你约吗,时尚博主王欣湖光山色镜泊湖，这个秋天你约吗,时尚博主王欣湖光山色镜泊湖，这个秋天你约吗,时尚博主王欣湖光山色镜泊湖，这个秋天你约吗,时尚博主王欣',
+        assist:'222',
+        reply:'22',
+        share:'88',
+        video:"http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400"
+      },
+      videoList:[
         {
-          id: '1',
-          title: '三枪拍案惊奇'
-        },{
-          id: '1',
-          title: '三枪拍案惊奇'
-        },{
-          id: '1',
-          title: '三枪拍案惊奇'
-        },{
-          id: '1',
-          title: '三枪拍案惊奇'
-        },{
-          id: '1',
-          title: '三枪拍案惊奇'
-        }
-      ],
-      videoList: [
+          id:'1',
+          replyHead:'../image/meFxm.png',
+          replyTitle:"玉溪澄江小湾村摇身变成“网红”村",
+          replyTime:'2019-10-28',
+          replyContent:'1111111111111111',
+          replyname:"薛之谦",
+          replyAssist:"2222",
+          replyReply:'22',
+          replyShare:'88',
+          replyVideo:"http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400"
+        },
         {
-          title: '标题标题标题标题标题标题标题',
-          read: 100,
-          comment: 1000,
-          like: 100,
-          share: 100,
-          video: '../image/daw.jpg'
-        },{
-          title: '标题标题标题标题标题标题标题',
-          read: 100,
-          comment: 1000,
-          like: 100,
-          share: 100,
-          video: '../image/daw.jpg'
-        },{
-          title: '标题标题标题标题标题标题标题',
-          read: 100,
-          comment: 1000,
-          like: 100,
-          share: 100,
-          video: '../image/daw.jpg'
-        },{
-          title: '标题标题标题标题标题标题标题',
-          read: 100,
-          comment: 1000,
-          like: 100,
-          share: 100,
-          video: '../image/daw.jpg'
-        }
+          id:'1',
+          replyHead:'../image/meFxm.png',
+          replyTime:'2019-10-28',
+          replyContent:'1111111111111111',
+          replyname:"薛之谦",
+          replyAssist:"2222",
+          replyReply:'22',
+          replyShare:'88',
+          replyVideo:"http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400"
+        },
+        {
+          id:'1',
+          replyHead:'../image/meFxm.png',
+          replyTime:'2019-10-28',
+          replyContent:'1111111111111111',
+          replyname:"薛之谦",
+          replyAssist:"2222",
+          replyReply:'22',
+          replyShare:'88',
+          replyVideo:"http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400"
+        },
       ]
     }
 
     computed = {
-
+      
     }
 
     methods = {
+
     }
 
     events = {
-
+      
     }
 
-    onLoad(options) {
+    onLoad() {
+      
     }
-
-    // 下拉刷新
-    onPullDownRefresh() {
-      wx.showToast({
-        title: "拼命加载中...",
-        icon: 'loading',
-        duration: 1000000
-      });
+    onShow() {
     }
   }
 </script>
 <style lang="less">
-page{
-  border-top: 1rpx solid #D5D5D5;
+video{
+  width: 100%;
+  height: 436rpx;
 }
-.type{
-  width: 750rpx;
-  padding: 30rpx 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  border-bottom: 10rpx solid #F0F2F3;
-  font-size: 31rpx;
-  font-weight: 600;
-  color: #999;
-  .active{
-    color: #333;
-  }
-  view{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  image{
-    width: 33rpx;
-    height: 33rpx;
-    margin-right: 10rpx;
-  }
-}
-.search{
+.video{
   width: 690rpx;
-  height: 66rpx;
-  margin: 30rpx;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  background-color: #f8f8f8;
-  border-radius: 10rpx;
-  icon{
-    font-size: 32rpx;
-    width: 66rpx;
-    height: 66rpx;
+  padding: 30rpx;
+  .content{
     display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  input{
-    width: 620rpx;
-  }
-}
-.textList{
-  width: 100%;
-  .item{
-    width: 690rpx;
-    height: auto;
-    padding: 30rpx;
-    font-size: 31rpx;
-    font-weight: 600;
-    color: #333;
-  }
-}
-.videoList{
-  width: 100%;
-  .item{
-    width: 690rpx;
-    height: 150rpx;
-    padding: 30rpx;
-    font-size: 23rpx;
-    border-bottom: 10rpx solid #F0F2F3;
-    color: #333;
-    display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
+    text{
+      color: #333333;
+      font-size: 34rpx;
+      font-weight: 600;
+      width: 640rpx;
+    }
   }
-  .info{
-    width: 420rpx;
-    height: 150rpx;
-    .title{
-      width: 100%;
-      height: 80rpx;
+  .cont{
+    text-overflow:ellipsis;
+    display: -webkit-box;
+    word-break: break-all;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+    font-size: 28rpx;
+    color: #333333;
+    margin: 20rpx 0;
+    line-height: 40rpx;
+  }
+  .userContent{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    margin: 35rpx 0 0;
+    image{
+      width: 70rpx;
+      height: 70rpx;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+    text{
       font-size: 30rpx;
       font-weight: 600;
-      color: #333;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      // white-space:nowrap;
-    }
-    .num{
-      margin-top: 30rpx;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 23rpx;
-      view{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .iconfont{
-        font-size: 27rpx;
-        margin-right: 10rpx;
-      }
+      color: #333333;
+      margin-left: 20rpx;
     }
   }
-  .img{
-    position: relative;
-    width: 225rpx;
-    height: 150rpx;
-    border-radius: 10rpx;
+  .userContent>view{
     display: flex;
     align-items: center;
-    justify-content: center;
-    image{
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      border-radius: 10rpx;
-    }
-    .iconfont{
-      z-index: 10;
+  }
+  .videoIcon{
+    width: 360rpx;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text{
+      font-size: 28rpx;
+       color: #333333;
+       font-weight: normal;
     }
   }
 }
-.imageList{
-  width: 100%;
+.line{
+  width: 750rpx;
+  height: 10rpx;
+  background: #F0F2F3;
+}
+.videoList{
+  width: 690rpx;
+  padding:0 30rpx;
   .item{
-    width: 690rpx;
-    height: auto;
-    padding: 30rpx;
-    font-size: 23rpx;
-    border-bottom: 10rpx solid #F0F2F3;
-    color: #333;
-  }
-  .title{
-    width: 100%;
-    height: auto;
-    font-size: 30rpx;
-    font-weight: 600;
-    color: #333;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-  }
-  .con{
-    font-size: 28rpx;
-    color: #333;
-  }
-  .noShow{
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-  }
-  .imgList{
-    width: 690rpx;
-    height: auto;
+    padding: 30rpx 0;
+    border-bottom: 1rpx solid #D5D5D5;
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    flex-direction: row;
-    flex-wrap: wrap;
-    image{
-      width: 224rpx;
-      height: 224rpx;
+    align-items: center;
+    .itemL{
+      width: 435rpx;
+      .replyTitle{
+        font-size: 32rpx;
+        font-weight: 600;
+        text-overflow:ellipsis;
+        display: -webkit-box;
+        word-break: break-all;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+      }
+      .itemLIcon{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20rpx;
+        .replyname{
+          font-size: 24rpx;
+          color: #999999
+        }
+        .itemLIconItem{
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          height: 60rpx;
+          line-height: 60rpx;
+          text{
+            font-size: 24rpx;
+             color: #333;
+          }
+          icon{
+            font-size: 24rpx;
+            color:#999999;
+            margin-right: 13rpx;
+          }
+        }
+      }
+    }
+    video{
+      width: 226rpx;
+      height: 150rpx;
       border-radius: 10rpx;
-      margin-top: 20rpx;
-      margin-right: 10rpx;
-    }
-    image:nth-child(3n) {
-      margin-right: 0;
-    }
-  }
-  .operating{
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 20rpx;
-    // .iconItem{
-    //   view{
-
-    //   }
-    // }
-    view{
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .iconfont{
-      font-size: 25rpx;
-      margin-left: 30rpx;
-      margin-right: 10rpx;
+      overflow: hidden;
     }
   }
 }

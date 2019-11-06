@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-10-29 10:40:57 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-05 11:51:27
+ * @Last Modified time: 2019-11-06 11:43:27
  */
 <template>
   <view>
@@ -22,101 +22,104 @@
       </view>
     </view>
     <view class="articleList">
-      <view class="item type1">
-        <view class="title">内容内容内容内容内容内容内容内容内容内容内容内容内容</view>
-        <view class="articleCon">内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容</view>
-        <view class="operating">
-          <text>狗子</text>
-          <view>
-            <view class="operatItem">
-              <view class="iconfont icondianzan"></view>
-              1233
-            </view>
-            <view class="operatItem">
-              <view class="iconfont iconpinglun"></view>
-              1233
-            </view>
-            <view class="operatItem">
-              <view class="iconfont iconzhuanfa"></view>
-              1233
-            </view>
-          </view>
-        </view>
-      </view>
-      <view class="item type2">
-        <view class="info">
-          <view class="con">
-            <view class="title">内容内容内容内容内容内容内容内容内容内容内容内容内容</view>
-            <view class="articleCon">内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容</view>
-          </view>
-          <image src="../image/navNewImage.png" />
-        </view>
-        <view class="operating">
-          <text>狗子</text>
-          <view>
-            <view class="operatItem">
-              <view class="iconfont icondianzan"></view>
-              1233
-            </view>
-            <view class="operatItem">
-              <view class="iconfont iconpinglun"></view>
-              1233
-            </view>
-            <view class="operatItem">
-              <view class="iconfont iconzhuanfa"></view>
-              1233
+      <repeat for="{{pageDataNode.artile_data.data}}" item="item">
+        <view class="item type1" wx:if="{{item.artile_type == 0}}}" @tap="goDetails" data-index="{{index}}">
+          <view class="title">{{item.type}}---000{{item.title}}</view>
+          <view class="articleCon">{{item.content}}</view>
+          <view class="operating">
+            <text>{{item.user.name}}</text>
+            <view>
+              <view class="operatItem">
+                <view class="iconfont icondianzan"></view>
+                {{item.like}}
+              </view>
+              <view class="operatItem">
+                <view class="iconfont iconpinglun"></view>
+                {{item.comment_count}}
+              </view>
+              <view class="operatItem">
+                <view class="iconfont iconzhuanfa"></view>
+                {{item.forwarding_amount}}
+              </view>
             </view>
           </view>
         </view>
-      </view>
-      <view class="item type3">
-        <view class="title">内容内容内容内容内容内容内容内容内容内容内容内容内容</view>
-        <video id="myVideo" src="http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400" danmu-list="{{danmuList}}" enable-danmu danmu-btn controls></video>
-        <view class="articleCon">内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容</view>
-        <view class="operating">
-          <text>狗子</text>
-          <view>
-            <view class="operatItem">
-              <view class="iconfont icondianzan"></view>
-              1233
+        <view class="item type2" wx:if="{{item.artile_type == 1}}}" @tap="goDetails" data-index="{{index}}">
+          <view class="info">
+            <view class="con">
+              <view class="title">{{item.type}}---111{{item.title}}</view>
+              <view class="articleCon">{{item.content}}</view>
             </view>
-            <view class="operatItem">
-              <view class="iconfont iconpinglun"></view>
-              1233
-            </view>
-            <view class="operatItem">
-              <view class="iconfont iconzhuanfa"></view>
-              1233
+            <image src="{{requestImgUrl + item.images[0]}}" />
+          </view>
+          <view class="operating">
+            <text>{{item.user.name}}</text>
+            <view>
+              <view class="operatItem">
+                <view class="iconfont icondianzan"></view>
+                {{item.like}}
+              </view>
+              <view class="operatItem">
+                <view class="iconfont iconpinglun"></view>
+                {{item.comment_count}}
+              </view>
+              <view class="operatItem">
+                <view class="iconfont iconzhuanfa"></view>
+                {{item.forwarding_amount}}
+              </view>
             </view>
           </view>
         </view>
-      </view>
-      <view class="item type4">
-        <view class="title">内容内容内容内容内容内容内容内容内容内容内容内容内容</view>
-        <view class="imageList">
-          <image src="../image/navNewImage.png" />
-          <image src="../image/navNewImage.png" />
-          <image src="../image/navNewImage.png" />
-        </view>
-        <view class="articleCon">内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容</view>
-        <view class="operating">
-          <text>狗子</text>
-          <view>
-            <view class="operatItem">
-              <view class="iconfont icondianzan"></view>
-              1233
-            </view>
-            <view class="operatItem">
-              <view class="iconfont iconpinglun"></view>
-              1233
-            </view>
-            <view class="operatItem">
-              <view class="iconfont iconzhuanfa"></view>
-              1233
+        <view class="item type3" wx:if="{{item.artile_type == 2}}}" @tap="goDetails" data-index="{{index}}">
+          <view class="title">{{item.type}}---222{{item.title}}</view>
+          <video id="myVideo" src="{{requestImgUrl + item.video_path}}" danmu-list="{{danmuList}}" enable-danmu danmu-btn controls></video>
+          <view class="articleCon">{{item.content}}</view>
+          <view class="operating">
+            <text>{{item.user.name}}</text>
+            <view>
+              <view class="operatItem">
+                <view class="iconfont icondianzan"></view>
+                {{item.like}}
+              </view>
+              <view class="operatItem">
+                <view class="iconfont iconpinglun"></view>
+                {{item.comment_count}}
+              </view>
+              <view class="operatItem">
+                <view class="iconfont iconzhuanfa"></view>
+                {{item.forwarding_amount}}
+              </view>
             </view>
           </view>
         </view>
-      </view>
+        <view class="item type4" wx:if="{{item.artile_type == 3}}}" @tap="goDetails" data-index="{{index}}">
+          <view class="title">{{item.type}}---333{{item.title}}</view>
+          <view class="imageList">
+            <repeat for="{{item.images}}" item="imgItem">
+              <image src="{{requestImgUrl + imgItem}}" />
+            </repeat>
+          </view>
+          <view class="articleCon">{{item.content}}</view>
+          <view class="operating">
+            <text>{{item.user.name}}</text>
+            <view>
+              <view class="operatItem">
+                <view class="iconfont icondianzan"></view>
+                {{item.like}}
+              </view>
+              <view class="operatItem">
+                <view class="iconfont iconpinglun"></view>
+                {{item.comment_count}}
+              </view>
+              <view class="operatItem">
+                <view class="iconfont iconzhuanfa"></view>
+                {{item.forwarding_amount}}
+              </view>
+            </view>
+          </view>
+        </view>
+      </repeat>
+      
     </view>
     <nav @childFn.user="goPage" @childFnOrReturn.user="goModifyUserInfo" />
     <button open-type="getUserInfo" id='getUserInfo' wx:if="{{userInfoButtonShow}}" lang="zh_CN" @getuserinfo="onGetUserInfo"></button>
@@ -175,6 +178,29 @@ import configStore from '../store';
       goNewImage() {
         this.$parent.globalData.navAction = ['noAction','noAction', 'action', 'noAction']
         let url = "/pages/newImage"
+        this.$redirect(url)
+      },
+      goDetails(e) {
+        let index = e.currentTarget.dataset.index
+        let type = this.pageDataNode.artile_data.data[index].artile_type
+        let id = e.currentTarget.dataset.id
+        let url = ''
+        switch(type) {
+          case 0: 
+            url = '/pages/IKnowSignUp'
+            break;
+          case 1: 
+            url = '/pages/IKnowType?type=1'
+            break;
+          case 2: 
+            url = '/pages/IKnowType?type=2'
+            break;
+          case 3: 
+            url = '/pages/IKnowType?type=3'
+            break;
+          default:
+            break;
+        }
         this.$redirect(url)
       }
     }

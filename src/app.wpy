@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-10-29 10:41:00 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-06 19:38:01
+ * @Last Modified time: 2019-11-06 20:40:56
  */
 // customData = {}  // 自定义数据
 // customFunction ()　{}  // 自定义方法
@@ -356,6 +356,30 @@ export default class extends wepy.app {
 }
 </script>
 <style lang="less">
+// 取消按钮默认样式
+button {
+  position:relative;
+  display:block;
+  margin-left:auto;
+  margin-right:auto;
+  padding-left:14px;
+  padding-right:14px;
+  box-sizing:border-box;
+  font-size:18px;
+  text-align:center;
+  text-decoration:none;
+  line-height:2.55555556;
+  border-radius:5px;
+  -webkit-tap-highlight-color:transparent;
+  overflow:hidden;
+  color:#000000;
+  background-color:transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+button::after {
+  border: none;
+}
 #getUserInfo{
   position: fixed;
   top: 0;

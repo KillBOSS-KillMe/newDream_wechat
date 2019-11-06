@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-11-06 11:44:22 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-06 19:51:22
+ * @Last Modified time: 2019-11-06 20:40:22
  */
 <template>
   <view>
@@ -28,10 +28,14 @@
             <icon class="iconfont iconpinglun"></icon>
             {{pageDatap.comment_count}}
           </view>
-          <view data-id="{{pageDatap.id}}" @tap="runLike">
+          <button type="primary" open-type="share" data-name="pageShare" id="share">
             <icon class="iconfont iconzhuanfa"></icon>
             {{pageDatap.forwarding_amount}}
-          </view>
+          </button>
+          <!-- <view data-id="{{pageDatap.id}}" @tap="runLike">
+            <icon class="iconfont iconzhuanfa"></icon>
+            {{pageDatap.forwarding_amount}}
+          </view> -->
         </view>
       </view>
       <view class="commentDom" wx:if="{{commentDomShow}}">
@@ -157,6 +161,17 @@
     }
     onShow() {
     }
+    // 分享页面
+    onShareAppMessage() {
+      let url = `pages/detailsVideo?id=${this.options.id}&type=${this.options.type}`
+      console.log(url)
+      return {
+        title: this.pageDatap.title,
+        desc: '',
+        // imageUrl: this.image,
+        path: url
+      }
+    };
     // 点赞
     runLike(e) {
       wx.showToast({
@@ -355,7 +370,7 @@ video{
        color: #333333;
        font-weight: normal;
     }
-    view{
+    view, button{
       font-size: 28rpx;
       color: #333333;
       display: flex;

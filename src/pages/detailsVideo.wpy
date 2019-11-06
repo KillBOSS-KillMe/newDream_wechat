@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-11-06 11:44:22 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-06 16:33:49
+ * @Last Modified time: 2019-11-06 17:19:15
  */
 <template>
   <view>
@@ -37,12 +37,12 @@
     </view>
     <view class="line"></view>
     <view class="videoList">
-      <repeat for="{{videoList}}" item="item">
-        <view class="item">
+      <repeat for="{{pageDatap.recommend}}" item="item">
+        <view class="item" data-id="{{item.id}}" @tap="showRecommendData">
           <view class="itemL">
-            <text class="replyTitle">{{item.replyTitle}}</text>
+            <text class="replyTitle">{{item.title}}</text>
             <view class="itemLIcon">
-              <text class="replyname">{{item.replyname}}</text>
+              <text class="replyname">{{item.user.name}}</text>
               <view class="itemLIconItem">
                 <view>
                   <icon class="iconfont icondianzan"></icon>
@@ -59,7 +59,7 @@
               </view>
             </view>
           </view>
-          <video src="{{item.replyVideo}}"></video>
+          <video src="{{requestImgUrl + item.video_path}}"></video>
         </view>
       </repeat>
     </view>
@@ -340,14 +340,19 @@ video{
           align-items: center;
           height: 60rpx;
           line-height: 60rpx;
-          text{
-            font-size: 24rpx;
-             color: #333;
+          font-size: 24rpx;
+          color: #333;
+          
+          view{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
           }
           icon{
             font-size: 24rpx;
             color:#999999;
             margin-right: 13rpx;
+            margin-left: 30rpx;
           }
         }
       }

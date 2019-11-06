@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-10-29 11:05:01 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-06 16:09:55
+ * @Last Modified time: 2019-11-06 16:14:03
  */
 
 <template>
@@ -71,11 +71,12 @@
           // console.log(data)
           wx.hideToast()
           if (data.statusCode === 200) {
-            this.pageDatap = data.data
-            wx.setNavigationBarTitle({
-              title: this.pageDatap.title
-            })
+            this.pageData = data.data
             this.$apply()
+            wx.setNavigationBarTitle({
+              title: this.pageData.title
+            })
+            console.log(this.pageData)
           } else {
             wx.showModal({
               title: '',

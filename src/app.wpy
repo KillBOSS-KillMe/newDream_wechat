@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-10-29 10:41:00 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-06 09:59:16
+ * @Last Modified time: 2019-11-06 11:51:38
  */
 // customData = {}  // 自定义数据
 // customFunction ()　{}  // 自定义方法
@@ -120,7 +120,7 @@ export default class extends wepy.app {
     // 接口请求路径
     requestUrl: 'http://www.silk-road-dreams.com/api',
     // 图片路径
-    requestImgUrl: 'http://www.silk-road-dreams.com/',
+    requestImgUrl: 'http://www.silk-road-dreams.com/uploads/',
     mapKey: 'GCABZ-J4G64-2WKUX-DNQMK-MVCGK-OSFD4',
     apikey: '123456',
     token: '',

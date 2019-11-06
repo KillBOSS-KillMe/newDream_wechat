@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-10-29 11:05:01 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-06 10:54:51
+ * @Last Modified time: 2019-11-06 14:58:54
  */
 
 <template>
@@ -26,37 +26,36 @@
       <input type="text" placeholder="请输入搜索内容" />
     </view>
     <view class="textList" wx:if="{{type == 2}}">
-      <repeat for="{{textList}}" item="item">
-        <view class="item" data-id="1" @tap="goText">
+      <repeat for="{{pageData[2].data}}" item="item">
+        <view class="item" data-id="{{item.id}}" @tap="goText">
           {{index + 1}}.{{item.title}}
         </view>
       </repeat>
     </view>
     <view class="imageList" wx:if="{{type == 1}}">
-      <repeat for="{{videoList}}" item="item">
-        <view class="item" data-id="1" @tap="goImage">
+      <repeat for="{{pageData[1].data}}" item="item">
+        <view class="item" data-id="{{item.id}}" @tap="goImage">
           <view class="title">{{item.title}}</view>
           <view class="con"></view>
           <view class="imgList">
-            <image src="../image/daw.jpg" />
-            <image src="../image/daw.jpg" />
-            <image src="../image/daw.jpg" />
-            <image src="../image/daw.jpg" />
+            <repeat for="{{item.images}}" item="imgItem">
+              <image src="{{requestImgUrl + imgItem}}" />
+            </repeat>
           </view>
           <view class="operating">
-            <text>199万阅读</text>
+            <text>{{item.reading_volume}}万阅读</text>
             <view class="iconItem">
               <view>
                 <icon class="iconfont icondianzan"></icon>
-                100
+                {{item.like}}
               </view>
               <view>
                 <icon class="iconfont iconpinglun"></icon>
-                100
+                {{item.comment_count}}
               </view>
               <view>
                 <icon class="iconfont iconzhuanfa"></icon>
-                100
+                {{item.forwarding_amount}}
               </view>
             </view>
           </view>
@@ -64,13 +63,13 @@
       </repeat>
     </view>
     <view class="videoList" wx:if="{{type == 0}}">
-      <repeat for="{{videoList}}" item="item">
-        <view class="item" data-id="1" @tap="goVideo">
+      <repeat for="{{pageData[0].data}}" item="item">
+        <view class="item" data-id="{{item.id}}" @tap="goVideo">
           <view class="info">
             <view class="title">{{item.title}}</view>
             <view class="num">
               <view>
-                {{item.read}}万阅读
+                {{item.reading_volume}}万阅读
               </view>
               <view>
                 <icon class="iconfont icondianzan"></icon>
@@ -78,16 +77,16 @@
               </view>
               <view>
                 <icon class="iconfont iconpinglun"></icon>
-                {{item.comment}}
+                {{item.comment_count}}
               </view>
               <view>
                 <icon class="iconfont iconzhuanfa"></icon>
-                {{item.share}}
+                {{item.forwarding_amount}}
               </view>
             </view>
           </view>
           <view class="img">
-            <image src="{{item.video}}" />
+            <image src="{{requestImgUrl + item.video}}" />
             <icon class="iconfont iconzhuanfa"></icon>
           </view>
         </view>
@@ -109,7 +108,9 @@
     mixins = []
 
     data = {
-      type: 3,
+      userInfo: {},
+      requestImgUrl: '',
+      type: 0,
       textList: [
         {
           id: '1',
@@ -170,6 +171,7 @@
       selType(e) {
         this.type = e.currentTarget.dataset.type
         this.$apply()
+        this.getData()
       },
       // 进入文字详情
       goText(e) {
@@ -196,6 +198,8 @@
     }
 
     onLoad(options) {
+      this.userInfo = this.$parent.globalData.userInfo
+      this.requestImgUrl = this.$parent.globalData.requestImgUrl
       console.log(options)
       this.type = options.type
       this.$apply()
@@ -216,23 +220,26 @@
           Authorization: this.$parent.globalData.token
         },
         data: {
-          type: 2
+          type: type
         },
         success: data => {
           data = this.$parent.null2str(data)
           console.log(data)
           wx.hideToast()
           if (data.statusCode === 200) {
-            if (type == 1) {
-              // 视频
-              this.pageDatap[0] = data.data
-            } else if (type == 2) {
-              // 图文
-              this.pageDatap[1] = data.data
-            } else if (type == 3) {
-              // 文字
-              this.pageDatap[2] = data.data
-            }
+            // if (type == 1) {
+            //   // 视频
+            //   this.pageData[type] = data.data
+            // } else if (type == 2) {
+            //   // 图文
+            //   this.pageData[1] = data.data
+            // } else if (type == 3) {
+            //   // 文字
+            //   this.pageData[2] = data.data
+            // }
+            this.pageData[type] = data.data
+            console.log(this.pageData)
+            this.$apply()
           } else {
             wx.showModal({
               title: '',

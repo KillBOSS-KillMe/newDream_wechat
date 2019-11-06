@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-11-04 15:50:56 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-05 16:53:03
+ * @Last Modified time: 2019-11-06 14:27:24
  */
 
 <template>
@@ -333,14 +333,9 @@
               wx.uploadFile({
                 url: `${this.$parent.globalData.requestUrl}/weapp/images`,
                 filePath: item.path,
-                name: 'file',
-                data: {
-                  type: 'new_image',
-                  image: item.path
-                },
+                name: 'image',
                 header: {
-                  Authorization: this.$parent.globalData.token,
-                  // apikey: this.$parent.globalData.apikey
+                  Authorization: this.$parent.globalData.token
                 },
                 success: res => {
                   console.log(res)

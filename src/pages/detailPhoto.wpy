@@ -2,25 +2,34 @@
   <view>
     <view class="works">
       <view class="workstop">
-        <image src="{{userInfo.headImg}}" />
+        <image src="{{pageDatap.user.avatar}}" />
         <view class="worksUser">
-          <text class="userName">{{userInfo.name}}</text>
-          <text>{{userInfo.time}}</text>
+          <text class="userName">{{pageDatap.user.name}}</text>
+          <text>{{pageDatap.created_at}}</text>
         </view>
       </view>
-      <text class="worksTitle">{{userInfo.title}}</text>
-      <view class="worksContent">{{userInfo.content}}</view>
+      <text class="worksTitle">{{pageDatap.title}}</text>
+      <view class="worksContent">{{pageDatap.content}}</view>
       <view class="imgList">
-        <repeat for="{{userInfo.imgList}}" item="item">
-          <image src="{{item.img}}" />
+        <repeat for="{{pageDatap.images}}" item="imgItem">
+          <image src="{{requestImgUrl + imgItem}}" />
         </repeat>
       </view>
       <view class="worksCount">
-        <text>{{userInfo.read}}万阅读</text>
+        <text>{{pageDatap.reading_volume}}万阅读</text>
         <view class="worksCountItem">
-          <view><icon class="iconfont iconjiantou"></icon>{{userInfo.assist}}</view>
-          <view><icon class="iconfont iconjiantou"></icon>{{userInfo.reply}}</view>
-          <view><icon class="iconfont iconjiantou"></icon>{{userInfo.share}}</view>
+          <view>
+            <icon class="iconfont icondianzan"></icon>
+            {{pageDatap.like}}
+          </view>
+          <view>
+            <icon class="iconfont iconpinglun"></icon>
+            {{pageDatap.comment_count}}
+          </view>
+          <view>
+            <icon class="iconfont iconzhuanfa"></icon>
+            {{pageDatap.forwarding_amount}}
+          </view>
         </view>
       </view>
       
@@ -60,24 +69,10 @@
     mixins = []
 
     data = {
-      userInfo:{
-        name:"狗子",
-        headImg:'../image/meFxm.png',
-        time:"2019-10-28",
-        title:"玉溪澄江小湾村摇身变成“网红”村",
-        content:'湖光山色镜泊湖，这个秋天你约吗,时尚博主王欣...',
-        read:'52',
-        assist:'222',
-        reply:'22',
-        share:'88',
-        imgList:[
-          {img:"../image/meFxm.png"},
-          {img:"../image/meFxm.png"},
-          {img:"../image/meFxm.png"},
-          {img:"../image/meFxm.png"},
-          {img:"../image/meFxm.png"},
-        ]
-      },
+      userInfo:{},
+      requestImgUrl: '',
+      pageDatap: {},
+      options: {},
       reply:[
         {id:'1',replyHead:'../image/meFxm.png',replyTime:'2019-10-28',replyContent:'1111111111111111',replyname:"薛之谦"},
         {id:'1',replyHead:'../image/meFxm.png',replyTime:'2019-10-28',replyContent:'1111111111111111',replyname:"薛之谦"},
@@ -97,10 +92,49 @@
       
     }
 
-    onLoad() {
-      
+    onLoad(options) {
+      console.log(options)
+      this.options = options
+      this.userInfo = this.$parent.globalData.userInfo
+      this.requestImgUrl = this.$parent.globalData.requestImgUrl
+      this.getData()
     }
     onShow() {
+    }
+    getData() {
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+      let type = this.type
+      let url = ''
+      if (this.options.type == 'new_image') {
+        url = `/weapp/new_image/${this.options.id}`
+      }
+      wx.request({
+        url: `${this.$parent.globalData.requestUrl + url}`,
+        method: 'GET',
+        header: {
+          'content-type':'application/json',
+          Authorization: this.$parent.globalData.token
+        },
+        success: data => {
+          data = this.$parent.null2str(data)
+          console.log(data)
+          wx.hideToast()
+          if (data.statusCode === 200) {
+            this.pageDatap = data.data
+            console.log(this.pageData)
+            this.$apply()
+          } else {
+            wx.showModal({
+              title: '',
+              content: data.data.errmsg
+            })
+          }
+        }
+      })
     }
   }
 </script>
@@ -185,6 +219,12 @@
       view{
         font-size: 28rpx;
         color: #333333;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .iconfont{
+        margin-right: 10rpx;
       }
     }
   }

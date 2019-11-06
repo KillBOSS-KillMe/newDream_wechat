@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-10-29 11:05:01 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-06 14:58:06
+ * @Last Modified time: 2019-11-06 15:05:28
  */
 
 <template>
@@ -180,7 +180,7 @@
       // 进入图片详情
       goImage(e) {
         let id = e.currentTarget.dataset.id
-        let url = `/pages/detailPhoto?id=${id}`
+        let url = `/pages/detailPhoto?id=${id}&type=new_image`
         this.$navigate(url)
       },
       // 进入视频详情

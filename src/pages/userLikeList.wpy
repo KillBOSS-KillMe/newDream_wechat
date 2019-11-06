@@ -2,17 +2,17 @@
  * @Author: luow 
  * @Date: 2019-10-29 15:23:31 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-06 10:33:21
+ * @Last Modified time: 2019-11-06 17:12:47
  */
 <template>
   <view class="infoList">
-    <repeat for="{{likeList}}" item="item">
-      <view class="item" data-id="{{item.id}}">
+    <repeat for="{{pageDataNode.data}}" item="item">
+      <view class="item" data-type="{{item.type}}" data-id="{{item.id}}">
         <view class="info">
-          <text class="title">{{item.title}}</text>
-          <text class="time">{{item.time}}点赞</text>
+          <text class="title">{{item.new_image.title}}</text>
+          <text class="time">{{item.updated_at}}点赞</text>
         </view>
-        <image src="{{item.iamge}}" />
+        <image src="{{requestImgUrl + item.new_image.images[0]}}" />
       </view>
     </repeat>
   </view>
@@ -29,29 +29,9 @@
     mixins = []
 
     data = {
-      likeList: [
-        {
-          id: '1',
-          title: '三枪拍案惊奇',
-          time: '2019.10.10', 
-          iamge: '../image/daw.jpg' 
-        },{
-          id: '1',
-          title: '三枪拍案惊奇',
-          time: '2019.10.10', 
-          iamge: '../image/daw.jpg' 
-        },{
-          id: '1',
-          title: '三枪拍案惊奇',
-          time: '2019.10.10',
-          iamge: '../image/daw.jpg' 
-        },{
-          id: '1',
-          title: '三枪拍案惊奇',
-          time: '2019.10.10',
-          iamge: '../image/daw.jpg' 
-        }
-      ]
+      requestImgUrl: '',
+      pageDataNode:{},
+
     }
 
     computed = {
@@ -66,6 +46,8 @@
     }
 
     onLoad(options) {
+      this.requestImgUrl = this.$parent.globalData.requestImgUrl
+      this.$apply()
       this.getData()
     }
     getData() {
@@ -88,10 +70,12 @@
         },
         success: data => {
           data = this.$parent.null2str(data)
-          console.log(data)
+          // console.log(data)
           wx.hideToast()
-          if (data.status_code === 200) {
-            this.pageDataNode = data.data.knowledge
+          if (data.statusCode === 200) {
+            this.pageDataNode = data.data
+            // console.log(this.pageDataNode)
+            this.$apply()
           } else {
             wx.showModal({
               title: '',

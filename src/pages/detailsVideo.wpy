@@ -1,36 +1,36 @@
 /*
  * @Author: luow 
  * @Date: 2019-11-06 11:44:22 
- * @Last Modified by:   luow 
- * @Last Modified time: 2019-11-06 11:44:22 
+ * @Last Modified by: luow
+ * @Last Modified time: 2019-11-06 15:30:25
  */
 <template>
   <view>
     <!-- 视频 -->
-    <video id="myVideo" src="{{video.video}}" danmu-list="{{danmuList}}" enable-danmu danmu-btn controls></video>
+    <video id="myVideo" src="{{requestImgUrl + pageDatap.video_path}}" danmu-list="{{danmuList}}" enable-danmu danmu-btn controls></video>
     <view class="video">
       <view class="content">
-        <text>{{video.title}}</text>
+        <text>{{pageDatap.title}}</text>
         <icon class="iconfont iconjiantou"></icon>
       </view>
-      <view class="cont">{{video.content}}</view>
+      <view class="cont">{{pageDatap.content}}</view>
       <view class="userContent">
         <view>
-          <image src="{{video.headImg}}">
-          <text>{{video.name}}</text>
+          <image src="{{pageDatap.user.avatar}}">
+          <text>{{pageDatap.user.name}}</text>
         </view>
         <view class="videoIcon">
           <view>
             <icon class="iconfont iconjiantou"></icon>
-            <text>{{video.assist}}</text>
+            <text>{{pageDatap.like}}</text>
           </view>
           <view>
             <icon class="iconfont iconjiantou"></icon>
-            <text>{{video.reply}}</text>
+            <text>{{pageDatap.comment_count}}</text>
           </view>
           <view>
             <icon class="iconfont iconjiantou"></icon>
-            <text>{{video.share}}</text>
+            <text>{{pageDatap.forwarding_amount}}</text>
           </view>
         </view>
       </view>
@@ -77,6 +77,10 @@
     mixins = []
 
     data = {
+      userInfo:{},
+      requestImgUrl: '',
+      pageDatap: {},
+      options: {},
       video:{
         name:"狗子",
         headImg:'../image/meFxm.png',
@@ -137,10 +141,49 @@
       
     }
 
-    onLoad() {
-      
+    onLoad(options) {
+      console.log(options)
+      this.options = options
+      this.userInfo = this.$parent.globalData.userInfo
+      this.requestImgUrl = this.$parent.globalData.requestImgUrl
+      this.getData()
     }
     onShow() {
+    }
+    getData() {
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+      let type = this.type
+      let url = ''
+      if (this.options.type == 'new_image') {
+        url = `/weapp/new_image/${this.options.id}`
+      }
+      wx.request({
+        url: `${this.$parent.globalData.requestUrl + url}`,
+        method: 'GET',
+        header: {
+          'content-type':'application/json',
+          Authorization: this.$parent.globalData.token
+        },
+        success: data => {
+          data = this.$parent.null2str(data)
+          console.log(data)
+          wx.hideToast()
+          if (data.statusCode === 200) {
+            this.pageDatap = data.data
+            console.log(this.pageData)
+            this.$apply()
+          } else {
+            wx.showModal({
+              title: '',
+              content: data.data.errmsg
+            })
+          }
+        }
+      })
     }
   }
 </script>

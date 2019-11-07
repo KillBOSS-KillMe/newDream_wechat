@@ -11,6 +11,7 @@
         <image @tap="goType" data-index="{{index}}" src="../image/{{item}}" />
       </repeat>
     </view>
+    <image class="typePageBg" src="../image/typePageBg.png" />
     <nav @childFn.user="goPage" @childFnOrReturn.user="goModifyUserInfo" />
   </view>
 </template>
@@ -86,7 +87,16 @@ page{
   border-top: 1rpx solid #D5D5D5;
   background-color: #00C2C8;
 }
+.typePageBg{
+  width: 750rpx;
+  height: 150rpx;
+  position: absolute;
+  left: 0;
+  bottom: 120rpx;
+  z-index: -1;
+}
 .typeList{
+  z-index: 10;
   width: 750rpx;
   padding-top: 20rpx;
   height: auto;

@@ -7,12 +7,13 @@
 <template>
   <view class="infoList">
     <repeat for="{{pageDataNode.data}}" item="item">
-      <view class="item" data-type="{{item.type}}" data-id="{{item.id}}">
+      <view class="item" @tap="goDetails" data-index="{{index}}" data-type="{{item.type}}" data-id="{{item.id}}">
         <view class="info">
           <text class="title">{{item.new_image.title}}</text>
           <text class="time">{{item.updated_at}}点赞</text>
         </view>
-        <image src="{{requestImgUrl + item.new_image.images[0]}}" />
+        <image wx:if="{{item.new_image.images.length > 0}}" src="{{requestImgUrl + item.new_image.images[0]}}" />
+        <video id="myVideo" wx:if="{{item.new_image.video_path != ''}}" src="{{requestImgUrl + item.new_image.video_path}}" enable-danmu danmu-btn controls></video>
       </view>
     </repeat>
   </view>
@@ -97,6 +98,27 @@
         }
       })
     }
+    goDetails(e) {
+      console.log(this.pageDataNode.data[e.currentTarget.dataset.index])
+      let dataNode = this.pageDataNode.data[e.currentTarget.dataset.index]
+      let id = dataNode.new_image.id
+      let url = ''
+      // 0视频，1动画，2图片  type
+      if (dataNode.type == 'new_image') {
+        if(dataNode.new_image.type == 0 || dataNode.new_image.type == 1) {
+          url = `/pages/detailsVideo?id=${id}&type=new_image`
+        } else if(dataNode.new_image.type == 2) {
+          url = `/pages/detailPhoto?id=${id}&type=new_image`
+        }
+      } else {
+        if(dataNode.new_image.type == 0 || dataNode.new_image.type == 1) {
+          url = `/pages/detailsVideo?id=${id}&type=iknow`
+        } else if(dataNode.new_image.type == 2) {
+          url = `/pages/detailPhoto?id=${id}&type=iknow`
+        }
+      }
+      this.$navigate(url)
+    }
     getData() {
       wx.showToast({
         title: "拼命加载中...",
@@ -172,7 +194,7 @@ page{
     font-size: 20rpx;
     color: #999;
   }
-  image{
+  image, video{
     width: 120rpx;
     height: 120rpx;
     border-radius: 10rpx;

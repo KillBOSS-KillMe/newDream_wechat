@@ -26,7 +26,7 @@
       <input type="text" placeholder="请输入搜索内容" />
     </view>
     <view class="videoList" wx:if="{{type == 0}}">
-      <repeat for="{{pageDatap[0].data}}" item="item">
+      <repeat for="{{pageData[0].data}}" item="item">
         <view class="item">
           <view class="info">
             <view class="title" data-id="{{item.id}}" @tap="goVideo">{{item.title}}</view>
@@ -56,7 +56,7 @@
       </repeat>
     </view>
     <view class="videoList" wx:if="{{type == 1}}">
-      <repeat for="{{pageDatap[1].data}}" item="item">
+      <repeat for="{{pageData[1].data}}" item="item">
         <view class="item">
           <view class="info">
             <view class="title" data-id="{{item.id}}" @tap="goVideo">{{item.title}}</view>
@@ -86,7 +86,7 @@
       </repeat>
     </view>
     <view class="imageList" wx:if="{{type == 2}}">
-      <repeat for="{{pageDatap[2].data}}" item="item">
+      <repeat for="{{pageData[2].data}}" item="item">
         <view class="item">
           <view class="title" data-id="{{item.id}}" @tap="goImage">{{item.title}}</view>
           <view class="con"></view>
@@ -132,7 +132,7 @@
     data = {
       userInfo: {},
       requestImgUrl: '',
-      pageDatap: [null, null, null],
+      pageData: [null, null, null],
       type: 1,
       videoList: [
         {
@@ -200,6 +200,57 @@
       this.requestImgUrl = this.$parent.globalData.requestImgUrl
       this.getData()
     }
+    /**
+     * 页面上拉触底事件的处理函数
+     */
+    onReachBottom() {
+      // 翻页加载
+      console.log(this.pageData[this.type])
+      if (this.pageData[this.type].next_page_url != '') {
+        this.getDataNextPage()
+      } else {
+        wx.showToast({
+          title: "没有更多了",
+          icon: 'none',
+          duration: 2000
+        });
+      }
+    }
+    // 加载下一页数据
+    getDataNextPage() {
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+      let type = this.type
+      let nextPageUrl = this.pageData[type].next_page_url
+      wx.request({
+        url: nextPageUrl,
+        method: 'GET',
+        data: {
+          type: type
+        },
+        success: data => {
+          data = this.$parent.null2str(data)
+          console.log(data)
+          wx.hideToast()
+          if (data.statusCode === 200) {
+            let list = this.pageData[type].data
+            let newList = data.data.data
+            list = list.concat(newList)
+            this.pageData[type].data = list
+            console.log(this.pageData)
+            this.$apply()
+          } else {
+            wx.showModal({
+              title: '',
+              content: data.data.errmsg
+            })
+          }
+        }
+      })
+    }
     getData() {
       wx.showToast({
         title: "拼命加载中...",
@@ -224,7 +275,7 @@
           // console.log(data)
           wx.hideToast()
           if (data.statusCode === 200) {
-            this.pageDatap[type] = data.data.data
+            this.pageData[type] = data.data.data
             // console.log(this.pageData)
             this.$apply()
           } else {

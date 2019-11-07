@@ -11,10 +11,10 @@
       <repeat for="{{pageDataNode}}" item="item">
         <view class="item">
           <view class="tiele">
-            <label>{{item.new_image.title}}</label>
+            <label @tap="goDetails" data-index="{{index}}">{{item.new_image.title}}</label>
             <text data-index="{{index}}" @tap="commentShow">回复</text>
           </view>
-          <view class="con">
+          <view class="con" @tap="goDetails" data-index="{{index}}">
             <image class="userImg" src="{{item.new_image.user.avatar}}" />
             <view class="info">
               <text class="name">{{item.new_image.user.name}}</text>
@@ -81,6 +81,27 @@
     onLoad(options) {
       this.requestImgUrl = this.$parent.globalData.requestImgUrl
       this.getData()
+    }
+    goDetails(e) {
+      console.log(this.pageDataNode[e.currentTarget.dataset.index])
+      let dataNode = this.pageDataNode[e.currentTarget.dataset.index]
+      let id = dataNode.new_image.id
+      let url = ''
+      // 0视频，1动画，2图片  type
+      if (dataNode.type == 'new_image') {
+        if(dataNode.new_image.type == 0 || dataNode.new_image.type == 1) {
+          url = `/pages/detailsVideo?id=${id}&type=new_image`
+        } else if(dataNode.new_image.type == 2) {
+          url = `/pages/detailPhoto?id=${id}&type=new_image`
+        }
+      } else {
+        if(dataNode.new_image.type == 0 || dataNode.new_image.type == 1) {
+          url = `/pages/detailsVideo?id=${id}&type=iknow`
+        } else if(dataNode.new_image.type == 2) {
+          url = `/pages/detailPhoto?id=${id}&type=iknow`
+        }
+      }
+      this.$navigate(url)
     }
     // 评论
     runComment(e) {

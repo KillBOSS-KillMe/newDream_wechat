@@ -23,10 +23,11 @@
     </view>
     <view class="search" wx:if="{{type == 2}}">
       <icon class="iconfont iconduihao"></icon>
-      <input type="text" placeholder="请输入搜索内容" />
+      <input type="text" placeholder="请输入搜索内容" @input="search" />
     </view>
     <view class="textList" wx:if="{{type == 2}}">
-      <repeat for="{{pageData[2].data}}" item="item">
+      <repeat for="{{textShowList}}" item="item">
+      <!-- <repeat for="{{pageData[2].data}}" item="item"> -->
         <view class="item" data-id="{{item.id}}" @tap="goText">
           {{index + 1}}.{{item.title}}
         </view>
@@ -87,7 +88,7 @@
           </view>
           <view class="img">
             <video id="myVideo" src="{{requestImgUrl + item.video_path}}" enable-danmu danmu-btn controls></video>
-            <icon class="iconfont iconzhuanfa"></icon>
+            <!-- <icon class="iconfont iconzhuanfa"></icon> -->
           </view>
         </view>
       </repeat>
@@ -108,58 +109,10 @@
     mixins = []
 
     data = {
+      textShowList: [],
       userInfo: {},
       requestImgUrl: '',
       type: 0,
-      textList: [
-        {
-          id: '1',
-          title: '三枪拍案惊奇'
-        },{
-          id: '1',
-          title: '三枪拍案惊奇'
-        },{
-          id: '1',
-          title: '三枪拍案惊奇'
-        },{
-          id: '1',
-          title: '三枪拍案惊奇'
-        },{
-          id: '1',
-          title: '三枪拍案惊奇'
-        }
-      ],
-      videoList: [
-        {
-          title: '标题标题标题标题标题标题标题',
-          read: 100,
-          comment: 1000,
-          like: 100,
-          share: 100,
-          video: '../image/daw.jpg'
-        },{
-          title: '标题标题标题标题标题标题标题',
-          read: 100,
-          comment: 1000,
-          like: 100,
-          share: 100,
-          video: '../image/daw.jpg'
-        },{
-          title: '标题标题标题标题标题标题标题',
-          read: 100,
-          comment: 1000,
-          like: 100,
-          share: 100,
-          video: '../image/daw.jpg'
-        },{
-          title: '标题标题标题标题标题标题标题',
-          read: 100,
-          comment: 1000,
-          like: 100,
-          share: 100,
-          video: '../image/daw.jpg'
-        }
-      ],
       pageData: [null, null, null]
     }
 
@@ -245,7 +198,10 @@
             let newList = data.data.data
             list = list.concat(newList)
             this.pageData[type].data = list
-            console.log(this.pageData)
+            if (type == 2) {
+              this.textShowList = data.data.data
+            }
+            // console.log(this.pageData)
             this.$apply()
           } else {
             wx.showModal({
@@ -255,6 +211,22 @@
           }
         }
       })
+    }
+    search(e) {
+      let key = e.detail.value
+      if (key == '') {
+        this.textShowList = this.pageData[2].data
+        return false
+      }
+      let allList = this.pageData[2].data
+      let textShowList = []
+      for (let i = 0; i < allList.length; i++) {
+        if (allList[i].title.indexOf(key) != -1) {
+          textShowList.push(allList[i])
+        }
+      }
+      this.textShowList = textShowList
+      this.$apply()
     }
     getData() {
       wx.showToast({
@@ -279,8 +251,11 @@
           wx.hideToast()
           if (data.statusCode === 200) {
             this.pageData[type] = data.data
-            console.log(this.pageData)
-            console.log(this.pageData[this.type].next_page_url)
+            if (type == 2) {
+              this.textShowList = data.data.data
+            }
+            // console.log(this.pageData)
+            // console.log(this.pageData[this.type].next_page_url)
             this.$apply()
           } else {
             wx.showModal({

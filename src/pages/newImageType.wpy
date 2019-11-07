@@ -23,10 +23,11 @@
     </view>
     <view class="search" wx:if="{{type == 0}}">
       <icon class="iconfont iconduihao"></icon>
-      <input type="text" placeholder="请输入搜索内容" />
+      <input type="text" placeholder="请输入搜索内容" @input="search" />
     </view>
     <view class="videoList" wx:if="{{type == 0}}">
-      <repeat for="{{pageDatap[0].data}}" item="item">
+      <repeat for="{{videoShowList}}" item="item">
+      <!-- <repeat for="{{pageData[0].data}}" item="item"> -->
         <view class="item">
           <view class="info">
             <view class="title" data-id="{{item.id}}" @tap="goVideo">{{item.title}}</view>
@@ -50,13 +51,13 @@
           </view>
           <view class="img" data-id="{{item.id}}" @tap="goVideo">
             <video id="myVideo" src="{{requestImgUrl + item.video_path}}" enable-danmu danmu-btn controls></video>
-            <icon class="iconfont iconzhuanfa"></icon>
+            <!-- <icon class="iconfont iconzhuanfa"></icon> -->
           </view>
         </view>
       </repeat>
     </view>
     <view class="videoList" wx:if="{{type == 1}}">
-      <repeat for="{{pageDatap[1].data}}" item="item">
+      <repeat for="{{pageData[1].data}}" item="item">
         <view class="item">
           <view class="info">
             <view class="title" data-id="{{item.id}}" @tap="goVideo">{{item.title}}</view>
@@ -80,13 +81,13 @@
           </view>
           <view class="img" data-id="{{item.id}}" @tap="goVideo">
             <video id="myVideo" src="{{requestImgUrl + item.video_path}}" enable-danmu danmu-btn controls></video>
-            <icon class="iconfont iconzhuanfa"></icon>
+            <!-- <icon class="iconfont iconzhuanfa"></icon> -->
           </view>
         </view>
       </repeat>
     </view>
     <view class="imageList" wx:if="{{type == 2}}">
-      <repeat for="{{pageDatap[2].data}}" item="item">
+      <repeat for="{{pageData[2].data}}" item="item">
         <view class="item">
           <view class="title" data-id="{{item.id}}" @tap="goImage">{{item.title}}</view>
           <view class="con"></view>
@@ -130,10 +131,11 @@
     mixins = []
 
     data = {
+      videoShowList: [],
       userInfo: {},
       requestImgUrl: '',
-      pageDatap: [null, null, null],
-      type: 1
+      pageData: [null, null, null],
+      type: 0
     }
 
     computed = {
@@ -220,6 +222,22 @@
         }
       })
     }
+    search(e) {
+      let key = e.detail.value
+      if (key == '') {
+        this.videoShowList = this.pageData[0].data
+        return false
+      }
+      let allList = this.pageData[0].data
+      let videoShowList = []
+      for (let i = 0; i < allList.length; i++) {
+        if (allList[i].title.indexOf(key) != -1) {
+          videoShowList.push(allList[i])
+        }
+      }
+      this.videoShowList = videoShowList
+      this.$apply()
+    }
     getData() {
       wx.showToast({
         title: "拼命加载中...",
@@ -242,8 +260,11 @@
           console.log(data)
           wx.hideToast()
           if (data.statusCode === 200) {
-            this.pageDatap[type] = data.data
-            console.log(this.pageData)
+            this.pageData[type] = data.data
+            if (type == 0) {
+              this.videoShowList = data.data.data
+            }
+            // console.log(this.pageData)
             this.$apply()
           } else {
             wx.showModal({

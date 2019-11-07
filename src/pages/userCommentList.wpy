@@ -12,7 +12,7 @@
         <view class="item">
           <view class="tiele">
             <label>{{item.new_image.title}}</label>
-            <text @tap="commentShow">回复</text>
+            <text data-index="{{index}}" @tap="commentShow">回复</text>
           </view>
           <view class="con">
             <image class="userImg" src="{{item.new_image.user.avatar}}" />
@@ -49,6 +49,7 @@
       pageDataNode: null,
       commentDomShow: false,
       commentData: '',
+      index: -1
     }
 
     computed = {
@@ -57,11 +58,12 @@
 
     methods = {
       // 评论Dom显示
-      commentShow() {
+      commentShow(e) {
         if (this.commentDomShow) {
           this.commentDomShow = false
         } else {
           this.commentDomShow = true
+          this.index = e.currentTarget.dataset.index
         }
         this.$apply()
       },
@@ -82,11 +84,19 @@
     }
     // 评论
     runComment(e) {
+      if (this.commentData == '') {
+        wx.showToast({
+          title: "请输入评论内容",
+          icon: 'none',
+          duration: 1000000
+        })
+      }
       wx.showToast({
         title: "拼命加载中...",
         icon: 'loading',
         duration: 1000000
-      });
+      })
+      let comment_id = this.pageDataNode[this.index].id
       wx.request({
         url: `${this.$parent.globalData.requestUrl}/weapp/users_comment_reply`,
         method: 'POST',
@@ -95,16 +105,15 @@
           Authorization: this.$parent.globalData.token
         },
         data: {
-          comment_id: 'knowledge',
+          comment_id: comment_id,
           content: this.commentData
         },
         success: data => {
           data = this.$parent.null2str(data)
-          console.log(data)
           wx.hideToast()
           if (data.data.status_code === 201) {
             wx.showToast({
-              title: "操作成功",
+              title: "评论成功",
               icon: 'success',
               duration: 2000
             });

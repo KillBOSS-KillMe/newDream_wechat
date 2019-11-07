@@ -45,7 +45,7 @@
     <view class="videoList">
       <repeat for="{{pageDatap.recommend}}" item="item">
         <view class="item" data-id="{{item.id}}" @tap="showRecommendData">
-          <view class="itemL">
+          <view class="itemL" @tap="dataSwitch" data-index="{{index}}">
             <text class="replyTitle">{{item.title}}</text>
             <view class="itemLIcon">
               <text class="replyname">{{item.user.name}}</text>
@@ -87,43 +87,7 @@
       requestImgUrl: '',
       pageDatap: {},
       options: {},
-      commentDomShow: false,
-      videoList:[
-        {
-          id:'1',
-          replyHead:'../image/meFxm.png',
-          replyTitle:"玉溪澄江小湾村摇身变成“网红”村",
-          replyTime:'2019-10-28',
-          replyContent:'1111111111111111',
-          replyname:"薛之谦",
-          replyAssist:"2222",
-          replyReply:'22',
-          replyShare:'88',
-          replyVideo:"http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400"
-        },
-        {
-          id:'1',
-          replyHead:'../image/meFxm.png',
-          replyTime:'2019-10-28',
-          replyContent:'1111111111111111',
-          replyname:"薛之谦",
-          replyAssist:"2222",
-          replyReply:'22',
-          replyShare:'88',
-          replyVideo:"http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400"
-        },
-        {
-          id:'1',
-          replyHead:'../image/meFxm.png',
-          replyTime:'2019-10-28',
-          replyContent:'1111111111111111',
-          replyname:"薛之谦",
-          replyAssist:"2222",
-          replyReply:'22',
-          replyShare:'88',
-          replyVideo:"http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400"
-        },
-      ]
+      commentDomShow: false
     }
 
     computed = {
@@ -158,6 +122,11 @@
       this.getData()
     }
     onShow() {
+    }
+    dataSwitch(e) {
+      let id = this.pageDatap.recommend[e.currentTarget.dataset.index].id
+      this.options.id = id
+      this.getData()
     }
     // 分享页面
     onShareAppMessage() {

@@ -42,7 +42,7 @@
     <view class="line"></view>
     <view class="worksReply">
       <repeat for="{{pageDatap.recommend}}" item="item">
-        <view class="item">
+        <view class="item" @tap="dataSwitch" data-index="{{index}}">
           <view class="itemTop">
             <image src="{{requestImgUrl + item.avatar}}" />
             <view class="itemTopUser">
@@ -72,12 +72,7 @@
       requestImgUrl: '',
       pageDatap: {},
       options: {},
-      commentDomShow: false,
-      reply:[
-        {id:'1',replyHead:'../image/meFxm.png',replyTime:'2019-10-28',replyContent:'1111111111111111',replyname:"薛之谦"},
-        {id:'1',replyHead:'../image/meFxm.png',replyTime:'2019-10-28',replyContent:'1111111111111111',replyname:"薛之谦"},
-        {id:'1',replyHead:'../image/meFxm.png',replyTime:'2019-10-28',replyContent:'1111111111111111',replyname:"薛之谦"},
-      ]
+      commentDomShow: false
     }
 
     computed = {
@@ -113,6 +108,11 @@
       this.getData()
     }
     onShow() {
+    }
+    dataSwitch(e) {
+      let id = this.pageDatap.recommend[e.currentTarget.dataset.index].id
+      this.options.id = id
+      this.getData()
     }
     // 分享页面
     onShareAppMessage() {

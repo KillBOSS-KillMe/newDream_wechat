@@ -216,25 +216,16 @@
         },
         data: {
           page: 1,
-          page_size: 10
+          page_size: 10,
+          type: type
         },
         success: data => {
           data = this.$parent.null2str(data)
-          console.log(data)
+          // console.log(data)
           wx.hideToast()
           if (data.statusCode === 200) {
-            // if (type == 1) {
-            //   // 视频
-            //   this.pageDatap[0] = data.data
-            // } else if (type == 2) {
-            //   // 图文
-            //   this.pageDatap[1] = data.data
-            // } else if (type == 3) {
-            //   // 文字
-            //   this.pageDatap[2] = data.data
-            // }
-            this.pageDatap[type] = data.data
-            console.log(this.pageData)
+            this.pageDatap[type] = data.data.data
+            // console.log(this.pageData)
             this.$apply()
           } else {
             wx.showModal({

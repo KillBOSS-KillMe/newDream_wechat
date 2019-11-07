@@ -149,16 +149,16 @@
     }
     submit() {
       let formNode = this.formNode
-      // 校验
-      // 校验
-      // 校验
-      // 校验
-      // 校验
-      // 校验
-      // 校验
-      // 校验
-      // 校验
-      // 校验
+      for( let key in formNode ) {
+        if (formNode[key] == '') {
+          wx.showToast({
+            title: "请完善信息",
+            icon: 'none',
+            duration: 2000
+          });
+          return false
+        }
+      }
       wx.showToast({
         title: "数据提交中...",
         icon: 'loading',
@@ -175,9 +175,18 @@
         success: data => {
           data = this.$parent.null2str(data)
           wx.hideToast()
-          if (data.status_code === 201) {
+          console.log(data)
+          if (data.statusCode === 422) {
             wx.showToast({
-              title: data.message,
+              title: '提交失败',
+              icon: 'none',
+              duration: 2000
+            });
+            return false
+          }
+          if (data.data.status_code === 201) {
+            wx.showToast({
+              title: data.data.message,
               icon: 'success',
               duration: 2000
             });
@@ -186,11 +195,6 @@
                 delta: -1
               })
             }, 2000)
-          } else {
-            wx.showModal({
-              title: '',
-              content: data.data.errmsg
-            })
           }
         }
       })

@@ -56,7 +56,7 @@
       </view>
       <view class="item">
         <label>是否播出/刊载/获奖情况</label>
-        <textarea data-name="register_name" @input="getSetData" placeholder="请输入..."></textarea>
+        <textarea data-name="introduction" @input="getSetData" placeholder="请输入..."></textarea>
       </view>
     </view>
     <view class="notice">
@@ -93,19 +93,25 @@
       </view>
       <view class="item">
         <label>创作概况及主体阐述</label>
-        <textarea data-name="introduction" @input="getSetData" placeholder="请输入..."></textarea>
+        <textarea data-name="work_introduction" @input="getSetData" placeholder="请输入..."></textarea>
       </view>
     </view>
-    <view class="upImg">
-      <view class="title">上传作品</view>
+    <view class="upImg" wx:if="{{formNode.work_type == '3'}}">
+      <view class="title">上传作品图片</view>
       <view class="description">支持jpg,gif,bmp,psd,tiff等图片格式,组照最多可上传8张</view>
       <view class="imgList">
-        <image data-index="1" src="../image/newImage1.png" />
-        <image data-index="1" src="../image/newImage1.png" />
-        <image data-index="1" src="../image/newImage1.png" />
-        <image data-index="1" src="../image/newImage1.png" />
-        <image data-index="1" src="../image/newImage1.png" />
+        <repeat for="{{formNode.images}}" item="item">
+          <image src="{{requestImgUrl + item}}" />
+        </repeat>
         <image class="up" @tap="upImgList" src="../image/upImg.png" />
+      </view>
+    </view>
+    <view class="upVideo" wx:if="{{formNode.work_type != '3'}}">
+      <view class="title">上传作品视频</view>
+      <!-- <view class="description">支持jpg,gif,bmp,psd,tiff等图片格式,组照最多可上传8张</view> -->
+      <view class="imgList">
+        <video id="myVideo" wx:if="{{formNode.video_path != ''}}" src="{{requestImgUrl + formNode.video_path}}" enable-danmu danmu-btn controls></video>
+        <image class="up" @tap="upVideo" src="../image/upImg.png" />
       </view>
     </view>
     <view class="sub">
@@ -125,6 +131,7 @@
     mixins = []
 
     data = {
+      requestImgUrl: '',
       notice: [
         '作品必须为创作者原创，一旦发现为抄袭，取消参赛资格。',
         '参赛作品黑白、彩色均可，单幅、组照不限，标题自拟。',
@@ -145,7 +152,7 @@
         {name: '否', id: '2', checks: false}
       ],
       worksType:[
-        {name: '视频', id: '1', checks: false},
+        {name: '视频', id: '1', checks: true},
         {name: '动画', id: '2', checks: false},
         {name: '图片', id: '3', checks: false}
       ],
@@ -160,10 +167,10 @@
         is_join_other: '',       // 作品是否参与过其他评选
         is_agree: '',          // 同意
         introduction: '',            // 主体阐述
-        work_type: '',            // 作品类型
+        work_type: '1',            // 作品类型
         work_name: '',            // 作品名称
         work_introduction: '',            // 作品描述
-        // video_path: '',            // 视频地址
+        video_path: '',            // 视频地址
         images: []            // 图片列表
       },
     }
@@ -253,11 +260,18 @@
             this.formNode['work_type'] = worksType[i].id
           }
         }
+        // {name: '视频', id: '1', checks: false},
+        // {name: '动画', id: '2', checks: false},
+        // {name: '图片', id: '3', checks: false}
         this.$apply()
       },
       // 图片上传
       upImgList() {
         this.runUpImgList()
+      },
+      // 视频上传
+      upVideo() {
+        this.runUpVideo()
       }
     }
 
@@ -266,21 +280,146 @@
     }
 
     onLoad(options) {
+      this.requestImgUrl = this.$parent.globalData.requestImgUrl
     }
     submit() {
       let formNode = this.formNode
       console.log(formNode)
-      return false
-      // 校验
-      // 校验
-      // 校验
-      // 校验
-      // 校验
-      // 校验
-      // 校验
-      // 校验
-      // 校验
-      // 校验
+      // for( let key in formNode ) {
+      //   if (formNode[key] == '') {
+      //     wx.showToast({
+      //       title: "请完善信息",
+      //       icon: 'none',
+      //       duration: 2000
+      //     });
+      //     return false
+      //   }
+      // }
+      if (formNode.creation_time == '') {
+        wx.showToast({
+          title: "请完善创作时间",
+          icon: 'none',
+          duration: 2000
+        });
+        return false
+      }
+      if (formNode.author == '') {
+        wx.showToast({
+          title: "请完善作者",
+          icon: 'none',
+          duration: 2000
+        });
+        return false
+      }
+      if (formNode.id_card == '') {
+        wx.showToast({
+          title: "请完善身份证号",
+          icon: 'none',
+          duration: 2000
+        });
+        return false
+      }
+      if (formNode.address == '') {
+        wx.showToast({
+          title: "请完善所在区县及学校名称",
+          icon: 'none',
+          duration: 2000
+        });
+        return false
+      }
+      if (formNode.sex == '') {
+        wx.showToast({
+          title: "请完善性别",
+          icon: 'none',
+          duration: 2000
+        });
+        return false
+      }
+      if (formNode.phone == '') {
+        wx.showToast({
+          title: "请完善联系方式",
+          icon: 'none',
+          duration: 2000
+        });
+        return false
+      }
+      if (formNode.email == '') {
+        wx.showToast({
+          title: "请完善邮箱",
+          icon: 'none',
+          duration: 2000
+        });
+        return false
+      }
+      if (formNode.is_join_other == '') {
+        wx.showToast({
+          title: "请完善作品是否参与过其他评选信息",
+          icon: 'none',
+          duration: 2000
+        });
+        return false
+      }
+      if (formNode.is_agree == '') {
+        wx.showToast({
+          title: "请同意参赛须知",
+          icon: 'none',
+          duration: 2000
+        });
+        return false
+      }
+      if (formNode.work_type == '') {
+        wx.showToast({
+          title: "请完善作品类型",
+          icon: 'none',
+          duration: 2000
+        });
+        return false
+      }
+      if (formNode.work_name == '') {
+        wx.showToast({
+          title: "请完善作品名称",
+          icon: 'none',
+          duration: 2000
+        });
+        return false
+      }
+      if (formNode.introduction == '') {
+        wx.showToast({
+          title: "请完善是否播出/刊载/获奖情况",
+          icon: 'none',
+          duration: 2000
+        });
+        return false
+      }
+      if (formNode.work_introduction == '') {
+        wx.showToast({
+          title: "请完善创作概况及主体阐述",
+          icon: 'none',
+          duration: 2000
+        });
+        return false
+      }
+      if (formNode.work_type == '3') {
+        // 图片
+        if (formNode.images.length == 0) {
+          wx.showToast({
+            title: "请上传图片",
+            icon: 'none',
+            duration: 2000
+          });
+          return false
+        }
+      } else {
+        // 视频
+        if (formNode.video_path == '') {
+          wx.showToast({
+            title: "请上传视频",
+            icon: 'none',
+            duration: 2000
+          });
+          return false
+        }
+      }
       wx.showToast({
         title: "数据提交中...",
         icon: 'loading',
@@ -297,9 +436,18 @@
         success: data => {
           data = this.$parent.null2str(data)
           wx.hideToast()
-          if (data.statusCode === 201) {
+          console.log(data)
+          if (data.statusCode === 422) {
             wx.showToast({
-              title: data.message,
+              title: '提交失败',
+              icon: 'none',
+              duration: 2000
+            });
+            return false
+          }
+          if (data.data.status_code === 201) {
+            wx.showToast({
+              title: data.data.message,
               icon: 'success',
               duration: 2000
             });
@@ -308,15 +456,49 @@
                 delta: -1
               })
             }, 2000)
-          } else {
-            wx.showModal({
-              title: '',
-              content: data.data.errmsg
-            })
           }
         }
       })
     }
+    // 上传视频
+    runUpVideo() {
+      wx.chooseVideo({
+        sourceType: ['album','camera'],
+        maxDuration: 60,
+        camera: 'back',
+        success: res => {
+          console.log(res)
+          wx.showToast({
+            title: '视频上传中',
+            icon: 'loading',
+            duration: 1000000
+          });
+          wx.uploadFile({
+            url: `${this.$parent.globalData.requestUrl}/weapp/video`,
+            filePath: res.tempFilePath,
+            name: 'video',
+            header: {
+              Authorization: this.$parent.globalData.token
+            },
+            success: res => {
+              // console.log(res)
+              wx.hideToast()
+              if (res.statusCode == 201) {
+                this.formNode.video_path = JSON.parse(res.data).path
+                this.$apply()
+              } else {
+                wx.showToast({
+                  title: '上传失败',
+                  icon: 'none',
+                  duration: 2000
+                });
+              }
+            }
+          })
+        }
+      })
+    }
+    // 上传图片
     runUpImgList() {
       let count = 9 - this.formNode.images.length
       wx.chooseImage({
@@ -338,25 +520,19 @@
                   Authorization: this.$parent.globalData.token
                 },
                 success: res => {
-                  console.log(res)
                   resolve({
-                    path: JSON.parse(res.data).data
+                    path: JSON.parse(res.data).path
                   })
                 }
               })
             })
           })).then(e => {
-            console.log(e)
             wx.hideToast()
-            this.hotelImgList = this.hotelImgList.concat(e)
-            let hotelImgList = this.hotelImgList
-            let hotel_image = ''
-            for (let i = 0; i < hotelImgList.length; i++) {
-              hotel_image += '|'
-              hotel_image += hotelImgList[i].path.image_id
+            let image = this.formNode.images
+            for (let i = 0; i < e.length; i++) {
+              image.push(e[i].path)
             }
-            hotel_image = hotel_image.substr(1)
-            this.formNode['hotel_image'] = hotel_image
+            this.formNode.images = image
             this.$apply()
           }).catch(err => console.log(err))
         }
@@ -426,7 +602,7 @@ page{
     color: #333;
   }
 }
-.upImg{
+.upImg, .upVideo{
   width: 690rpx;
   padding: 0 30rpx;
   height: auto;
@@ -459,6 +635,10 @@ page{
     }
     image:nth-child(4n){
       margin-right: 0;
+    }
+    video{
+      width: 100%;
+      height: 400rpx;
     }
   }
 }

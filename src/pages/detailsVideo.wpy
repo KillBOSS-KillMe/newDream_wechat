@@ -366,6 +366,9 @@ video{
     .itemL{
       width: 435rpx;
       .replyTitle{
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
         font-size: 32rpx;
         font-weight: 600;
         text-overflow:ellipsis;

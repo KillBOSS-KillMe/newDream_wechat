@@ -50,7 +50,7 @@
         {id: '2', name: '我的点赞', type: '0'},
         {id: '3', name: '我的评论', type: '1'},
         {id: '4', name: '浏览记录', type: '0'},
-        {id: '5', name: '系统设置', type: '1'}
+        {id: '5', name: '清理缓存', type: '1'}
       ]
     }
 
@@ -95,7 +95,34 @@
             break;
           case '5': 
              // 系统设置
-            url = '/pages/qqqqq'
+            // url = '/pages/qqqqq'
+              wx.showModal({
+                title: '提示',
+                content: '确认清理缓存？',
+                success: res => {
+                  if (res.confirm) {
+                    // console.log('用户点击确定')
+                    wx.clearStorageSync();
+                    wx.showToast({
+                      title: '缓存清理中',
+                      icon: 'loading',
+                      duration: 5000
+                    })
+                    setTimeout(e => {
+                      wx.showToast({
+                        title: '清理成功',
+                        icon: 'success',
+                        duration: 1000
+                      })
+                      this.$parent.globalData.navAction = ['action', 'noAction', 'noAction', 'noAction']
+                      let url = "/pages/index"
+                      this.$redirect(url)
+                    }, 5000 );
+                  } else if (res.cancel) {
+                    // console.log('用户点击取消')
+                  }
+                }
+              })
             break;
           default:
             break;

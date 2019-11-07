@@ -8,7 +8,7 @@
 <template>
   <view>
     <view class="list">
-      {{pageData.content}}
+      <rich-text nodes="{{pageData.content}}"></rich-text>
     </view>
   </view>
   

@@ -32,7 +32,7 @@
             <view class="title" data-id="{{item.id}}" @tap="goVideo">{{item.title}}</view>
             <view class="num">
               <view>
-                {{item.reading_volume}}万阅读
+                {{item.reading_volume}}阅读
               </view>
               <view>
                 <icon class="iconfont icondianzan"></icon>
@@ -62,7 +62,7 @@
             <view class="title" data-id="{{item.id}}" @tap="goVideo">{{item.title}}</view>
             <view class="num">
               <view>
-                {{item.reading_volume}}万阅读
+                {{item.reading_volume}}阅读
               </view>
               <view>
                 <icon class="iconfont icondianzan"></icon>
@@ -96,7 +96,7 @@
             </repeat>
           </view>
           <view class="operating">
-            <text>{{item.reading_volume}}万阅读</text>
+            <text>{{item.reading_volume}}阅读</text>
             <view class="iconItem">
               <view>
                 <icon class="iconfont icondianzan"></icon>

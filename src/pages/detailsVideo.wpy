@@ -13,7 +13,9 @@
         <text>{{pageDatap.title}}</text>
         <icon class="iconfont iconjiantou"></icon>
       </view>
-      <view class="cont">{{pageDatap.content}}</view>
+      <view class="cont">
+        <rich-text nodes="{{pageDatap.content}}"></rich-text>
+      </view>
       <view class="userContent">
         <view wx:if="{{options.type == 'new_image'}}">
           <image src="{{pageDatap.user.avatar}}">
@@ -32,10 +34,6 @@
             <icon class="iconfont iconzhuanfa"></icon>
             {{pageDatap.forwarding_amount}}
           </button>
-          <!-- <view data-id="{{pageDatap.id}}" @tap="runLike">
-            <icon class="iconfont iconzhuanfa"></icon>
-            {{pageDatap.forwarding_amount}}
-          </view> -->
         </view>
       </view>
       <view class="commentDom" wx:if="{{commentDomShow}}">

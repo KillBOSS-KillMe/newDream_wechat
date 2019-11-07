@@ -9,14 +9,16 @@
         </view>
       </view>
       <text class="worksTitle">{{pageDatap.title}}</text>
-      <view class="worksContent">{{pageDatap.content}}</view>
+      <view class="worksContent">
+        <rich-text nodes="{{pageDatap.content}}"></rich-text>
+      </view>
       <view class="imgList">
         <repeat for="{{pageDatap.images}}" item="imgItem">
           <image src="{{requestImgUrl + imgItem}}" />
         </repeat>
       </view>
       <view class="worksCount">
-        <text>{{pageDatap.reading_volume}}万阅读</text>
+        <text>{{pageDatap.reading_volume}}阅读</text>
         <view class="worksCountItem">
           <view data-id="{{pageDatap.id}}" @tap="runLike">
             <icon class="iconfont icondianzan"></icon>
@@ -30,10 +32,6 @@
             <icon class="iconfont iconzhuanfa"></icon>
             {{pageDatap.forwarding_amount}}
           </button>
-          <!-- <view data-id="{{pageDatap.id}}" @tap="runLike">
-            <icon class="iconfont iconzhuanfa"></icon>
-            {{pageDatap.forwarding_amount}}
-          </view> -->
         </view>
       </view>
       <view class="commentDom" wx:if="{{commentDomShow}}">
@@ -55,7 +53,6 @@
           <text class="replyContent">{{item.title}}</text>
         </view>
       </repeat>
-      
     </view>
   </view>
 </template>
@@ -340,7 +337,7 @@
       width: 300rpx;
       display: flex;
       justify-content: space-between;
-      view{
+      view, button{
         font-size: 28rpx;
         color: #333333;
         display: flex;

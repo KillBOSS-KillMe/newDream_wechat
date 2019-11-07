@@ -359,6 +359,7 @@ export default class extends wepy.app {
 <style lang="less">
 // 取消按钮默认样式
 button {
+  height: 40rpx;
   position:relative;
   display:block;
   margin-left:auto;

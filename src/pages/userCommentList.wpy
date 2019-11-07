@@ -8,19 +8,20 @@
 <template>
   <view>
     <view class="infoList">
-      <repeat for="{{commentList}}" item="item">
+      <repeat for="{{pageDataNode}}" item="item">
         <view class="item">
           <view class="tiele">
-            <label>{{item.title}}</label>
+            <label>{{item.new_image.title}}</label>
             <text @tap="commentShow">回复</text>
           </view>
           <view class="con">
-            <image class="userImg" src="../image/daw.jpg" />
+            <image class="userImg" src="{{item.new_image.user.avatar}}" />
             <view class="info">
-              <text class="name">二狗子</text>
-              <label>{{item.title}}</label>
+              <text class="name">{{item.new_image.user.name}}</text>
+              <label>{{item.content}}</label>
             </view>
-            <image src="../image/daw.jpg" />
+            <image wx:if="{{item.new_image.images.length > 0}}" src="{{requestImgUrl + item.new_image.images[0]}}" />
+            <video id="myVideo" wx:if="{{item.new_image.video_path != ''}}" src="{{requestImgUrl + item.new_image.video_path}}" enable-danmu danmu-btn controls></video>
           </view>
         </view>
       </repeat>
@@ -44,36 +45,10 @@
     mixins = []
 
     data = {
+      requestImgUrl: '',
       pageDataNode: null,
       commentDomShow: false,
       commentData: '',
-      commentList: [
-        {
-          title: '三枪拍案惊奇',
-          userNmae: '萨尔', 
-          userImg: '../image/daw.jpg',
-          con: '内容内容内容内容内容内容内容内容内容',
-          iamge: '../image/daw.jpg' 
-        },{
-          title: '三枪拍案惊奇',
-          userNmae: '萨尔', 
-          userImg: '../image/daw.jpg',
-          con: '内容内容内容内容内容内容内容内容内容',
-          iamge: '../image/daw.jpg' 
-        },{
-          title: '三枪拍案惊奇',
-          userNmae: '萨尔', 
-          userImg: '../image/daw.jpg',
-          con: '内容内容内容内容内容内容内容内容内容',
-          iamge: '../image/daw.jpg' 
-        },{
-          title: '三枪拍案惊奇',
-          userNmae: '萨尔', 
-          userImg: '../image/daw.jpg',
-          con: '内容内容内容内容内容内容内容内容内容',
-          iamge: '../image/daw.jpg' 
-        }
-      ]
     }
 
     computed = {
@@ -102,6 +77,7 @@
     }
 
     onLoad(options) {
+      this.requestImgUrl = this.$parent.globalData.requestImgUrl
       this.getData()
     }
     // 评论
@@ -167,8 +143,9 @@
           data = this.$parent.null2str(data)
           console.log(data)
           wx.hideToast()
-          if (data.status_code === 200) {
-            this.pageDataNode = data.data.knowledge
+          if (data.data.status_code === 200) {
+            this.pageDataNode = data.data.data
+            this.$apply()
           } else {
             wx.showModal({
               title: '',
@@ -258,7 +235,7 @@ page{
     height: 50rpx;
     border-radius: 50rpx;
   }
-  image{
+  image, video{
     width: 120rpx;
     height: 120rpx;
     border-radius: 10rpx;

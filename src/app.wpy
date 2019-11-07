@@ -93,6 +93,7 @@ export default class extends wepy.app {
       
       // 个人中心模块
       'pages/user', // 我的
+      'pages/userUpWorks', // 已经上传的作品
       'pages/userLikeList', // 点赞列表
       'pages/userCommentList', // 评论列表
       'pages/userSignUp', // 报名情况

@@ -26,10 +26,14 @@
             <icon class="iconfont iconpinglun"></icon>
             {{pageDatap.comment_count}}
           </view>
-          <view data-id="{{pageDatap.id}}" @tap="runLike">
+          <button type="primary" open-type="share" data-name="pageShare" id="share">
             <icon class="iconfont iconzhuanfa"></icon>
             {{pageDatap.forwarding_amount}}
-          </view>
+          </button>
+          <!-- <view data-id="{{pageDatap.id}}" @tap="runLike">
+            <icon class="iconfont iconzhuanfa"></icon>
+            {{pageDatap.forwarding_amount}}
+          </view> -->
         </view>
       </view>
       <view class="commentDom" wx:if="{{commentDomShow}}">
@@ -112,6 +116,17 @@
       this.getData()
     }
     onShow() {
+    }
+    // 分享页面
+    onShareAppMessage() {
+      let url = `pages/detailPhoto?id=${this.options.id}&type=${this.options.type}`
+      console.log(url)
+      return {
+        title: this.pageDatap.title,
+        desc: '',
+        // imageUrl: this.image,
+        path: url
+      }
     }
     // 点赞
     runLike(e) {

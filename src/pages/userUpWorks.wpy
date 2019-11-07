@@ -1,0 +1,453 @@
+/*
+ * @Author: luow 
+ * @Date: 2019-10-29 11:05:01 
+ * @Last Modified by: luow
+ * @Last Modified time: 2019-11-06 15:51:48
+ */
+
+<template>
+  <view>
+    <view class="type">
+      <view data-type="0" @tap="selType" class="{{type == 0?'active':''}}">
+        <image src="../image/yingshi{{type == 0?'1':'0'}}.png" />
+        视频
+      </view>
+      <view data-type="1" @tap="selType" class="{{type == 1?'active':''}}">
+        <image src="../image/donghua{{type == 1?'1':'0'}}.png" />
+        动画
+      </view>
+      <view data-type="2" @tap="selType" class="{{type == 2?'active':''}}">
+        <image src="../image/tupian{{type == 2?'1':'0'}}.png" />
+        图片
+      </view>
+    </view>
+    <view class="search" wx:if="{{type == 0}}">
+      <icon class="iconfont iconduihao"></icon>
+      <input type="text" placeholder="请输入搜索内容" />
+    </view>
+    <view class="videoList" wx:if="{{type == 0}}">
+      <repeat for="{{pageDatap[0].data}}" item="item">
+        <view class="item">
+          <view class="info">
+            <view class="title" data-id="{{item.id}}" @tap="goVideo">{{item.title}}</view>
+            <view class="num">
+              <view>
+                {{item.reading_volume}}万阅读
+              </view>
+              <view>
+                <icon class="iconfont icondianzan"></icon>
+                {{item.like}}
+              </view>
+              <view>
+                <icon class="iconfont iconpinglun"></icon>
+                {{item.comment_count}}
+              </view>
+              <view>
+                <icon class="iconfont iconzhuanfa"></icon>
+                {{item.forwarding_amount}}
+              </view>
+            </view>
+          </view>
+          <view class="img" data-id="{{item.id}}" @tap="goVideo">
+            <video id="myVideo" src="{{requestImgUrl + item.video_path}}" enable-danmu danmu-btn controls></video>
+            <icon class="iconfont iconzhuanfa"></icon>
+          </view>
+        </view>
+      </repeat>
+    </view>
+    <view class="videoList" wx:if="{{type == 1}}">
+      <repeat for="{{pageDatap[1].data}}" item="item">
+        <view class="item">
+          <view class="info">
+            <view class="title" data-id="{{item.id}}" @tap="goVideo">{{item.title}}</view>
+            <view class="num">
+              <view>
+                {{item.reading_volume}}万阅读
+              </view>
+              <view>
+                <icon class="iconfont icondianzan"></icon>
+                {{item.like}}
+              </view>
+              <view>
+                <icon class="iconfont iconpinglun"></icon>
+                {{item.comment_count}}
+              </view>
+              <view>
+                <icon class="iconfont iconzhuanfa"></icon>
+                {{item.forwarding_amount}}
+              </view>
+            </view>
+          </view>
+          <view class="img" data-id="{{item.id}}" @tap="goVideo">
+            <video id="myVideo" src="{{requestImgUrl + item.video_path}}" enable-danmu danmu-btn controls></video>
+            <icon class="iconfont iconzhuanfa"></icon>
+          </view>
+        </view>
+      </repeat>
+    </view>
+    <view class="imageList" wx:if="{{type == 2}}">
+      <repeat for="{{pageDatap[2].data}}" item="item">
+        <view class="item">
+          <view class="title" data-id="{{item.id}}" @tap="goImage">{{item.title}}</view>
+          <view class="con"></view>
+          <view class="imgList" data-id="{{item.id}}" @tap="goImage">
+            <repeat for="{{item.images}}" item="imgItem">
+              <image src="{{requestImgUrl + imgItem}}" />
+            </repeat>
+          </view>
+          <view class="operating">
+            <text>{{item.reading_volume}}万阅读</text>
+            <view class="iconItem">
+              <view>
+                <icon class="iconfont icondianzan"></icon>
+                {{item.like}}
+              </view>
+              <view>
+                <icon class="iconfont iconpinglun"></icon>
+                {{item.comment_count}}
+              </view>
+              <view>
+                <icon class="iconfont iconzhuanfa"></icon>
+                {{item.forwarding_amount}}
+              </view>
+            </view>
+          </view>
+        </view>
+      </repeat>
+    </view>
+  </view>
+  
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class UserUpWorks extends wepy.page {
+     config = {
+      navigationBarTitleText: '已上传的商品'
+    }
+    components = {
+    }
+    mixins = []
+
+    data = {
+      userInfo: {},
+      requestImgUrl: '',
+      pageDatap: [null, null, null],
+      type: 1,
+      videoList: [
+        {
+          title: '标题标题标题标题标题标题标题',
+          read: 100,
+          comment: 1000,
+          like: 100,
+          share: 100,
+          video: '../image/daw.jpg'
+        },{
+          title: '标题标题标题标题标题标题标题',
+          read: 100,
+          comment: 1000,
+          like: 100,
+          share: 100,
+          video: '../image/daw.jpg'
+        },{
+          title: '标题标题标题标题标题标题标题',
+          read: 100,
+          comment: 1000,
+          like: 100,
+          share: 100,
+          video: '../image/daw.jpg'
+        },{
+          title: '标题标题标题标题标题标题标题',
+          read: 100,
+          comment: 1000,
+          like: 100,
+          share: 100,
+          video: '../image/daw.jpg'
+        }
+      ]
+    }
+
+    computed = {
+
+    }
+
+    methods = {
+      selType(e) {
+        this.type = e.currentTarget.dataset.type
+        this.$apply()
+        this.getData()
+      },
+      // 进入图片详情
+      goImage(e) {
+        let id = e.currentTarget.dataset.id
+        let url = `/pages/detailPhoto?id=${id}&type=new_image`
+        this.$navigate(url)
+      },
+      // 进入视频详情
+      goVideo(e) {
+        let id = e.currentTarget.dataset.id
+        let url = `/pages/detailsVideo?id=${id}&type=new_image`
+        this.$navigate(url)
+      }
+    }
+
+    events = {
+
+    }
+
+    onLoad(options) {
+      this.userInfo = this.$parent.globalData.userInfo
+      this.requestImgUrl = this.$parent.globalData.requestImgUrl
+      this.getData()
+    }
+    getData() {
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+      let type = this.type
+      wx.request({
+        url: `${this.$parent.globalData.requestUrl}/weapp/users_new_images_list`,
+        method: 'GET',
+        header: {
+          'content-type':'application/json',
+          Authorization: this.$parent.globalData.token
+        },
+        data: {
+          page: 1,
+          page_size: 10
+        },
+        success: data => {
+          data = this.$parent.null2str(data)
+          console.log(data)
+          wx.hideToast()
+          if (data.statusCode === 200) {
+            // if (type == 1) {
+            //   // 视频
+            //   this.pageDatap[0] = data.data
+            // } else if (type == 2) {
+            //   // 图文
+            //   this.pageDatap[1] = data.data
+            // } else if (type == 3) {
+            //   // 文字
+            //   this.pageDatap[2] = data.data
+            // }
+            this.pageDatap[type] = data.data
+            console.log(this.pageData)
+            this.$apply()
+          } else {
+            wx.showModal({
+              title: '',
+              content: data.data.errmsg
+            })
+          }
+        }
+      })
+    }
+    // 下拉刷新
+    onPullDownRefresh() {
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+    }
+  }
+</script>
+<style lang="less">
+page{
+  border-top: 1rpx solid #D5D5D5;
+}
+.type{
+  width: 750rpx;
+  padding: 30rpx 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border-bottom: 10rpx solid #F0F2F3;
+  font-size: 31rpx;
+  font-weight: 600;
+  color: #999;
+  .active{
+    color: #333;
+  }
+  view{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  image{
+    width: 33rpx;
+    height: 33rpx;
+    margin-right: 10rpx;
+  }
+}
+.search{
+  width: 690rpx;
+  height: 66rpx;
+  margin: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #f8f8f8;
+  border-radius: 10rpx;
+  icon{
+    font-size: 32rpx;
+    width: 66rpx;
+    height: 66rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  input{
+    width: 620rpx;
+  }
+}
+.textList{
+  width: 100%;
+  .item{
+    width: 690rpx;
+    height: auto;
+    padding: 30rpx;
+    font-size: 31rpx;
+    font-weight: 600;
+    color: #333;
+  }
+}
+.videoList{
+  width: 100%;
+  .item{
+    width: 690rpx;
+    height: 150rpx;
+    padding: 30rpx;
+    font-size: 23rpx;
+    border-bottom: 10rpx solid #F0F2F3;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .info{
+    width: 420rpx;
+    height: 150rpx;
+    .title{
+      width: 100%;
+      height: 80rpx;
+      font-size: 30rpx;
+      font-weight: 600;
+      color: #333;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      // white-space:nowrap;
+    }
+    .num{
+      margin-top: 30rpx;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 23rpx;
+      view{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .iconfont{
+        font-size: 27rpx;
+        margin-right: 10rpx;
+      }
+    }
+  }
+  .img{
+    position: relative;
+    width: 225rpx;
+    height: 150rpx;
+    border-radius: 10rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    image, video{
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 10rpx;
+    }
+    .iconfont{
+      z-index: 10;
+    }
+  }
+}
+.imageList{
+  width: 100%;
+  .item{
+    width: 690rpx;
+    height: auto;
+    padding: 30rpx;
+    font-size: 23rpx;
+    border-bottom: 10rpx solid #F0F2F3;
+    color: #333;
+  }
+  .title{
+    width: 100%;
+    height: auto;
+    font-size: 30rpx;
+    font-weight: 600;
+    color: #333;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .con{
+    font-size: 28rpx;
+    color: #333;
+  }
+  .noShow{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .imgList{
+    width: 690rpx;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    flex-wrap: wrap;
+    image{
+      width: 224rpx;
+      height: 224rpx;
+      border-radius: 10rpx;
+      margin-top: 20rpx;
+      margin-right: 10rpx;
+    }
+    image:nth-child(3n) {
+      margin-right: 0;
+    }
+  }
+  .operating{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20rpx;
+    // .iconItem{
+    //   view{
+
+    //   }
+    // }
+    view{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .iconfont{
+      font-size: 25rpx;
+      margin-left: 30rpx;
+      margin-right: 10rpx;
+    }
+  }
+}
+</style>

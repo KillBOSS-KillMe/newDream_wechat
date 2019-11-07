@@ -75,7 +75,7 @@
         switch(type) {
           case '0': 
             // 已上传的作品
-            url = '/pages/qqqqq'
+            url = '/pages/userUpWorks'
             break;
           case '1': 
             // 报名情况

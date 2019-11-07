@@ -203,6 +203,7 @@ import configStore from '../store';
     }
 
     onLoad(options) {
+      this.getIndexInfo()
       this.userInfo = this.$parent.globalData.userInfo
       this.requestImgUrl = this.$parent.globalData.requestImgUrl
       wx.showToast({
@@ -287,7 +288,7 @@ import configStore from '../store';
                 let token = data.data.token_type + data.data.access_token
                 this.$parent.globalData.token = token
                 console.log(token)
-                this.getIndexInfo()
+                // this.getIndexInfo()
               } else {
                 wx.showModal({
                   title: '',
@@ -308,10 +309,6 @@ import configStore from '../store';
       wx.request({
         url: `${this.$parent.globalData.requestUrl}/index`,
         method: 'GET',
-        header: {
-          // 'content-type':'application/json',
-        },
-        data: {},
         success: data => {
           data = this.$parent.null2str(data)
           console.log(data)

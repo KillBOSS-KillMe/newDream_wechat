@@ -80,6 +80,7 @@
 
     onLoad(options) {
       this.requestImgUrl = this.$parent.globalData.requestImgUrl
+      this.$apply()
       this.getData()
     }
     goDetails(e) {

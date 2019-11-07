@@ -137,6 +137,7 @@
 
     onLoad(options) {
       this.userInfo = this.$parent.globalData.userInfo
+      this.$apply()
       console.log(this.userInfo)
     }
     // 下拉刷新

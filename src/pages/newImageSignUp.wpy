@@ -281,6 +281,7 @@
 
     onLoad(options) {
       this.requestImgUrl = this.$parent.globalData.requestImgUrl
+      this.$apply()
     }
     submit() {
       let formNode = this.formNode
@@ -456,6 +457,12 @@
                 delta: -1
               })
             }, 2000)
+          } else {
+            wx.showToast({
+              title: '提交失败',
+              icon: 'none',
+              duration: 2000
+            });
           }
         }
       })

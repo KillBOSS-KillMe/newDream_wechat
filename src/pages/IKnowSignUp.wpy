@@ -176,14 +176,14 @@
           data = this.$parent.null2str(data)
           wx.hideToast()
           console.log(data)
-          if (data.statusCode === 422) {
-            wx.showToast({
-              title: '提交失败',
-              icon: 'none',
-              duration: 2000
-            });
-            return false
-          }
+          // if (data.statusCode === 422) {
+          //   wx.showToast({
+          //     title: '提交失败',
+          //     icon: 'none',
+          //     duration: 2000
+          //   });
+          //   return false
+          // }
           if (data.data.status_code === 201) {
             wx.showToast({
               title: data.data.message,
@@ -195,6 +195,12 @@
                 delta: -1
               })
             }, 2000)
+          } else {
+            wx.showToast({
+              title: '提交失败',
+              icon: 'none',
+              duration: 2000
+            });
           }
         }
       })

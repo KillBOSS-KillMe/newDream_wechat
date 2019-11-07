@@ -249,6 +249,7 @@ import configStore from '../store';
       this.getIndexInfo()
       this.userInfo = this.$parent.globalData.userInfo
       this.requestImgUrl = this.$parent.globalData.requestImgUrl
+      this.$apply()
       wx.showToast({
         title: "拼命加载中...",
         icon: 'loading',

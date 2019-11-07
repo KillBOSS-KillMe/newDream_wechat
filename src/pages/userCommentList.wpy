@@ -146,7 +146,8 @@
         },
         data: {
           page: 1,
-          page_size: 2
+          // 数据中无分页信息，所以  一起全拿
+          // page_size: 1000000000
         },
         success: data => {
           data = this.$parent.null2str(data)

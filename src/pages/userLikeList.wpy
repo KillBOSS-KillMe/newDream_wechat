@@ -50,6 +50,53 @@
       this.$apply()
       this.getData()
     }
+    /**
+     * 页面上拉触底事件的处理函数
+     */
+    onReachBottom() {
+      // 翻页加载
+      if (this.pageDataNode.data.length < this.pageDataNode.total) {
+        this.getDataNextPage()
+      } else {
+        wx.showToast({
+          title: "没有更多了",
+          icon: 'none',
+          duration: 2000
+        });
+      }
+    }
+    // 加载下一页数据
+    getDataNextPage() {
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+      wx.request({
+        url: `${this.$parent.globalData.requestUrl}/weapp/users_like_list`,
+        method: 'GET',
+        data: {
+          page: this.pageDataNode.page_tatal,
+          page_size: this.pageDataNode.data.length
+        },
+        success: data => {
+          data = this.$parent.null2str(data)
+          wx.hideToast()
+          if (data.statusCode === 200) {
+            let list = this.pageDataNode.data
+            let newList = data.data.data
+            list = list.concat(newList)
+            this.pageDataNode.data = list
+            this.$apply()
+          } else {
+            wx.showModal({
+              title: '',
+              content: data.data.errmsg
+            })
+          }
+        }
+      })
+    }
     getData() {
       wx.showToast({
         title: "拼命加载中...",
@@ -66,7 +113,7 @@
         },
         data: {
           page: 1,
-          page_size: 2
+          page_size: 20
         },
         success: data => {
           data = this.$parent.null2str(data)
@@ -74,7 +121,6 @@
           wx.hideToast()
           if (data.statusCode === 200) {
             this.pageDataNode = data.data
-            // console.log(this.pageDataNode)
             this.$apply()
           } else {
             wx.showModal({

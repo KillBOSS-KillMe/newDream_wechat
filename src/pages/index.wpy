@@ -24,26 +24,30 @@
     <view class="articleList">
       <repeat for="{{pageDataNode.artile_data.data}}" item="item">
         <!-- artile_type 单条数据总类型 0:视频 1:动画 2:图片 3:文字 -->
-        <view class="item type1" wx:if="{{item.artile_type == 3}}" @tap="goDetails" data-index="{{index}}">
-          <view class="title">{{item.title}}</view>
-          <view class="articleCon">
+        <view class="item type1" wx:if="{{item.artile_type == 3}}">
+          <view class="title" @tap="goDetails" data-index="{{index}}">{{item.title}}</view>
+          <view class="articleCon" @tap="goDetails" data-index="{{index}}">
             <rich-text nodes="{{item.content}}"></rich-text>
           </view>
           <view class="operating">
             <text>{{item.user.name}}</text>
             <view>
-              <view class="operatItem">
+              <view class="operatItem" @tap="runLike" data-id="{{item.id}}">
                 <view class="iconfont icondianzan"></view>
                 {{item.like}}
               </view>
-              <view class="operatItem">
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
                 <view class="iconfont iconpinglun"></view>
                 {{item.comment_count}}
               </view>
-              <view class="operatItem">
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
                 <view class="iconfont iconzhuanfa"></view>
                 {{item.forwarding_amount}}
               </view>
+              <!-- <button type="primary" open-type="share" data-name="pageShare" id="share">
+                <icon class="iconfont iconzhuanfa"></icon>
+                {{pageDatap.forwarding_amount}}
+              </button> -->
             </view>
           </view>
         </view>
@@ -75,57 +79,57 @@
             </view>
           </view>
         </view> -->
-        <view class="item type3" wx:if="{{item.artile_type == 0}}" @tap="goDetails" data-index="{{index}}">
-          <view class="title">{{item.title}}</view>
-          <video id="myVideo" src="{{requestImgUrl + item.video_path}}" danmu-list="{{danmuList}}" enable-danmu danmu-btn controls></video>
-          <view class="articleCon">
+        <view class="item type3" wx:if="{{item.artile_type == 0}}">
+          <view class="title" @tap="goDetails" data-index="{{index}}">{{item.title}}</view>
+          <video @tap="goDetails" data-index="{{index}}" id="myVideo" src="{{requestImgUrl + item.video_path}}" danmu-list="{{danmuList}}" enable-danmu danmu-btn controls></video>
+          <view class="articleCon" @tap="goDetails" data-index="{{index}}">
             <rich-text nodes="{{item.content}}"></rich-text>
           </view>
           <view class="operating">
             <text>{{item.user.name}}</text>
             <view>
-              <view class="operatItem">
+              <view class="operatItem" @tap="runLike" data-id="{{item.id}}">
                 <view class="iconfont icondianzan"></view>
                 {{item.like}}
               </view>
-              <view class="operatItem">
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
                 <view class="iconfont iconpinglun"></view>
                 {{item.comment_count}}
               </view>
-              <view class="operatItem">
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
                 <view class="iconfont iconzhuanfa"></view>
                 {{item.forwarding_amount}}
               </view>
             </view>
           </view>
         </view>
-        <view class="item type3" wx:if="{{item.artile_type == 1}}" @tap="goDetails" data-index="{{index}}">
-          <view class="title">{{item.title}}</view>
-          <video id="myVideo" src="{{requestImgUrl + item.video_path}}" danmu-list="{{danmuList}}" enable-danmu danmu-btn controls></video>
+        <view class="item type3" wx:if="{{item.artile_type == 1}}">
+          <view class="title" @tap="goDetails" data-index="{{index}}">{{item.title}}</view>
+          <video @tap="goDetails" data-index="{{index}}" id="myVideo" src="{{requestImgUrl + item.video_path}}" danmu-list="{{danmuList}}" enable-danmu danmu-btn controls></video>
           <view class="articleCon">
             <rich-text nodes="{{item.content}}"></rich-text>
           </view>
           <view class="operating">
             <text>{{item.user.name}}</text>
             <view>
-              <view class="operatItem">
+              <view class="operatItem" @tap="runLike" data-id="{{item.id}}">
                 <view class="iconfont icondianzan"></view>
                 {{item.like}}
               </view>
-              <view class="operatItem">
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
                 <view class="iconfont iconpinglun"></view>
                 {{item.comment_count}}
               </view>
-              <view class="operatItem">
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
                 <view class="iconfont iconzhuanfa"></view>
                 {{item.forwarding_amount}}
               </view>
             </view>
           </view>
         </view>
-        <view class="item type4" wx:if="{{item.artile_type == 2}}" @tap="goDetails" data-index="{{index}}">
-          <view class="title">{{item.title}}</view>
-          <view class="imageList">
+        <view class="item type4" wx:if="{{item.artile_type == 2}}">
+          <view @tap="goDetails" data-index="{{index}}" class="title">{{item.title}}</view>
+          <view @tap="goDetails" data-index="{{index}}" class="imageList">
             <repeat for="{{item.images}}" item="imgItem">
               <image src="{{requestImgUrl + imgItem}}" />
             </repeat>
@@ -136,15 +140,15 @@
           <view class="operating">
             <text>{{item.user.name}}</text>
             <view>
-              <view class="operatItem">
+              <view class="operatItem" @tap="runLike" data-id="{{item.id}}">
                 <view class="iconfont icondianzan"></view>
                 {{item.like}}
               </view>
-              <view class="operatItem">
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
                 <view class="iconfont iconpinglun"></view>
                 {{item.comment_count}}
               </view>
-              <view class="operatItem">
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
                 <view class="iconfont iconzhuanfa"></view>
                 {{item.forwarding_amount}}
               </view>
@@ -152,7 +156,6 @@
           </view>
         </view>
       </repeat>
-      
     </view>
     <nav @childFn.user="goPage" @childFnOrReturn.user="goModifyUserInfo" />
     <button open-type="getUserInfo" id='getUserInfo' wx:if="{{userInfoButtonShow}}" lang="zh_CN" @getuserinfo="onGetUserInfo"></button>
@@ -260,6 +263,22 @@ import configStore from '../store';
         this.onGetUserInfo()
       }
     }
+    /**
+     * 页面上拉触底事件的处理函数
+     */
+    onReachBottom() {
+      // 翻页加载
+      // console.log(this.pageDataNode.artile_data.next_page_url)
+      if (this.pageDataNode.artile_data.next_page_url != '') {
+        this.getIndexInfoNextPage()
+      } else {
+        wx.showToast({
+          title: "没有更多了",
+          icon: 'none',
+          duration: 2000
+        });
+      }
+    }
     // 下拉刷新
     onPullDownRefresh() {
       wx.showToast({
@@ -270,8 +289,37 @@ import configStore from '../store';
       // 获取用户信息
       this.onGetUserInfo()
     }
-    
-
+    // 加载下一页数据
+    getIndexInfoNextPage() {
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+      let nextPageUrl = this.pageDataNode.artile_data.next_page_url
+      wx.request({
+        url: nextPageUrl,
+        method: 'GET',
+        success: data => {
+          data = this.$parent.null2str(data)
+          console.log(data)
+          wx.hideToast()
+          if (data.statusCode === 200) {
+            let list = this.pageDataNode.artile_data.data
+            let newList = data.data.artile_data.data
+            list = list.concat(newList)
+            data.data.artile_data.data = list
+            this.pageDataNode = data.data
+            this.$apply()
+          } else {
+            wx.showModal({
+              title: '',
+              content: data.data.errmsg
+            })
+          }
+        }
+      })
+    }
     // 用户信息校验
     verificationUserInfo() {
       if (!this.userInfo.hasOwnProperty('id')) {
@@ -356,6 +404,42 @@ import configStore from '../store';
           if (data.statusCode === 200) {
             this.pageDataNode = data.data
             this.$apply()
+          } else {
+            wx.showModal({
+              title: '',
+              content: data.data.errmsg
+            })
+          }
+        }
+      })
+    }
+    // 点赞
+    runLike(e) {
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+      let url = `/weapp/users_like/new_image/${e.currentTarget.dataset.id}`
+      wx.request({
+        url: `${this.$parent.globalData.requestUrl + url}`,
+        method: 'PUT',
+        header: {
+          'content-type':'application/json',
+          Authorization: this.$parent.globalData.token
+        },
+        success: data => {
+          data = this.$parent.null2str(data)
+          // console.log(data)
+          wx.hideToast()
+          if (data.data.status_code === 201) {
+            wx.showToast({
+              title: "操作成功",
+              icon: 'success',
+              duration: 2000
+            });
+            // 数据更新
+            this.getIndexInfo()
           } else {
             wx.showModal({
               title: '',

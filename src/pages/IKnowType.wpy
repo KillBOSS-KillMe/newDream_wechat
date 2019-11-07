@@ -205,6 +205,57 @@
       this.$apply()
       this.getData()
     }
+    /**
+     * 页面上拉触底事件的处理函数
+     */
+    onReachBottom() {
+      // 翻页加载
+      console.log(this.pageData[this.type].next_page_url)
+      if (this.pageData[this.type].next_page_url != '') {
+        this.getDataNextPage()
+      } else {
+        wx.showToast({
+          title: "没有更多了",
+          icon: 'none',
+          duration: 2000
+        });
+      }
+    }
+    // 加载下一页数据
+    getDataNextPage() {
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+      let type = this.type
+      let nextPageUrl = this.pageData[type].next_page_url
+      wx.request({
+        url: nextPageUrl,
+        method: 'GET',
+        data: {
+          type: type
+        },
+        success: data => {
+          data = this.$parent.null2str(data)
+          console.log(data)
+          wx.hideToast()
+          if (data.statusCode === 200) {
+            let list = this.pageData[type].data
+            let newList = data.data.data
+            list = list.concat(newList)
+            this.pageData[type].data = list
+            console.log(this.pageData)
+            this.$apply()
+          } else {
+            wx.showModal({
+              title: '',
+              content: data.data.errmsg
+            })
+          }
+        }
+      })
+    }
     getData() {
       wx.showToast({
         title: "拼命加载中...",
@@ -227,18 +278,9 @@
           console.log(data)
           wx.hideToast()
           if (data.statusCode === 200) {
-            // if (type == 1) {
-            //   // 视频
-            //   this.pageData[type] = data.data
-            // } else if (type == 2) {
-            //   // 图文
-            //   this.pageData[1] = data.data
-            // } else if (type == 3) {
-            //   // 文字
-            //   this.pageData[2] = data.data
-            // }
             this.pageData[type] = data.data
             console.log(this.pageData)
+            console.log(this.pageData[this.type].next_page_url)
             this.$apply()
           } else {
             wx.showModal({

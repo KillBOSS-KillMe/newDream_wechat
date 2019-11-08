@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-10-29 10:40:48 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-08 10:14:22
+ * @Last Modified time: 2019-11-08 15:38:23
  */
 <template>
   <view>
@@ -24,6 +24,7 @@
         </view>
       </repeat>
     </view>
+    <image class="technicalSupport" src="../image/technicalSupport.png" />
     <nav @childFn.user="goPage" @childFnOrReturn.user="goModifyUserInfo" />
   </view>
 </template>

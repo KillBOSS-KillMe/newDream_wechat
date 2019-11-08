@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-10-29 10:41:00 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-08 10:14:21
+ * @Last Modified time: 2019-11-08 11:12:59
  */
 // customData = {}  // 自定义数据
 // customFunction ()　{}  // 自定义方法
@@ -138,6 +138,40 @@ export default class extends wepy.app {
 
   onLaunch() {
     this.testAsync();
+    wx.login({
+      success: res => {
+        wx.request({
+          url: `${this.globalData.requestUrl}/weapp/authorizations`,
+          method: 'POST',
+          header: {
+            // 'content-type':'application/json',
+          },
+          data: {
+            code: res.code,
+            // nickName: this.userInfo.nickName,
+            // gender: this.userInfo.gender,
+            // avatar: this.userInfo.avatarUrl
+          },
+          success: data => {
+            data = this.null2str(data)
+            wx.hideToast()
+            if (data.statusCode === 201) {
+              let token = data.data.token_type + data.data.access_token
+              this.globalData.token = token
+              // console.log('------')
+              // console.log(token)
+              // console.log('========')
+              // this.getIndexInfo()
+            } else {
+              wx.showModal({
+                title: '',
+                content: data.data.errmsg
+              })
+            }
+          }
+        })
+      }
+    })
   }
   // 获取Token
   getToken() {

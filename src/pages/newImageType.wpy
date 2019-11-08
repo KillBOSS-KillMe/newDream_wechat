@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-10-29 11:05:01 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-06 15:51:48
+ * @Last Modified time: 2019-11-08 11:45:23
  */
 
 <template>
@@ -43,10 +43,14 @@
                 <icon class="iconfont iconpinglun"></icon>
                 {{item.comment_count}}
               </view>
-              <view>
+              <button style="color:#333" data-id="{{item.id}}" data-title="{{item.title}}" type="primary" open-type="share" data-name="pageShare" id="share">
+                <view class="iconfont iconzhuanfa"></view>
+                {{item.forwarding_amount}}
+              </button>
+              <!-- <view>
                 <icon class="iconfont iconzhuanfa"></icon>
                 {{item.forwarding_amount}}
-              </view>
+              </view> -->
             </view>
           </view>
           <view class="img" data-id="{{item.id}}" @tap="goVideo">
@@ -73,10 +77,14 @@
                 <icon class="iconfont iconpinglun"></icon>
                 {{item.comment_count}}
               </view>
-              <view>
+              <button style="color:#333" data-id="{{item.id}}" data-title="{{item.title}}" type="primary" open-type="share" data-name="pageShare" id="share">
+                <view class="iconfont iconzhuanfa"></view>
+                {{item.forwarding_amount}}
+              </button>
+              <!-- <view>
                 <icon class="iconfont iconzhuanfa"></icon>
                 {{item.forwarding_amount}}
-              </view>
+              </view> -->
             </view>
           </view>
           <view class="img" data-id="{{item.id}}" @tap="goVideo">
@@ -107,10 +115,14 @@
                 <icon class="iconfont iconpinglun"></icon>
                 {{item.comment_count}}
               </view>
-              <view>
+              <button style="color:#333" data-id="{{item.id}}" data-title="{{item.title}}" type="primary" open-type="share" data-name="pageShare" id="share">
+                <view class="iconfont iconzhuanfa"></view>
+                {{item.forwarding_amount}}
+              </button>
+              <!-- <view>
                 <icon class="iconfont iconzhuanfa"></icon>
                 {{item.forwarding_amount}}
-              </view>
+              </view> -->
             </view>
           </view>
         </view>
@@ -170,6 +182,25 @@
       this.userInfo = this.$parent.globalData.userInfo
       this.requestImgUrl = this.$parent.globalData.requestImgUrl
       this.getData()
+    }
+    // 分享页面
+    onShareAppMessage(e) {
+      let id = e.currentTarget.dataset.id
+      let title = e.currentTarget.dataset.title
+      let type = this.type
+      let url = ''
+      if (type == 0 || type == 1) {
+        url = `pages/detailsVideo?id=${id}&type=new_image`
+      } else if (type == 2) {
+        url = `pages/detailPhoto?id=${id}&type=new_image`
+      }
+      console.log(url)
+      return {
+        title: title,
+        desc: '',
+        // imageUrl: this.image,
+        path: url
+      }
     }
     /**
      * 页面上拉触底事件的处理函数
@@ -468,6 +499,10 @@ page{
 
     //   }
     // }
+    .iconItem button{
+      font-size: 28rpx;
+      color: #333333 !important;
+    }
     view{
       display: flex;
       align-items: center;

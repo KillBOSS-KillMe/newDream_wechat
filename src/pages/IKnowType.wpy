@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-10-29 11:05:01 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-06 15:59:01
+ * @Last Modified time: 2019-11-08 11:45:45
  */
 
 <template>
@@ -35,10 +35,10 @@
     </view>
     <view class="imageList" wx:if="{{type == 1}}">
       <repeat for="{{pageData[1].data}}" item="item">
-        <view class="item" data-id="{{item.id}}" @tap="goImage">
-          <view class="title">{{item.title}}</view>
+        <view class="item">
+          <view class="title" data-id="{{item.id}}" @tap="goImage">{{item.title}}</view>
           <view class="con"></view>
-          <view class="imgList">
+          <view class="imgList" data-id="{{item.id}}" @tap="goImage">
             <repeat for="{{item.images}}" item="imgItem">
               <image src="{{requestImgUrl + imgItem}}" />
             </repeat>
@@ -46,18 +46,24 @@
           <view class="operating">
             <text>{{item.reading_volume}}阅读</text>
             <view class="iconItem">
-              <view>
+              <view data-id="{{item.id}}" @tap="goImage">
                 <icon class="iconfont icondianzan"></icon>
                 {{item.like}}
               </view>
-              <view>
+              <view data-id="{{item.id}}" @tap="goImage">
                 <icon class="iconfont iconpinglun"></icon>
                 {{item.comment_count}}
               </view>
-              <view>
-                <icon class="iconfont iconzhuanfa"></icon>
+              <!-- <view>
+                <button type="primary" data-index="{{index}}" open-type="share" data-name="pageShare" id="share">
+                  <view class="iconfont iconzhuanfa"></view>
+                </button>
                 {{item.forwarding_amount}}
-              </view>
+              </view> -->
+              <button style="color:#333" data-id="{{item.id}}" data-title="{{item.title}}" type="primary" open-type="share" data-name="pageShare" id="share">
+                <view class="iconfont iconzhuanfa"></view>
+                {{item.forwarding_amount}}
+              </button>
             </view>
           </view>
         </view>
@@ -65,23 +71,25 @@
     </view>
     <view class="videoList" wx:if="{{type == 0}}">
       <repeat for="{{pageData[0].data}}" item="item">
-        <view class="item" data-id="{{item.id}}" @tap="goVideo">
+        <view class="item">
           <view class="info">
-            <view class="title">{{item.title}}</view>
+            <view class="title" data-id="{{item.id}}" @tap="goVideo">{{item.title}}</view>
             <view class="num">
               <view>
                 {{item.reading_volume}}阅读
               </view>
-              <view>
+              <view data-id="{{item.id}}" @tap="goVideo">
                 <icon class="iconfont icondianzan"></icon>
                 {{item.like}}
               </view>
-              <view>
+              <view data-id="{{item.id}}" @tap="goVideo">
                 <icon class="iconfont iconpinglun"></icon>
                 {{item.comment_count}}
               </view>
               <view>
-                <icon class="iconfont iconzhuanfa"></icon>
+                <button style="color:#333" data-id="{{item.id}}" data-title="{{item.title}}" type="primary" data-index="{{index}}" open-type="share" data-name="pageShare" id="share">
+                  <view class="iconfont iconzhuanfa"></view>
+                </button>
                 {{item.forwarding_amount}}
               </view>
             </view>
@@ -157,6 +165,25 @@
       this.type = options.type
       this.$apply()
       this.getData()
+    }
+    // 分享页面
+    onShareAppMessage(e) {
+      let id = e.currentTarget.dataset.id
+      let title = e.currentTarget.dataset.title
+      let type = this.type
+      let url = ''
+      if (type == 0) {
+        url = `pages/detailsVideo?id=${id}&type=iknow`
+      } else if (type == 1) {
+        url = `pages/detailPhoto?id=${id}&type=iknow`
+      }
+      console.log(url)
+      return {
+        title: title,
+        desc: '',
+        // imageUrl: this.image,
+        path: url
+      }
     }
     /**
      * 页面上拉触底事件的处理函数
@@ -464,7 +491,17 @@ page{
       align-items: center;
       justify-content: space-between;
     }
+    .iconItem button{
+      font-size: 28rpx;
+      color: #333333 !important;
+    }
+    // button{
+    //   color: #333 !important;
+    //   font-size: 23rpx;
+    //   margin-left: 30rpx !important;
+    // }
     .iconfont{
+      color: #333;
       font-size: 25rpx;
       margin-left: 30rpx;
       margin-right: 10rpx;

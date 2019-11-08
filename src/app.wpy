@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-10-29 10:41:00 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-08 11:12:59
+ * @Last Modified time: 2019-11-08 11:17:37
  */
 // customData = {}  // 自定义数据
 // customFunction ()　{}  // 自定义方法
@@ -410,10 +410,13 @@ button {
   border-radius:5px;
   -webkit-tap-highlight-color:transparent;
   overflow:hidden;
-  color:#000000;
+  color:#333;
   background-color:transparent !important;
   padding: 0 !important;
   margin: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 button::after {
   border: none;

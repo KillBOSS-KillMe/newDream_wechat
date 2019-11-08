@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-10-29 10:40:57 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-06 20:03:38
+ * @Last Modified time: 2019-11-08 11:26:14
  */
 <template>
   <view>
@@ -40,13 +40,15 @@
                 <view class="iconfont iconpinglun"></view>
                 {{item.comment_count}}
               </view>
-              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
-                <view class="iconfont iconzhuanfa"></view>
+              <view class="operatItem">
+                <button  type="primary" data-index="{{index}}" open-type="share" data-name="pageShare" id="share">
+                  <view class="iconfont iconzhuanfa"></view>
+                </button>
                 {{item.forwarding_amount}}
               </view>
-              <!-- <button type="primary" open-type="share" data-name="pageShare" id="share">
+              <!-- <button class="operatItem" type="primary" open-type="share" data-name="pageShare" id="share">
                 <icon class="iconfont iconzhuanfa"></icon>
-                {{pageDatap.forwarding_amount}}
+                {{pageDatap.forwarding_amount}}qq
               </button> -->
             </view>
           </view>
@@ -96,8 +98,10 @@
                 <view class="iconfont iconpinglun"></view>
                 {{item.comment_count}}
               </view>
-              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
-                <view class="iconfont iconzhuanfa"></view>
+              <view class="operatItem">
+                <button  type="primary" data-index="{{index}}" open-type="share" data-name="pageShare" id="share">
+                  <view class="iconfont iconzhuanfa"></view>
+                </button>
                 {{item.forwarding_amount}}
               </view>
             </view>
@@ -120,8 +124,10 @@
                 <view class="iconfont iconpinglun"></view>
                 {{item.comment_count}}
               </view>
-              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
-                <view class="iconfont iconzhuanfa"></view>
+              <view class="operatItem">
+                <button  type="primary" data-index="{{index}}" open-type="share" data-name="pageShare" id="share">
+                  <view class="iconfont iconzhuanfa"></view>
+                </button>
                 {{item.forwarding_amount}}
               </view>
             </view>
@@ -148,8 +154,10 @@
                 <view class="iconfont iconpinglun"></view>
                 {{item.comment_count}}
               </view>
-              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
-                <view class="iconfont iconzhuanfa"></view>
+              <view class="operatItem">
+                <button  type="primary" data-index="{{index}}" open-type="share" data-name="pageShare" id="share">
+                  <view class="iconfont iconzhuanfa"></view>
+                </button>
                 {{item.forwarding_amount}}
               </view>
             </view>
@@ -320,6 +328,45 @@ import configStore from '../store';
           }
         }
       })
+    }
+    // 分享页面
+    onShareAppMessage(e) {
+      console.log(e.currentTarget.dataset.index)
+      let index = e.currentTarget.dataset.index
+      let itemNode = this.pageDataNode.artile_data.data[index]
+      let artileType = itemNode.artile_type   // 单条数据总类型 0:视频 1:动画 2:图片 3:文字
+      let dataType = itemNode.data_type       // on-line  新影像，  off-line   我知道
+      let id = itemNode.id
+      let title = itemNode.title
+      let url = ''
+      if (artileType == 0) {
+        if (dataType == 'off-line') {
+          url = `pages/detailsVideo?id=${id}&type=iknow`
+        } else if (dataType == 'on-line') {
+          url = `pages/detailsVideo?id=${id}&type=new_image`
+        }
+      } else if (artileType == 1) {
+        if (dataType == 'off-line') {
+          url = `pages/detailsVideo?id=${id}&type=iknow`
+        } else if (dataType == 'on-line') {
+          url = `pages/detailsVideo?id=${id}&type=new_image`
+        }
+      } else if (artileType == 2) {
+        if (dataType == 'off-line') {
+          url = `pages/detailPhoto?id=${id}&type=iknow`
+        } else if (dataType == 'on-line') {
+          url = `pages/detailPhoto?id=${id}&type=new_image`
+        }
+      } else if (artileType == 3) {
+        url = `pages/detailsText?id=${id}`
+      }
+      console.log(url)
+      return {
+        title: title,
+        desc: '',
+        // imageUrl: this.image,
+        path: url
+      }
     }
     // 用户信息校验
     verificationUserInfo() {
@@ -515,7 +562,13 @@ import configStore from '../store';
       font-size: 23rpx;
       color: #333;
       .operatItem{
-        margin-left: 30rpx;
+        color: #333;
+        font-size: 23rpx;
+        margin-left: 30rpx !important;
+        .iconfont{
+          color: #333;
+          font-size: 23rpx;
+        }
       }
     }
     .iconfont{

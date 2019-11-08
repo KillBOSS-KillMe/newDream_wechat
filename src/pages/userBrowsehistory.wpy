@@ -1,0 +1,557 @@
+/*
+ * @Author: luow 
+ * @Date: 2019-10-29 10:40:57 
+ * @Last Modified by: luow
+ * @Last Modified time: 2019-11-08 11:01:25
+ */
+<template>
+  <view>
+    <view class="articleList">
+      <repeat for="{{pageDataNode}}" item="item">
+        <!-- artile_type 单条数据总类型 0:视频 1:动画 2:图片 3:文字 -->
+        <view class="item type1" wx:if="{{item.type == 3 && item.own_type == 'new_image'}}">
+          <view class="title" @tap="goDetails" data-index="{{index}}">{{item.newImage.title}}</view>
+          <view class="articleCon" @tap="goDetails" data-index="{{index}}">
+            <rich-text nodes="{{item.newImage.content}}"></rich-text>
+          </view>
+          <view class="operating">
+            <view>{{item.newImage.reading_volume}}阅读</view>
+            <view>
+              <view class="operatItem"  @tap="goDetails" data-index="{{index}}">
+                <view class="iconfont icondianzan"></view>
+                {{item.newImage.like}}
+              </view>
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+                <view class="iconfont iconpinglun"></view>
+                {{item.newImage.comment_count}}
+              </view>
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+                <view class="iconfont iconzhuanfa"></view>
+                {{item.newImage.forwarding_amount}}
+              </view>
+              <!-- <button type="primary" open-type="share" data-name="pageShare" id="share">
+                <icon class="iconfont iconzhuanfa"></icon>
+                {{item.newImage.forwarding_amount}}
+              </button> -->
+            </view>
+          </view>
+        </view>
+        <view class="item type3" wx:if="{{item.type == 0 && item.own_type == 'new_image'}}">
+          <view class="title" @tap="goDetails" data-index="{{index}}">{{item.newImage.title}}</view>
+          <video @tap="goDetails" data-index="{{index}}" id="myVideo" src="{{requestImgUrl + item.newImage.video_path}}" danmu-list="{{danmuList}}" enable-danmu danmu-btn controls></video>
+          <view class="articleCon" @tap="goDetails" data-index="{{index}}">
+            <rich-text nodes="{{item.newImage.content}}"></rich-text>
+          </view>
+          <view class="operating">
+            <text>{{item.newImage.name}}</text>
+            <view>
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+                <view class="iconfont icondianzan"></view>
+                {{item.newImage.like}}
+              </view>
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+                <view class="iconfont iconpinglun"></view>
+                {{item.newImage.comment_count}}
+              </view>
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+                <view class="iconfont iconzhuanfa"></view>
+                {{item.newImage.forwarding_amount}}
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="item type3" wx:if="{{item.type == 1 && item.own_type == 'new_image'}}">
+          <view class="title" @tap="goDetails" data-index="{{index}}">{{item.newImage.title}}</view>
+          <video @tap="goDetails" data-index="{{index}}" id="myVideo" src="{{requestImgUrl + item.newImage.video_path}}" danmu-list="{{danmuList}}" enable-danmu danmu-btn controls></video>
+          <view class="articleCon">
+            <rich-text nodes="{{item.newImage.content}}"></rich-text>
+          </view>
+          <view class="operating">
+            <text>{{item.newImage.name}}</text>
+            <view>
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+                <view class="iconfont icondianzan"></view>
+                {{item.newImage.like}}
+              </view>
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+                <view class="iconfont iconpinglun"></view>
+                {{item.newImage.comment_count}}
+              </view>
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+                <view class="iconfont iconzhuanfa"></view>
+                {{item.newImage.forwarding_amount}}
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="item type4" wx:if="{{item.type == 2 && item.own_type == 'new_image'}}">
+          <view @tap="goDetails" data-index="{{index}}" class="title">{{item.newImage.title}}</view>
+          <view @tap="goDetails" data-index="{{index}}" class="imageList">
+            <repeat for="{{item.newImage.images}}" item="imgItem">
+              <image src="{{requestImgUrl + imgItem}}" />
+            </repeat>
+          </view>
+          <view class="articleCon">
+            <rich-text nodes="{{item.newImage.content}}"></rich-text>
+          </view>
+          <view class="operating">
+            <text>{{item.newImage.user.name}}</text>
+            <view>
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+                <view class="iconfont icondianzan"></view>
+                {{item.newImage.like}}
+              </view>
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+                <view class="iconfont iconpinglun"></view>
+                {{item.newImage.comment_count}}
+              </view>
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+                <view class="iconfont iconzhuanfa"></view>
+                {{item.newImage.forwarding_amount}}
+              </view>
+            </view>
+          </view>
+        </view>
+
+
+
+        <view class="item type1" wx:if="{{item.type == 3 && item.own_type == 'knowledge'}}">
+          <view class="title" @tap="goDetails" data-index="{{index}}">{{item.knowledge.title}}</view>
+          <view class="articleCon" @tap="goDetails" data-index="{{index}}">
+            <rich-text nodes="{{item.knowledge.content}}"></rich-text>
+          </view>
+          <view class="operating">
+            <view>{{item.knowledge.reading_volume}}阅读</view>
+            <view>
+              <view class="operatItem"  @tap="goDetails" data-index="{{index}}">
+                <view class="iconfont icondianzan"></view>
+                {{item.knowledge.like}}
+              </view>
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+                <view class="iconfont iconpinglun"></view>
+                {{item.knowledge.comment_count}}
+              </view>
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+                <view class="iconfont iconzhuanfa"></view>
+                {{item.knowledge.forwarding_amount}}
+              </view>
+              <!-- <button type="primary" open-type="share" data-name="pageShare" id="share">
+                <icon class="iconfont iconzhuanfa"></icon>
+                {{pageDatap.forwarding_amount}}
+              </button> -->
+            </view>
+          </view>
+        </view>
+        <view class="item type3" wx:if="{{item.type == 0 && item.own_type == 'knowledge'}}">
+          <view class="title" @tap="goDetails" data-index="{{index}}">{{item.knowledge.title}}</view>
+          <video @tap="goDetails" data-index="{{index}}" id="myVideo" src="{{requestImgUrl + item.knowledge.video_path}}" danmu-list="{{danmuList}}" enable-danmu danmu-btn controls></video>
+          <view class="articleCon" @tap="goDetails" data-index="{{index}}">
+            <rich-text nodes="{{item.knowledge.content}}"></rich-text>
+          </view>
+          <view class="operating">
+            <text>{{item.knowledge.name}}</text>
+            <view>
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+                <view class="iconfont icondianzan"></view>
+                {{item.knowledge.like}}
+              </view>
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+                <view class="iconfont iconpinglun"></view>
+                {{item.knowledge.comment_count}}
+              </view>
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+                <view class="iconfont iconzhuanfa"></view>
+                {{item.knowledge.forwarding_amount}}
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="item type3" wx:if="{{item.type == 1 && item.own_type == 'knowledge'}}">
+          <view class="title" @tap="goDetails" data-index="{{index}}">{{item.knowledge.title}}</view>
+          <video @tap="goDetails" data-index="{{index}}" id="myVideo" src="{{requestImgUrl + item.knowledge.video_path}}" danmu-list="{{danmuList}}" enable-danmu danmu-btn controls></video>
+          <view class="articleCon">
+            <rich-text nodes="{{item.knowledge.content}}"></rich-text>
+          </view>
+          <view class="operating">
+            <text>{{item.knowledge.name}}</text>
+            <view>
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+                <view class="iconfont icondianzan"></view>
+                {{item.knowledge.like}}
+              </view>
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+                <view class="iconfont iconpinglun"></view>
+                {{item.knowledge.comment_count}}
+              </view>
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+                <view class="iconfont iconzhuanfa"></view>
+                {{item.knowledge.forwarding_amount}}
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="item type4" wx:if="{{item.type == 2 && item.own_type == 'knowledge'}}">
+          <view @tap="goDetails" data-index="{{index}}" class="title">{{item.knowledge.title}}</view>
+          <view @tap="goDetails" data-index="{{index}}" class="imageList">
+            <repeat for="{{item.knowledge.images}}" item="imgItem">
+              <image src="{{requestImgUrl + imgItem}}" />
+            </repeat>
+          </view>
+          <view class="articleCon">
+            <rich-text nodes="{{item.knowledge.content}}"></rich-text>
+          </view>
+          <view class="operating">
+            <text>{{item.knowledge.user.name}}</text>
+            <view>
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+                <view class="iconfont icondianzan"></view>
+                {{item.knowledge.like}}
+              </view>
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+                <view class="iconfont iconpinglun"></view>
+                {{item.knowledge.comment_count}}
+              </view>
+              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+                <view class="iconfont iconzhuanfa"></view>
+                {{item.knowledge.forwarding_amount}}
+              </view>
+            </view>
+          </view>
+        </view>
+      </repeat>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import nav from '../components/nav' // 底部导航
+import configStore from '../store';
+  export default class UserBrowsehistory extends wepy.page {
+    config = {
+      navigationBarTitleText: '浏览历史'
+    }
+    components = {
+      nav: nav
+    }
+
+    mixins = []
+
+    data = {
+      pageDataNode: null,
+      requestImgUrl: '',
+      userInfo: {},
+      userInfoButtonShow: true,
+    }
+
+    computed = {
+
+    }
+
+    methods = {
+      goDetails(e) {
+        let index = e.currentTarget.dataset.index
+        let itemNode = this.pageDataNode[index]
+        console.log(itemNode)
+        let artileType = itemNode.type   // 单条数据总类型 0:视频 1:动画 2:图片 3:文字
+        let dataType = itemNode.own_type       // new_image  新影像，  knowledge   我知道
+        // let id = itemNode.id
+        let url = ''
+        if (artileType == 0) {
+          if (dataType == 'knowledge') {
+            url = `/pages/detailsVideo?id=${itemNode.knowledge.id}&type=iknow`
+          } else if (dataType == 'new_image') {
+            url = `/pages/detailsVideo?id=${itemNode.newImage.id}&type=new_image`
+          }
+        } else if (artileType == 1) {
+          if (dataType == 'knowledge') {
+            url = `/pages/detailsVideo?id=${itemNode.knowledge.id}&type=iknow`
+          } else if (dataType == 'new_image') {
+            url = `/pages/detailsVideo?id=${itemNode.newImage.id}&type=new_image`
+          }
+        } else if (artileType == 2) {
+          if (dataType == 'knowledge') {
+            url = `/pages/detailPhoto?id=${itemNode.knowledge.id}&type=iknow`
+          } else if (dataType == 'new_image') {
+            url = `/pages/detailPhoto?id=${itemNode.newImage.id}&type=new_image`
+          }
+        } else if (artileType == 3) {
+          url = `/pages/detailsText?id=${itemNode.knowledge.id}`
+        }
+        console.log(url)
+        this.$navigate(url)
+      }
+    }
+
+    events = {
+
+    }
+
+    onLoad(options) {
+      this.userInfo = this.$parent.globalData.userInfo
+      this.requestImgUrl = this.$parent.globalData.requestImgUrl
+      this.$apply()
+      this.getData()
+    }
+    /**
+     * 页面上拉触底事件的处理函数
+     */
+    onReachBottom() {
+      // 翻页加载
+      // console.log(this.pageDataNode.artile_data.next_page_url)
+      if (this.pageDataNode.artile_data.next_page_url != '') {
+        this.getIndexInfoNextPage()
+      } else {
+        wx.showToast({
+          title: "没有更多了",
+          icon: 'none',
+          duration: 2000
+        });
+      }
+    }
+    // 下拉刷新
+    onPullDownRefresh() {
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+      // 获取用户信息
+      this.onGetUserInfo()
+    }
+    // 加载下一页数据
+    getDataNextPage() {
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+      let nextPageUrl = this.pageDataNode.artile_data.next_page_url
+      wx.request({
+        url: nextPageUrl,
+        method: 'GET',
+        success: data => {
+          data = this.$parent.null2str(data)
+          console.log(data)
+          wx.hideToast()
+          if (data.statusCode === 200) {
+            let list = this.pageDataNode.artile_data.data
+            let newList = data.data.artile_data.data
+            list = list.concat(newList)
+            data.data.artile_data.data = list
+            this.pageDataNode = data.data
+            this.$apply()
+          } else {
+            wx.showModal({
+              title: '',
+              content: data.data.errmsg
+            })
+          }
+        }
+      })
+    }
+    getData() {
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+      wx.request({
+        url: `${this.$parent.globalData.requestUrl}/weapp/users_histories`,
+        method: 'GET',
+        header: {
+          'content-type':'application/json',
+          Authorization: this.$parent.globalData.token
+        },
+        data: {
+          page: 1,
+          page_size: 20
+        },
+        success: data => {
+          data = this.$parent.null2str(data)
+          console.log(data)
+          wx.hideToast()
+          if (data.statusCode === 200) {
+            this.pageDataNode = data.data.data
+            this.$apply()
+          } else {
+            wx.showModal({
+              title: '',
+              content: data.data.errmsg
+            })
+          }
+        }
+      })
+    }
+    // 点赞
+    runLike(e) {
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+      let url = `/weapp/users_like/new_image/${e.currentTarget.dataset.id}`
+      wx.request({
+        url: `${this.$parent.globalData.requestUrl + url}`,
+        method: 'PUT',
+        header: {
+          'content-type':'application/json',
+          Authorization: this.$parent.globalData.token
+        },
+        success: data => {
+          data = this.$parent.null2str(data)
+          // console.log(data)
+          wx.hideToast()
+          if (data.data.status_code === 201) {
+            wx.showToast({
+              title: "操作成功",
+              icon: 'success',
+              duration: 2000
+            });
+            // 数据更新
+            this.getIndexInfo()
+          } else {
+            wx.showModal({
+              title: '',
+              content: data.data.errmsg
+            })
+          }
+        }
+      })
+    }
+  }
+</script>
+<style lang="less">
+.articleList{
+  width: 750rpx;
+  height: auto;
+  margin-bottom: 130rpx;
+  .title{
+    font-size: 33rpx;
+    font-weight: 600;
+    color: #333;
+  }
+  .articleCon{
+    font-size: 27rpx;
+    color: #666666;
+  }
+  .operating{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 30rpx;
+    
+    text{
+      font-size: 23rpx;
+      color: #999;
+    }
+    view{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 23rpx;
+      color: #333;
+      .operatItem{
+        margin-left: 30rpx;
+      }
+    }
+    .iconfont{
+      margin-right: 10rpx;
+    }
+  }
+  .item{
+    width: 690rpx;
+    height: auto;
+    padding: 30rpx 0;
+    margin: 0 30rpx;
+    border-bottom: 1rpx solid #D5D5D5;
+  }
+  .type1{
+    .title{
+      width: 690rpx;
+      height: auto;
+      padding-bottom: 30rpx;
+    }
+    .articleCon{
+      width: 690rpx;
+      height: 70rpx;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      // white-space:nowrap;
+    }
+  }
+  .type2{
+    .info{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .con{
+      width: 420rpx;
+    }
+    image{
+      width: 226rpx;
+      height: 150rpx;
+      border-radius: 10rpx;
+    }
+    .title{
+      height: 80rpx;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      // white-space:nowrap;
+      margin-bottom: 36rpx;
+    }
+    .articleCon{
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+  }
+  .type3{
+    .title{
+      width: 690rpx;
+      height: auto;
+      padding-bottom: 20rpx;
+    }
+    .articleCon{
+      width: 690rpx;
+      margin-top: 20rpx;
+      height: auto;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    video{
+      width: 690rpx;
+      height: 360rpx;
+      border-radius: 10rpx;
+    }
+  }
+  .type4{
+    .title{
+      width: 690rpx;
+      height: auto;
+      padding-bottom: 20rpx;
+    }
+    .articleCon{
+      width: 690rpx;
+      margin-top: 20rpx;
+      height: auto;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    .imageList{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      image{
+        width: 226rpx;
+        height: 150rpx;
+        border-radius: 10rpx;
+      }
+    }
+  }
+}
+</style>

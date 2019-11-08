@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-11-04 15:50:56 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-06 14:27:24
+ * @Last Modified time: 2019-11-08 10:17:06
  */
 
 <template>
@@ -18,7 +18,7 @@
       </view>
       <view class="item">
         <label>身份证号</label>
-        <input data-name="id_card" @input="getSetData" type="text" placeholder="请输入身份证号" >
+        <input data-name="id_card" @input="getSetData" type="idcard" placeholder="请输入身份证号" >
       </view>
       <view class="item">
         <label>所在区县及学校名称</label>
@@ -37,7 +37,7 @@
       </view>
       <view class="item">
         <label>手机</label>
-        <input data-name="phone" @input="getSetData" type="text" placeholder="请输入手机号码" >
+        <input data-name="phone" @input="getSetData" type="number" placeholder="请输入手机号码" >
       </view>
       <view class="item">
         <label>E-mail</label>
@@ -122,13 +122,14 @@
 
 <script>
   import wepy from 'wepy'
+  import check from '../mixins/check'
   export default class NewImageSignUp extends wepy.page {
      config = {
       navigationBarTitleText: '报名通道'
     }
     components = {
     }
-    mixins = []
+    mixins = [check]
 
     data = {
       requestImgUrl: '',
@@ -286,119 +287,105 @@
     submit() {
       let formNode = this.formNode
       console.log(formNode)
-      // for( let key in formNode ) {
-      //   if (formNode[key] == '') {
-      //     wx.showToast({
-      //       title: "请完善信息",
-      //       icon: 'none',
-      //       duration: 2000
-      //     });
-      //     return false
-      //   }
-      // }
-      if (formNode.creation_time == '') {
-        wx.showToast({
-          title: "请完善创作时间",
-          icon: 'none',
-          duration: 2000
-        });
-        return false
+      if (this.check.isNull(formNode.creation_time)) {
+        wx.showModal({
+          title: '',
+          content: '请完善创作时间'
+        })
+        return ''
       }
-      if (formNode.author == '') {
-        wx.showToast({
-          title: "请完善作者",
-          icon: 'none',
-          duration: 2000
-        });
-        return false
+      if (this.check.isNull(formNode.author)) {
+        wx.showModal({
+          title: '',
+          content: '请完善作者'
+        })
+        return ''
       }
-      if (formNode.id_card == '') {
-        wx.showToast({
-          title: "请完善身份证号",
-          icon: 'none',
-          duration: 2000
-        });
-        return false
+      if (this.check.isNull(formNode.address)) {
+        wx.showModal({
+          title: '',
+          content: '请完善所在区县及学校名称'
+        })
+        return ''
       }
-      if (formNode.address == '') {
-        wx.showToast({
-          title: "请完善所在区县及学校名称",
-          icon: 'none',
-          duration: 2000
-        });
-        return false
+      if (this.check.isNull(formNode.sex)) {
+        wx.showModal({
+          title: '',
+          content: '请完善性别'
+        })
+        return ''
       }
-      if (formNode.sex == '') {
-        wx.showToast({
-          title: "请完善性别",
-          icon: 'none',
-          duration: 2000
-        });
-        return false
+      if (this.check.isNull(formNode.email)) {
+        wx.showModal({
+          title: '',
+          content: '请完善邮箱'
+        })
+        return ''
       }
-      if (formNode.phone == '') {
-        wx.showToast({
-          title: "请完善联系方式",
-          icon: 'none',
-          duration: 2000
-        });
-        return false
+      if (this.check.isNull(formNode.is_join_other)) {
+        wx.showModal({
+          title: '',
+          content: '请完善作品是否参与过其他评选信息'
+        })
+        return ''
       }
-      if (formNode.email == '') {
-        wx.showToast({
-          title: "请完善邮箱",
-          icon: 'none',
-          duration: 2000
-        });
-        return false
+      if (this.check.isNull(formNode.is_agree)) {
+        wx.showModal({
+          title: '',
+          content: '请同意参赛须知'
+        })
+        return ''
       }
-      if (formNode.is_join_other == '') {
-        wx.showToast({
-          title: "请完善作品是否参与过其他评选信息",
-          icon: 'none',
-          duration: 2000
-        });
-        return false
+      if (this.check.isNull(formNode.work_type)) {
+        wx.showModal({
+          title: '',
+          content: '请完善作品类型'
+        })
+        return ''
       }
-      if (formNode.is_agree == '') {
-        wx.showToast({
-          title: "请同意参赛须知",
-          icon: 'none',
-          duration: 2000
-        });
-        return false
+      if (this.check.isNull(formNode.introduction)) {
+        wx.showModal({
+          title: '',
+          content: '请完善是否播出/刊载/获奖情况'
+        })
+        return ''
       }
-      if (formNode.work_type == '') {
-        wx.showToast({
-          title: "请完善作品类型",
-          icon: 'none',
-          duration: 2000
-        });
-        return false
+      if (this.check.isNull(formNode.work_introduction)) {
+        wx.showModal({
+          title: '',
+          content: '请完善创作概况及主体阐述'
+        })
+        return ''
       }
-      if (formNode.work_name == '') {
-        wx.showToast({
-          title: "请完善作品名称",
-          icon: 'none',
-          duration: 2000
-        });
-        return false
+      if (formNode.id_card.length == 18) {
+        if (this.check.isIdentity_18(formNode.id_card)) {
+          wx.showModal({
+            title: '',
+            content: '请输入正确的身份证号'
+          })
+          return ''
+        }
+      } else if (formNode.id_card.length == 15) {
+        if (this.check.isIdentity_15(formNode.id_card)) {
+          wx.showModal({
+            title: '',
+            content: '请输入正确的身份证号'
+          })
+          return ''
+        }
+      } else {
+        wx.showModal({
+          title: '',
+          content: '请输入正确的身份证号'
+        })
+        return ''
       }
-      if (formNode.introduction == '') {
-        wx.showToast({
-          title: "请完善是否播出/刊载/获奖情况",
-          icon: 'none',
-          duration: 2000
-        });
-        return false
-      }
-      if (formNode.work_introduction == '') {
-        wx.showToast({
-          title: "请完善创作概况及主体阐述",
-          icon: 'none',
-          duration: 2000
-        });
-        return false
+      if (formNode.phone.length != 11) {
+        wx.showModal({
+          title: '',
+          content: '请输入正确的手机号'
+        })
+        return ''
       }
       if (formNode.work_type == '3') {
         // 图片

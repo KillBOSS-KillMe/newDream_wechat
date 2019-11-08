@@ -42,7 +42,7 @@ export default class testMixin extends wepy.mixin {
     // },
     // 是否为空
     isNull(str) {
-      if (trim(str).length == 0)return true
+      if (str.length == 0)return true
       else return false
     },
     // 是否为邮件

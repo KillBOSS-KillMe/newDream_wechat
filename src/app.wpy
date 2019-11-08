@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-10-29 10:41:00 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-06 20:40:56
+ * @Last Modified time: 2019-11-08 10:14:21
  */
 // customData = {}  // 自定义数据
 // customFunction ()　{}  // 自定义方法
@@ -97,6 +97,8 @@ export default class extends wepy.app {
       'pages/userLikeList', // 点赞列表
       'pages/userCommentList', // 评论列表
       'pages/userSignUp', // 报名情况
+      'pages/userBrowsehistory', // 浏览历史
+      
 
       // 详情部分
       'pages/detailsText', // 文字详情

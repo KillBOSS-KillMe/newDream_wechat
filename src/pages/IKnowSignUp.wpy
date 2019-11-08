@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-11-04 15:50:56 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-06 10:18:19
+ * @Last Modified time: 2019-11-08 09:43:40
  */
 
 <template>
@@ -25,11 +25,11 @@
       </view>
       <view class="item">
         <label>身份证号</label>
-        <input data-name="id_card" @input="getSetData" type="text" placeholder="请输入您的身份证号码" >
+        <input data-name="id_card" @input="getSetData" type="idcard" placeholder="请输入您的身份证号码" >
       </view>
       <view class="item">
         <label>联系方式</label>
-        <input data-name="contact" @input="getSetData" type="text" placeholder="请输入您的联系方式" >
+        <input data-name="contact" @input="getSetData" type="number" placeholder="请输入您的联系方式" >
       </view>
       <view class="item">
         <label>所属区县</label>
@@ -45,7 +45,7 @@
       </view>
       <view class="item">
         <label>指导老师联系方式</label>
-        <input data-name="teacher_contact" @input="getSetData" type="text" placeholder="请输入您的指导老师联系方式" >
+        <input data-name="teacher_contact" @input="getSetData" type="number" placeholder="请输入您的指导老师联系方式" >
       </view>
       <view class="item">
         <label>自我介绍</label>
@@ -70,13 +70,14 @@
 
 <script>
   import wepy from 'wepy'
+  import check from '../mixins/check'
   export default class NewImage extends wepy.page {
      config = {
       navigationBarTitleText: '报名通道'
     }
     components = {
     }
-    mixins = []
+    mixins = [check]
 
     data = {
       notice: [
@@ -159,6 +160,55 @@
           return false
         }
       }
+      //   register_name: '',         // 姓名
+      //   id_card: '',               // 身份证号
+      //   contact: '',               // 联系方式
+      //   address: '',               // 地址
+      //   sex: '',                   // 性别
+      //   school: '',                // 学校
+      //   teacher: '',               // 指导老师
+      //   teacher_contact: '',       // 指导老师联系方式
+      //   introduction: '',          // 参赛宣言
+      //   declaration: ''            // 自我介绍
+      if (formNode.id_card.length == 18) {
+        if (this.check.isIdentity_18(formNode.id_card)) {
+          wx.showModal({
+            title: '',
+            content: '请输入正确的身份证号'
+          })
+          return ''
+        }
+      } else if (formNode.id_card.length == 15){
+        if (this.check.isIdentity_15(formNode.id_card)) {
+          wx.showModal({
+            title: '',
+            content: '请输入正确的身份证号'
+          })
+          return ''
+        }
+      } else {
+        wx.showModal({
+          title: '',
+          content: '请输入正确的身份证号'
+        })
+        return ''
+      }
+      
+      if (formNode.contact.length != 11) {
+        wx.showModal({
+          title: '',
+          content: '请输入正确的手机号'
+        })
+        return ''
+      }
+      if (formNode.teacher_contact.length != 11) {
+        wx.showModal({
+          title: '',
+          content: '请输入正确的手机号'
+        })
+        return ''
+      }
+      
       wx.showToast({
         title: "数据提交中...",
         icon: 'loading',

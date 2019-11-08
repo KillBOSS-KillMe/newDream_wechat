@@ -2,7 +2,7 @@
  * @Author: luow 
  * @Date: 2019-10-29 10:40:48 
  * @Last Modified by: luow
- * @Last Modified time: 2019-11-06 20:07:13
+ * @Last Modified time: 2019-11-08 10:14:22
  */
 <template>
   <view>
@@ -91,7 +91,7 @@
             break;
           case '4': 
              // 浏览记录
-            url = '/pages/qqqqq'
+            url = '/pages/userBrowsehistory'
             break;
           case '5': 
              // 系统设置

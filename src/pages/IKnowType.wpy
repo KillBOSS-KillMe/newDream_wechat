@@ -22,7 +22,7 @@
       </view>
     </view>
     <view class="search" wx:if="{{type == 2}}">
-      <icon class="iconfont iconduihao"></icon>
+      <icon class="iconfont iconsousuo"></icon>
       <input type="text" placeholder="请输入搜索内容" @input="search" />
     </view>
     <view class="textList" wx:if="{{type == 2}}">
@@ -256,14 +256,6 @@
         this.textShowList = this.pageData[2].data
         return false
       }
-      // let allList = this.pageData[2].data
-      // let textShowList = []
-      // for (let i = 0; i < allList.length; i++) {
-      //   if (allList[i].title.indexOf(key) != -1) {
-      //     textShowList.push(allList[i])
-      //   }
-      // }
-      // this.textShowList = textShowList
       wx.showToast({
         title: "搜索中...",
         icon: 'loading',
@@ -317,9 +309,6 @@
           wx.hideToast()
           if (data.statusCode === 200) {
             this.pageData[type] = data.data
-            if (type == 2) {
-              this.textShowList = data.data.data
-            }
             // console.log(this.pageData)
             // console.log(this.pageData[this.type].next_page_url)
             this.$apply()

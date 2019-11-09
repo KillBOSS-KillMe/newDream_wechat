@@ -584,6 +584,9 @@ icon{
   // font-weight: 600; 
   color: #898989; 
  } 
+  .fontColor{
+    color: red !important;
+  }
 // 多选框样式
   checkbox .wx-checkbox-input {
     border-radius: 50%; /* 圆角 */

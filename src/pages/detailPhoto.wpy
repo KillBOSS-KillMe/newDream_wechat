@@ -20,8 +20,8 @@
       <view class="worksCount">
         <text>{{pageDatap.reading_volume}}阅读</text>
         <view class="worksCountItem">
-          <view data-id="{{pageDatap.id}}" @tap="runLike">
-            <icon class="iconfont icondianzan"></icon>
+          <view data-id="{{pageDatap.id}}" data-str="{{pageDatap.is_like}}" @tap="runLike">
+            <icon class="iconfont icondianzan {{pageDatap.is_like == 1?'fontColor':''}}"></icon>
             {{pageDatap.like}}
           </view>
           <view data-id="{{pageDatap.id}}" @tap="commentShow">
@@ -41,12 +41,26 @@
     </view>
     <view class="line"></view>
     <view class="worksReply">
+      <lable class="listName" wx:if="{{commentNode.data.length > 0}}">评论列表</lable>
+      <repeat for="{{commentNode.data}}" item="item">
+        <view class="item" @tap="dataSwitch" data-index="{{index}}">
+          <view class="itemTop">
+            <image src="{{item.user.avatar}}" />
+            <view class="itemTopUser">
+              <text>{{item.user.name}}</text>
+              <text>{{item.created_at}}</text>
+            </view>
+          </view>
+          <text class="replyContent">{{item.content}}</text>
+        </view>
+      </repeat>
+      <lable class="listName" wx:if="{{pageDatap.recommend > 0}}">推荐列表</lable>
       <repeat for="{{pageDatap.recommend}}" item="item">
         <view class="item" @tap="dataSwitch" data-index="{{index}}">
           <view class="itemTop">
-            <image src="{{requestImgUrl + item.avatar}}" />
+            <!-- <image src="{{requestImgUrl + item.avatar}}" /> -->
             <view class="itemTopUser">
-              <text>{{item.user.name}}</text>
+              <text>{{item.title}}</text>
               <text>{{item.updated_at}}</text>
             </view>
           </view>
@@ -130,6 +144,13 @@
     }
     // 点赞
     runLike(e) {
+      if (e.currentTarget.dataset.id == '1') {
+        wx.showToast({
+          title: "不可重复点赞",
+          icon: 'none'
+        });
+        return false
+      }
       wx.showToast({
         title: "拼命加载中...",
         icon: 'loading',
@@ -229,7 +250,7 @@
       let type = this.type
       let url = ''
       if (this.options.type == 'new_image') {
-        url = `/weapp/new_image/comments/?kid=${this.options.id}`
+        url = `/weapp/new_image/comments/?nid=${this.options.id}`
       } else if (this.options.type == 'iknow') {
         url = `/weapp/knowledge/comments/?kid=${this.options.id}`
       }
@@ -245,8 +266,8 @@
           console.log('-')
           console.log(data)
           wx.hideToast()
-          if (data.statusCode === 201) {
-            this.commentList = data.data
+          if (data.data.status_code === 201) {
+            this.commentNode = data.data.data
             this.$apply()
           } else {
             wx.showModal({
@@ -429,5 +450,13 @@
       margin: 10rpx 0 10rpx 80rpx;
     }
   }
+}
+.listName{
+  height: 90rpx;
+  line-height: 90rpx;
+  // margin: 30rpx 0;
+  font-size: 30rpx;
+  color: #333;
+  font-weight: 600;
 }
 </style>

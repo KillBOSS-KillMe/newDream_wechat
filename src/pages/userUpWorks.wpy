@@ -35,7 +35,7 @@
                 {{item.reading_volume}}阅读
               </view>
               <view>
-                <icon class="iconfont icondianzan"></icon>
+                <icon class="iconfont icondianzan {{item.is_like == 1?'fontColor':''}}"></icon>
                 {{item.like}}
               </view>
               <view>
@@ -65,7 +65,7 @@
                 {{item.reading_volume}}阅读
               </view>
               <view>
-                <icon class="iconfont icondianzan"></icon>
+                <icon class="iconfont icondianzan {{item.is_like == 1?'fontColor':''}}"></icon>
                 {{item.like}}
               </view>
               <view>
@@ -99,7 +99,7 @@
             <text>{{item.reading_volume}}阅读</text>
             <view class="iconItem">
               <view>
-                <icon class="iconfont icondianzan"></icon>
+                <icon class="iconfont icondianzan {{item.is_like == 1?'fontColor':''}}"></icon>
                 {{item.like}}
               </view>
               <view>

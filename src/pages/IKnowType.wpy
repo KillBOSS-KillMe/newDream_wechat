@@ -53,7 +53,7 @@
             <text>{{item.reading_volume}}阅读</text>
             <view class="iconItem">
               <view data-id="{{item.id}}" @tap="goImage">
-                <icon class="iconfont icondianzan"></icon>
+                <icon class="iconfont icondianzan {{item.is_like == 1?'fontColor':''}}"></icon>
                 {{item.like}}
               </view>
               <view data-id="{{item.id}}" @tap="goImage">
@@ -85,7 +85,7 @@
                 {{item.reading_volume}}阅读
               </view>
               <view data-id="{{item.id}}" @tap="goVideo">
-                <icon class="iconfont icondianzan"></icon>
+                <icon class="iconfont icondianzan {{item.is_like == 1?'fontColor':''}}"></icon>
                 {{item.like}}
               </view>
               <view data-id="{{item.id}}" @tap="goVideo">

@@ -71,6 +71,7 @@
       userInfo:{},
       requestImgUrl: '',
       pageDatap: {},
+      commentNode: {},
       options: {},
       commentDomShow: false
     }
@@ -107,6 +108,7 @@
       this.requestImgUrl = this.$parent.globalData.requestImgUrl
       this.$apply()
       this.getData()
+      this.getComment()
     }
     onShow() {
     }
@@ -208,6 +210,44 @@
             this.$apply()
             // 数据更新
             this.getData()
+            this.getComment()
+          } else {
+            wx.showModal({
+              title: '',
+              content: data.data.errmsg
+            })
+          }
+        }
+      })
+    }
+    getComment() {
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+      let type = this.type
+      let url = ''
+      if (this.options.type == 'new_image') {
+        url = `/weapp/new_image/comments/?kid=${this.options.id}`
+      } else if (this.options.type == 'iknow') {
+        url = `/weapp/knowledge/comments/?kid=${this.options.id}`
+      }
+      wx.request({
+        url: `${this.$parent.globalData.requestUrl + url}`,
+        method: 'GET',
+        header: {
+          'content-type':'application/json',
+          Authorization: this.$parent.globalData.token
+        },
+        success: data => {
+          data = this.$parent.null2str(data)
+          console.log('-')
+          console.log(data)
+          wx.hideToast()
+          if (data.statusCode === 201) {
+            this.commentList = data.data
+            this.$apply()
           } else {
             wx.showModal({
               title: '',

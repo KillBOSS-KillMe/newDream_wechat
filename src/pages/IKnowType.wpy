@@ -26,12 +26,18 @@
       <input type="text" placeholder="请输入搜索内容" @input="search" />
     </view>
     <view class="textList" wx:if="{{type == 2}}">
-      <repeat for="{{textShowList}}" item="item">
+      <repeat for="{{textShowList}}" item="item" wx:if="{{searchKey != ''}}">
+        <view class="item" data-id="{{item.id}}" @tap="goText">
+          {{index + 1}}.{{item.name}}
+        </view>
+      </repeat>
+      <repeat for="{{textShowList}}" item="item" wx:if="{{searchKey == ''}}">
       <!-- <repeat for="{{pageData[2].data}}" item="item"> -->
         <view class="item" data-id="{{item.id}}" @tap="goText">
           {{index + 1}}.{{item.title}}
         </view>
       </repeat>
+      
     </view>
     <view class="imageList" wx:if="{{type == 1}}">
       <repeat for="{{pageData[1].data}}" item="item">
@@ -117,6 +123,7 @@
     mixins = []
 
     data = {
+      searchKey: '',
       textShowList: [],
       userInfo: {},
       requestImgUrl: '',
@@ -203,6 +210,9 @@
     }
     // 加载下一页数据
     getDataNextPage() {
+      if (this.searchKey != '') {
+        return false
+      }
       wx.showToast({
         title: "拼命加载中...",
         icon: 'loading',
@@ -240,19 +250,48 @@
       })
     }
     search(e) {
-      let key = e.detail.value
-      if (key == '') {
+      this.searchKey = e.detail.value
+      this.$apply()
+      if (this.searchKey == '') {
         this.textShowList = this.pageData[2].data
         return false
       }
-      let allList = this.pageData[2].data
-      let textShowList = []
-      for (let i = 0; i < allList.length; i++) {
-        if (allList[i].title.indexOf(key) != -1) {
-          textShowList.push(allList[i])
+      // let allList = this.pageData[2].data
+      // let textShowList = []
+      // for (let i = 0; i < allList.length; i++) {
+      //   if (allList[i].title.indexOf(key) != -1) {
+      //     textShowList.push(allList[i])
+      //   }
+      // }
+      // this.textShowList = textShowList
+      wx.showToast({
+        title: "搜索中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+      wx.request({
+        url: `${this.$parent.globalData.requestUrl}/weapp/knowledge_base/search`,
+        method: 'GET',
+        data: {
+          keywordes: this.searchKey,
+          page: 1,
+          page_size: 100000
+        },
+        success: data => {
+          data = this.$parent.null2str(data)
+          console.log(data)
+          wx.hideToast()
+          if (data.statusCode === 200) {
+            this.textShowList = data.data.data.data
+            this.$apply()
+          } else {
+            wx.showModal({
+              title: '',
+              content: data.data.errmsg
+            })
+          }
         }
-      }
-      this.textShowList = textShowList
+      })
       this.$apply()
     }
     getData() {

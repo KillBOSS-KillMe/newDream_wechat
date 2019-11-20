@@ -34,8 +34,8 @@
               <view>
                 {{item.reading_volume}}阅读
               </view>
-              <view @tap="runLike" data-str="{{item.is_like}}" data-index="{{index}}" data-id="{{item.id}}">
-                <icon class="iconfont icondianzan {{item.is_like == 1?'fontColor':''}}"></icon>
+              <view class="{{item.is_like == 1?'fontColor':''}}" @tap="runLike" data-str="{{item.is_like}}" data-index="{{index}}" data-id="{{item.id}}">
+                <icon class="iconfont icondianzan"></icon>
                 {{item.like}}
               </view>
               <view>
@@ -64,8 +64,8 @@
               <view>
                 {{item.reading_volume}}阅读
               </view>
-              <view @tap="runLike" data-str="{{item.is_like}}" data-index="{{index}}" data-id="{{item.id}}">
-                <icon class="iconfont icondianzan {{item.is_like == 1?'fontColor':''}}"></icon>
+              <view class="{{item.is_like == 1?'fontColor':''}}" @tap="runLike" data-str="{{item.is_like}}" data-index="{{index}}" data-id="{{item.id}}">
+                <icon class="iconfont icondianzan"></icon>
                 {{item.like}}
               </view>
               <view>
@@ -98,8 +98,8 @@
           <view class="operating">
             <text>{{item.reading_volume}}阅读</text>
             <view class="iconItem">
-              <view @tap="runLike" data-str="{{item.is_like}}" data-index="{{index}}" data-id="{{item.id}}">
-                <icon class="iconfont icondianzan {{item.is_like == 1?'fontColor':''}}"></icon>
+              <view class="{{item.is_like == 1?'fontColor':''}}" @tap="runLike" data-str="{{item.is_like}}" data-index="{{index}}" data-id="{{item.id}}">
+                <icon class="iconfont icondianzan"></icon>
                 {{item.like}}
               </view>
               <view>
@@ -123,7 +123,7 @@
   import wepy from 'wepy'
   export default class UserUpWorks extends wepy.page {
      config = {
-      navigationBarTitleText: '已上传的商品'
+      navigationBarTitleText: '已上传的作品'
     }
     components = {
     }
@@ -164,7 +164,8 @@
           share: 100,
           video: '../image/daw.jpg'
         }
-      ]
+      ],
+      currentPage: 0
     }
 
     computed = {
@@ -224,24 +225,36 @@
         icon: 'loading',
         duration: 1000000
       });
+      if (this.pageData[this.type].next_page_url == '') {
+        wx.showToast({
+          title: "没有更多了",
+          icon: 'none',
+          duration: 2000
+        });
+        return false
+      }
       let type = this.type
       let nextPageUrl = this.pageData[type].next_page_url
       wx.request({
         url: nextPageUrl,
         method: 'GET',
         data: {
+          page: this.currentPage + 1,
+          page_size: 10,
           type: type
         },
         success: data => {
           data = this.$parent.null2str(data)
-          console.log(data)
+          // console.log(data)
           wx.hideToast()
           if (data.statusCode === 200) {
+            this.currentPage += 1
             let list = this.pageData[type].data
             let newList = data.data.data
             list = list.concat(newList)
             this.pageData[type].data = list
-            console.log(this.pageData)
+            this.pageData[type].next_page_url = data.data.next_page_url
+            // console.log(this.pageData)
             this.$apply()
           } else {
             wx.showModal({
@@ -267,7 +280,7 @@
           Authorization: this.$parent.globalData.token
         },
         data: {
-          page: 1,
+          page: this.currentPage + 1,
           page_size: 10,
           type: type
         },
@@ -276,6 +289,7 @@
           // console.log(data)
           wx.hideToast()
           if (data.statusCode === 200) {
+            this.currentPage += 1
             this.pageData[type] = data.data.data
             // console.log(this.pageData)
             this.$apply()
@@ -329,6 +343,8 @@
               duration: 2000
             });
             this.pageData[this.type].data[e.currentTarget.dataset.index].is_like = '1'
+            this.pageData[this.type].data[e.currentTarget.dataset.index].like += 1
+            this.$apply()
           } else {
             wx.showModal({
               title: '',

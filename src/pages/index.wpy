@@ -405,6 +405,7 @@ import configStore from '../store';
     setUserInfo() {
       wx.login({
         success: res => {
+          // console.log(res.code)
           wx.request({
             url: `${this.$parent.globalData.requestUrl}/weapp/authorizations`,
             method: 'POST',

@@ -54,11 +54,10 @@
           <text class="replyContent">{{item.content}}</text>
         </view>
       </repeat>
-      <lable class="listName" wx:if="{{pageDatap.recommend > 0}}">推荐列表</lable>
+      <!-- <lable class="listName" wx:if="{{pageDatap.recommend.length > 0}}">推荐列表</lable>
       <repeat for="{{pageDatap.recommend}}" item="item">
         <view class="item" @tap="dataSwitch" data-index="{{index}}">
           <view class="itemTop">
-            <!-- <image src="{{requestImgUrl + item.avatar}}" /> -->
             <view class="itemTopUser">
               <text>{{item.title}}</text>
               <text>{{item.updated_at}}</text>
@@ -66,7 +65,7 @@
           </view>
           <text class="replyContent">{{item.title}}</text>
         </view>
-      </repeat>
+      </repeat> -->
     </view>
   </view>
 </template>

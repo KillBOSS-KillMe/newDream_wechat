@@ -64,7 +64,7 @@
           <view class="itemL" @tap="dataSwitch" data-index="{{index}}">
             <text class="replyTitle">{{item.title}}</text>
             <view class="itemLIcon">
-              <text class="replyname">{{item.user.name}}</text>
+              <text class="replyname">{{item.reading_volume}}阅读</text>
               <view class="itemLIconItem">
                 <view>
                   <icon class="iconfont icondianzan"></icon>
@@ -428,6 +428,11 @@ video{
     align-items: center;
     .itemL{
       width: 435rpx;
+      height: 150rpx;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-direction: column;
       .replyTitle{
         overflow:hidden;
         text-overflow:ellipsis;
@@ -442,6 +447,7 @@ video{
         overflow: hidden;
       }
       .itemLIcon{
+        width: 100%;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -454,8 +460,7 @@ video{
           display: flex;
           justify-content: space-between;
           align-items: center;
-          height: 60rpx;
-          line-height: 60rpx;
+          height: auto;
           font-size: 24rpx;
           color: #333;
           

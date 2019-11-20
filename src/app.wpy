@@ -126,9 +126,9 @@ export default class extends wepy.app {
   globalData = {
     userInfo: {},
     // 接口请求路径
-    requestUrl: 'http://www.silk-road-dreams.com/api',
+    requestUrl: 'http://silkroad.beaconway.cn/api',
     // 图片路径
-    requestImgUrl: 'http://www.silk-road-dreams.com/uploads/',
+    requestImgUrl: 'http://silkroad.beaconway.cn/uploads/',
     mapKey: 'GCABZ-J4G64-2WKUX-DNQMK-MVCGK-OSFD4',
     apikey: '123456',
     token: '',
@@ -586,6 +586,9 @@ icon{
  } 
   .fontColor{
     color: red !important;
+    .iconfont{
+      color: red !important;
+    }
   }
 // 多选框样式
   checkbox .wx-checkbox-input {

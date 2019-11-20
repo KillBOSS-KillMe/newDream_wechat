@@ -32,7 +32,7 @@
           <view class="operating">
             <text>{{item.user.name}}</text>
             <view>
-              <view class="operatItem" @tap="runLike" data-id="{{item.id}}">
+              <view class="operatItem {{item.is_like == '1'?'fontColor':''}}" @tap="runLike" data-str="{{item.is_like}}" data-index="{{index}}" data-id="{{item.id}}">
                 <view class="iconfont icondianzan"></view>
                 {{item.like}}
               </view>
@@ -90,7 +90,7 @@
           <view class="operating">
             <text>{{item.user.name}}</text>
             <view>
-              <view class="operatItem" @tap="runLike" data-id="{{item.id}}">
+              <view class="operatItem {{item.is_like == '1'?'fontColor':''}}" @tap="runLike" data-str="{{item.is_like}}" data-index="{{index}}" data-id="{{item.id}}">
                 <view class="iconfont icondianzan"></view>
                 {{item.like}}
               </view>
@@ -116,7 +116,7 @@
           <view class="operating">
             <text>{{item.user.name}}</text>
             <view>
-              <view class="operatItem" @tap="runLike" data-id="{{item.id}}">
+              <view class="operatItem {{item.is_like == '1'?'fontColor':''}}" @tap="runLike" data-str="{{item.is_like}}" data-index="{{index}}" data-id="{{item.id}}">
                 <view class="iconfont icondianzan"></view>
                 {{item.like}}
               </view>
@@ -146,7 +146,7 @@
           <view class="operating">
             <text>{{item.user.name}}</text>
             <view>
-              <view class="operatItem" @tap="runLike" data-id="{{item.id}}">
+              <view class="operatItem {{item.is_like == '1'?'fontColor':''}}" @tap="runLike" data-str="{{item.is_like}}" data-index="{{index}}" data-id="{{item.id}}">
                 <view class="iconfont icondianzan"></view>
                 {{item.like}}
               </view>
@@ -254,7 +254,7 @@ import configStore from '../store';
     }
 
     onLoad(options) {
-      this.getIndexInfo()
+      // this.getIndexInfo()
       this.userInfo = this.$parent.globalData.userInfo
       this.requestImgUrl = this.$parent.globalData.requestImgUrl
       this.$apply()
@@ -311,7 +311,6 @@ import configStore from '../store';
         method: 'GET',
         success: data => {
           data = this.$parent.null2str(data)
-          console.log(data)
           wx.hideToast()
           if (data.statusCode === 200) {
             let list = this.pageDataNode.artile_data.data
@@ -396,6 +395,8 @@ import configStore from '../store';
                 this.setUserInfo()
               }
             })
+          } else {
+            this.setUserInfo()
           }
         }
       })
@@ -420,10 +421,9 @@ import configStore from '../store';
               data = this.$parent.null2str(data)
               wx.hideToast()
               if (data.statusCode === 201) {
-                let token = data.data.token_type + data.data.access_token
+                let token = data.data.token_type + ' ' + data.data.access_token
                 this.$parent.globalData.token = token
-                console.log(token)
-                // this.getIndexInfo()
+                this.getIndexInfo()
               } else {
                 wx.showModal({
                   title: '',
@@ -444,9 +444,12 @@ import configStore from '../store';
       wx.request({
         url: `${this.$parent.globalData.requestUrl}/index`,
         method: 'GET',
+        header: {
+          'content-type':'application/json',
+          Authorization: this.$parent.globalData.token
+        },
         success: data => {
           data = this.$parent.null2str(data)
-          console.log(data)
           wx.hideToast()
           if (data.statusCode === 200) {
             this.pageDataNode = data.data
@@ -462,6 +465,13 @@ import configStore from '../store';
     }
     // 点赞
     runLike(e) {
+      if (e.currentTarget.dataset.str == '1') {
+        wx.showToast({
+          title: "不可重复点赞",
+          icon: 'none'
+        });
+        return false
+      }
       wx.showToast({
         title: "拼命加载中...",
         icon: 'loading',
@@ -486,11 +496,14 @@ import configStore from '../store';
               duration: 2000
             });
             // 数据更新
-            this.getIndexInfo()
+            this.pageDataNode.artile_data.data[e.currentTarget.dataset.index].is_like = '1'
+            this.pageDataNode.artile_data.data[e.currentTarget.dataset.index].like += 1
+            this.$apply()
           } else {
-            wx.showModal({
-              title: '',
-              content: data.data.errmsg
+            wx.showToast({
+              title: "操作失败",
+              icon: 'none',
+              duration: 2000
             })
           }
         }

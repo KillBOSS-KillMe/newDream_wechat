@@ -34,8 +34,8 @@
               <view>
                 {{item.reading_volume}}阅读
               </view>
-              <view>
-                <icon class="iconfont icondianzan {{item.is_like == 1?'fontColor':''}}"></icon>
+              <view class="{{item.is_like == 1?'fontColor':''}}" @tap="runLike" data-str="{{item.is_like}}" data-index="{{index}}" data-id="{{item.id}}">
+                <icon class="iconfont icondianzan"></icon>
                 {{item.like}}
               </view>
               <view>
@@ -66,8 +66,8 @@
               <view>
                 {{item.reading_volume}}阅读
               </view>
-              <view>
-                <icon class="iconfont icondianzan {{item.is_like == 1?'fontColor':''}}"></icon>
+              <view class="{{item.is_like == 1?'fontColor':''}}" @tap="runLike" data-str="{{item.is_like}}" data-index="{{index}}" data-id="{{item.id}}">
+                <icon class="iconfont icondianzan"></icon>
                 {{item.like}}
               </view>
               <view>
@@ -100,8 +100,8 @@
               <view>
                 {{item.reading_volume}}阅读
               </view>
-              <view>
-                <icon class="iconfont icondianzan {{item.is_like == 1?'fontColor':''}}"></icon>
+              <view class="{{item.is_like == 1?'fontColor':''}}" @tap="runLike" data-str="{{item.is_like}}" data-index="{{index}}" data-id="{{item.id}}">
+                <icon class="iconfont icondianzan"></icon>
                 {{item.like}}
               </view>
               <view>
@@ -132,8 +132,8 @@
               <view>
                 {{item.reading_volume}}阅读
               </view>
-              <view>
-                <icon class="iconfont icondianzan {{item.is_like == 1?'fontColor':''}}"></icon>
+              <view class="{{item.is_like == 1?'fontColor':''}}" @tap="runLike" data-str="{{item.is_like}}" data-index="{{index}}" data-id="{{item.id}}">
+                <icon class="iconfont icondianzan"></icon>
                 {{item.like}}
               </view>
               <view>
@@ -170,8 +170,8 @@
           <view class="operating">
             <text>{{item.reading_volume}}阅读</text>
             <view class="iconItem">
-              <view>
-                <icon class="iconfont icondianzan {{item.is_like == 1?'fontColor':''}}"></icon>
+              <view class="{{item.is_like == 1?'fontColor':''}}" @tap="runLike" data-str="{{item.is_like}}" data-index="{{index}}" data-id="{{item.id}}">
+                <icon class="iconfont icondianzan"></icon>
                 {{item.like}}
               </view>
               <view>
@@ -202,8 +202,8 @@
           <view class="operating">
             <text>{{item.reading_volume}}阅读</text>
             <view class="iconItem">
-              <view>
-                <icon class="iconfont icondianzan {{item.is_like == 1?'fontColor':''}}"></icon>
+              <view class="{{item.is_like == 1?'fontColor':''}}" @tap="runLike" data-str="{{item.is_like}}" data-index="{{index}}" data-id="{{item.id}}">
+                <icon class="iconfont icondianzan"></icon>
                 {{item.like}}
               </view>
               <view>
@@ -340,6 +340,8 @@
           wx.hideToast()
           if (data.statusCode === 200) {
             let list = this.pageData[type].data
+            // 更新历史数据下一页的路径
+            this.pageData[type].next_page_url = data.data.next_page_url
             let newList = data.data.data
             list = list.concat(newList)
             this.pageData[type].data = list
@@ -430,6 +432,58 @@
         icon: 'loading',
         duration: 1000000
       });
+    }
+    // 点赞
+    runLike(e) {
+      if (e.currentTarget.dataset.str == '1') {
+        wx.showToast({
+          title: "不可重复点赞",
+          icon: 'none'
+        });
+        return false
+      }
+      wx.showToast({
+        title: "拼命加载中...",
+        icon: 'loading',
+        duration: 1000000
+      });
+      let url = `/weapp/users_like/new_image/${e.currentTarget.dataset.id}`
+      wx.request({
+        url: `${this.$parent.globalData.requestUrl + url}`,
+        method: 'PUT',
+        header: {
+          'content-type':'application/json',
+          Authorization: this.$parent.globalData.token
+        },
+        success: data => {
+          data = this.$parent.null2str(data)
+          // console.log(data)
+          wx.hideToast()
+          if (data.data.status_code === 201) {
+            wx.showToast({
+              title: "操作成功",
+              icon: 'success',
+              duration: 2000
+            });
+            if (this.searchKey == '') {
+              this.pageData[this.type][e.currentTarget.dataset.index].is_like = '1'
+              this.pageData[this.type][e.currentTarget.dataset.index].like += 1
+              console.log(this.pageData[this.type][e.currentTarget.dataset.index])
+            } else {
+              this.searchData[this.type][e.currentTarget.dataset.index].is_like = '1'
+              this.searchData[this.type][e.currentTarget.dataset.index].like += 1
+              console.log(this.searchData[this.type][e.currentTarget.dataset.index])
+            }
+            this.$apply()
+          } else {
+            wx.showToast({
+              title: "操作失败",
+              icon: 'none',
+              duration: 2000
+            })
+          }
+        }
+      })
     }
   }
 </script>

@@ -17,7 +17,7 @@
           <view class="operating">
             <view>{{item.newImage.reading_volume}}阅读</view>
             <view>
-              <view class="operatItem"  @tap="goDetails" data-index="{{index}}">
+              <view class="operatItem {{item.knowledge.is_like == 1?'fontColor':''}}" @tap="runLike" data-str="{{item.knowledge.is_like}}" data-index="{{index}}" data-id="{{item.id}}">
                 <view class="iconfont icondianzan"></view>
                 {{item.newImage.like}}
               </view>
@@ -45,7 +45,7 @@
           <view class="operating">
             <text>{{item.newImage.name}}</text>
             <view>
-              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+              <view class="operatItem {{item.knowledge.is_like == 1?'fontColor':''}}" @tap="runLike" data-str="{{item.knowledge.is_like}}" data-index="{{index}}" data-id="{{item.id}}">
                 <view class="iconfont icondianzan"></view>
                 {{item.newImage.like}}
               </view>
@@ -69,7 +69,7 @@
           <view class="operating">
             <text>{{item.newImage.name}}</text>
             <view>
-              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+              <view class="operatItem {{item.knowledge.is_like == 1?'fontColor':''}}" @tap="runLike" data-str="{{item.knowledge.is_like}}" data-index="{{index}}" data-id="{{item.id}}">
                 <view class="iconfont icondianzan"></view>
                 {{item.newImage.like}}
               </view>
@@ -97,7 +97,7 @@
           <view class="operating">
             <text>{{item.newImage.user.name}}</text>
             <view>
-              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+              <view class="operatItem {{item.knowledge.is_like == 1?'fontColor':''}}" @tap="runLike" data-str="{{item.knowledge.is_like}}" data-index="{{index}}" data-id="{{item.id}}">
                 <view class="iconfont icondianzan"></view>
                 {{item.newImage.like}}
               </view>
@@ -123,7 +123,7 @@
           <view class="operating">
             <view>{{item.knowledge.reading_volume}}阅读</view>
             <view>
-              <view class="operatItem"  @tap="goDetails" data-index="{{index}}">
+              <view class="operatItem {{item.knowledge.is_like == 1?'fontColor':''}}" @tap="runLike" data-str="{{item.knowledge.is_like}}" data-index="{{index}}" data-id="{{item.id}}">
                 <view class="iconfont icondianzan"></view>
                 {{item.knowledge.like}}
               </view>
@@ -151,7 +151,7 @@
           <view class="operating">
             <text>{{item.knowledge.name}}</text>
             <view>
-              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+              <view class="operatItem {{item.knowledge.is_like == 1?'fontColor':''}}" @tap="runLike" data-str="{{item.knowledge.is_like}}" data-index="{{index}}" data-id="{{item.id}}">
                 <view class="iconfont icondianzan"></view>
                 {{item.knowledge.like}}
               </view>
@@ -175,7 +175,7 @@
           <view class="operating">
             <text>{{item.knowledge.name}}</text>
             <view>
-              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+              <view class="operatItem {{item.knowledge.is_like == 1?'fontColor':''}}" @tap="runLike" data-str="{{item.knowledge.is_like}}" data-index="{{index}}" data-id="{{item.id}}">
                 <view class="iconfont icondianzan"></view>
                 {{item.knowledge.like}}
               </view>
@@ -203,7 +203,7 @@
           <view class="operating">
             <text>{{item.knowledge.user.name}}</text>
             <view>
-              <view class="operatItem" @tap="goDetails" data-index="{{index}}">
+              <view class="operatItem {{item.knowledge.is_like == 1?'fontColor':''}}" @tap="runLike" data-str="{{item.knowledge.is_like}}" data-index="{{index}}" data-id="{{item.id}}">
                 <view class="iconfont icondianzan"></view>
                 {{item.knowledge.like}}
               </view>
@@ -385,6 +385,13 @@ import configStore from '../store';
     }
     // 点赞
     runLike(e) {
+      if (e.currentTarget.dataset.str == '1') {
+        wx.showToast({
+          title: "不可重复点赞",
+          icon: 'none'
+        });
+        return false
+      }
       wx.showToast({
         title: "拼命加载中...",
         icon: 'loading',
@@ -400,7 +407,6 @@ import configStore from '../store';
         },
         success: data => {
           data = this.$parent.null2str(data)
-          // console.log(data)
           wx.hideToast()
           if (data.data.status_code === 201) {
             wx.showToast({
@@ -408,12 +414,14 @@ import configStore from '../store';
               icon: 'success',
               duration: 2000
             });
-            // 数据更新
-            this.getIndexInfo()
+            this.pageDataNode.data[e.currentTarget.dataset.index].is_like = '1'
+            this.pageDataNode.data[e.currentTarget.dataset.index].like += 1
+            this.$apply()
           } else {
-            wx.showModal({
-              title: '',
-              content: data.data.errmsg
+            wx.showToast({
+              title: "操作失败",
+              icon: 'none',
+              duration: 2000
             })
           }
         }

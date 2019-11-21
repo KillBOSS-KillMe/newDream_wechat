@@ -22,8 +22,8 @@
           <text>{{pageDatap.user.name}}</text>
         </view>
         <view class="videoIcon">
-          <view data-id="{{pageDatap.id}}" data-str="{{pageDatap.is_like}}" @tap="runLike">
-            <icon class="iconfont icondianzan {{pageDatap.is_like == 1?'fontColor':''}}"></icon>
+          <view class="{{pageDatap.is_like == 1?'fontColor':''}}" data-id="{{pageDatap.id}}" data-str="{{pageDatap.is_like}}" @tap="runLike">
+            <icon class="iconfont icondianzan"></icon>
             {{pageDatap.like}}
           </view>
           <view data-id="{{pageDatap.id}}" @tap="commentShow">

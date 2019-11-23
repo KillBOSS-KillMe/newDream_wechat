@@ -27,9 +27,9 @@
     </view>
     <view class="videoList" wx:if="{{type == 0}}">
       <repeat for="{{pageData[0].data}}" item="item">
-        <view class="item">
+        <view class="item" data-id="{{item.id}}" @tap="goVideo">
           <view class="info">
-            <view class="title" data-id="{{item.id}}" @tap="goVideo">{{item.title}}</view>
+            <view class="title">{{item.title}}</view>
             <view class="num">
               <view>
                 {{item.reading_volume}}阅读
@@ -49,18 +49,18 @@
               </view>
             </view>
           </view>
-          <view class="img" data-id="{{item.id}}" @tap="goVideo">
+          <view class="img">
             <video id="myVideo" src="{{requestImgUrl + item.video_path}}" enable-danmu danmu-btn controls></video>
-            <icon class="iconfont iconzhuanfa"></icon>
+            <!-- <icon class="iconfont iconzhuanfa"></icon> -->
           </view>
         </view>
       </repeat>
     </view>
     <view class="videoList" wx:if="{{type == 1}}">
       <repeat for="{{pageData[1].data}}" item="item">
-        <view class="item">
+        <view class="item" data-id="{{item.id}}" @tap="goVideo">
           <view class="info">
-            <view class="title" data-id="{{item.id}}" @tap="goVideo">{{item.title}}</view>
+            <view class="title">{{item.title}}</view>
             <view class="num">
               <view>
                 {{item.reading_volume}}阅读
@@ -80,19 +80,19 @@
               </view>
             </view>
           </view>
-          <view class="img" data-id="{{item.id}}" @tap="goVideo">
+          <view class="img">
             <video id="myVideo" src="{{requestImgUrl + item.video_path}}" enable-danmu danmu-btn controls></video>
-            <icon class="iconfont iconzhuanfa"></icon>
+            <!-- <icon class="iconfont iconzhuanfa"></icon> -->
           </view>
         </view>
       </repeat>
     </view>
     <view class="imageList" wx:if="{{type == 2}}">
       <repeat for="{{pageData[2].data}}" item="item">
-        <view class="item">
-          <view class="title" data-id="{{item.id}}" @tap="goImage">{{item.title}}</view>
+        <view class="item" data-id="{{item.id}}" @tap="goImage">
+          <view class="title">{{item.title}}</view>
           <view class="con"></view>
-          <view class="imgList" data-id="{{item.id}}" @tap="goImage">
+          <view class="imgList">
             <repeat for="{{item.images}}" item="imgItem">
               <image src="{{requestImgUrl + imgItem}}" />
             </repeat>
@@ -126,7 +126,7 @@
   import wepy from 'wepy'
   export default class UserUpWorks extends wepy.page {
      config = {
-      navigationBarTitleText: '已上传的商品'
+      navigationBarTitleText: '已上传的作品'
     }
     components = {
     }
@@ -136,7 +136,7 @@
       userInfo: {},
       requestImgUrl: '',
       pageData: [null, null, null],
-      type: 1,
+      type: 0,
       videoList: [
         {
           title: '标题标题标题标题标题标题标题',

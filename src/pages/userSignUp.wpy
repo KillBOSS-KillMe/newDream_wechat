@@ -187,6 +187,7 @@
   height: auto;
   padding: 30rpx;
   font-size: 30rpx;
+  font-weight: 600;
   color: #333;
 }
 .infoList{

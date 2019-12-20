@@ -95,7 +95,7 @@
         id_card: '',               // 身份证号
         contact: '',               // 联系方式
         address: '',               // 地址
-        sex: '',                   // 性别
+        sex: '1',                   // 性别
         school: '',                // 学校
         teacher: '',               // 指导老师
         teacher_contact: '',       // 指导老师联系方式
@@ -117,14 +117,13 @@
         for (let i = 0; i < genderList.length; ++i) {
           let checks = 'genderList[' + i + '].checks'
           if (i == selected[selected.length - 1]) {
-            this.setData({
-              [checks]: true
-            })
+            genderList[i].checks = true
           } else {
-            this.setData({
-              [checks]: false
-            })
+            genderList[i].checks = false
           }
+
+          this.genderList = genderList
+          
           if (genderList[i].checks) {
             this.formNode['sex'] = genderList[i].id
           }
@@ -150,6 +149,7 @@
     }
     submit() {
       let formNode = this.formNode
+      console.log(formNode)
       for( let key in formNode ) {
         if (formNode[key] == '') {
           wx.showToast({

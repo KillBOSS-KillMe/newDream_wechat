@@ -165,6 +165,11 @@
         </view>
       </repeat>
     </view>
+    <view class="technicalSupport" wx:if="{{logoShow}}">
+      <image src="../image/technicalSupport.png" />
+      <text>西安贝肯伟网络提供技术支持</text>
+      <text></text>
+    </view>
     <nav @childFn.user="goPage" @childFnOrReturn.user="goModifyUserInfo" />
     <button open-type="getUserInfo" id='getUserInfo' wx:if="{{userInfoButtonShow}}" lang="zh_CN" @getuserinfo="onGetUserInfo"></button>
   </view>
@@ -185,6 +190,7 @@ import configStore from '../store';
     mixins = []
 
     data = {
+      logoShow: false,
       pageDataNode: null,
       requestImgUrl: '',
       userInfo: {},
@@ -284,8 +290,15 @@ import configStore from '../store';
         wx.showToast({
           title: "没有更多了",
           icon: 'none',
-          duration: 2000
+          duration: 2000,
+          success:() => {
+            setTimeout(() =>{
+              this.logoShow = true
+              this.$apply()
+            }, 1000)
+          }
         });
+        
       }
     }
     // 下拉刷新
@@ -513,6 +526,10 @@ import configStore from '../store';
   }
 </script>
 <style lang="less">
+page {
+  position: relative;
+  padding-bottom: 300rpx;
+}
 .swiper {
   width: 690rpx;
   height: 315rpx;

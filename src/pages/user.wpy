@@ -24,7 +24,13 @@
         </view>
       </repeat>
     </view>
-    <image class="technicalSupport" src="../image/technicalSupport.png" />
+    <view class="technicalSupport">
+      <image src="../image/technicalSupport.png" />
+      <text>西安贝肯伟网络提供技术支持</text>
+      <text></text>
+    </view>
+    
+    <!-- 西安教育电视台 -->
     <nav @childFn.user="goPage" @childFnOrReturn.user="goModifyUserInfo" />
   </view>
 </template>

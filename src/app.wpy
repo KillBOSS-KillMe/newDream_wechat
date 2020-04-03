@@ -398,6 +398,9 @@ export default class extends wepy.app {
 }
 </script>
 <style lang="less">
+scroll-view{
+  height: auto;
+}
 // 技术支持
 .technicalSupport {
   position: absolute;

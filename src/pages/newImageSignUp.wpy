@@ -6,6 +6,7 @@
  */
 
 <template>
+<scroll-view scroll-y="hidden">
   <view>
     <view class="list">
       <view class="item">
@@ -121,6 +122,7 @@
       <view @tap="submit">提交</view>
     </view>
   </view>
+</scroll-view>
 </template>
 
 <script>

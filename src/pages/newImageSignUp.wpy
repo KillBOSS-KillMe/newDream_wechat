@@ -11,8 +11,8 @@
     <view class="list">
       <view class="item">
         <label>创作时间</label>
-        <picker mode="date" value="{{date}}" start="2015-09-01" end="2017-09-01" bindchange="bindDateChange">
-          <input value="{{formNode.creation_time}}" type="text" placeholder="请选择创作时间" >
+        <picker mode="date" value="{{date}}" start="2010-09-01" end="{{endTime}}" bindchange="bindDateChange">
+          <input value="{{formNode.creation_time}}" type="text" placeholder="请选择时间" disabled >
         </picker>
         
       </view>
@@ -128,6 +128,7 @@
 <script>
   import wepy from 'wepy'
   import check from '../mixins/check'
+  var date = new Date();
   export default class NewImageSignUp extends wepy.page {
      config = {
       navigationBarTitleText: '报名通道'
@@ -137,6 +138,7 @@
     mixins = [check]
 
     data = {
+      endTime: '',
       requestImgUrl: '',
       notice: [
         '作品必须为创作者原创，一旦发现为抄袭，取消参赛资格。',
@@ -282,6 +284,10 @@
     }
 
     onLoad(options) {
+      var year = date.getFullYear();      　　 //年
+      var month = date.getMonth() + 1;     //月
+      var day = date.getDate();            　　//日
+      this.endTime = `${year}-${month}-${day}`
       this.requestImgUrl = this.$parent.globalData.requestImgUrl
       this.$apply()
     }

@@ -222,15 +222,15 @@
           wx.hideToast()
           if (data.data.status_code === 201) {
             wx.showToast({
-              title: "操作成功",
+              title: "评论已提交审核，审核通过后显示",
               icon: 'success',
-              duration: 2000
+              duration: 3000
             });
             this.commentDomShow = false
             this.$apply()
             // 数据更新
-            this.getData()
-            this.getComment()
+            // this.getData()
+            // this.getComment()
           } else {
             wx.showModal({
               title: '',

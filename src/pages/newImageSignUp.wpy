@@ -440,10 +440,22 @@
           wx.hideToast()
           console.log(data)
           if (data.statusCode === 422) {
+            let message = ''
+            let messageNode = data.data.errors
+            for (let key in messageNode) {
+              console.log(messageNode[key])
+              for (let i = 0; i < messageNode[key].length; i++) {
+                console.log(messageNode[key][i])
+                message += messageNode[key][i]
+                message += ','
+              }
+            }
+            message = message.substr(0, message.length - 1);
             wx.showToast({
-              title: '提交失败',
+              // title: '提交失败',
+              title: message,
               icon: 'none',
-              duration: 2000
+              duration: 3000
             });
             return false
           }
@@ -521,7 +533,7 @@
           Promise.all(res.tempFiles.map(item => {
             return new Promise((resolve, reject) => {
               console.log(item)
-              if (item.size > 5000000) {
+              if (item.size > 10000000) {
               // if (item.size > 500) {
                 wx.showToast({
                   title: '上传图片不能大于5兆',

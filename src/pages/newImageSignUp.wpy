@@ -146,7 +146,7 @@
         '作品格式为JEPG文件，长边不小于800像素。',
         '组照提交数量最多不超过8张。',
         '作品一律不得加入边框、水印、签名等修饰。',
-        '没人上报参赛作品不得超过三件（组照算一件）。'
+        '每人上报参赛作品不得超过三件（组照算一件）。'
       ],
       genderList: [
         {name: '男', id: '1', checks: false},
@@ -574,7 +574,9 @@
 page{
   border-top: 1rpx solid #D5D5D5;
 }
-
+.sub {
+  position: relative;
+}
 .list{
   width: 750rpx;
   height: auto;
@@ -636,7 +638,7 @@ page{
   width: 690rpx;
   padding: 0 30rpx;
   height: auto;
-  margin-bottom: 200rpx;
+  // margin-bottom: 200rpx;
   .title{
     font-size: 30rpx;
     font-weight: 600;

@@ -27,7 +27,7 @@
         <view class="item type1" wx:if="{{item.artile_type == 3}}">
           <view class="title" @tap="goDetails" data-index="{{index}}">{{item.title}}</view>
           <view class="articleCon" @tap="goDetails" data-index="{{index}}">
-            <rich-text nodes="{{item.content}}"></rich-text>
+            <rich-text class="richtext" nodes="{{item.content}}"></rich-text>
           </view>
           <view class="operating">
             <text>{{item.user.name}}</text>
@@ -58,7 +58,7 @@
             <view class="con">
               <view class="title">{{item.type}}---111{{item.title}}</view>
               <view class="articleCon">
-                <rich-text nodes="{{item.content}}"></rich-text>
+                <rich-text class="richtext" nodes="{{item.content}}"></rich-text>
               </view>
             </view>
             <image src="{{requestImgUrl + item.images[0]}}" />
@@ -85,7 +85,7 @@
           <view class="title" @tap="goDetails" data-index="{{index}}">{{item.title}}</view>
           <video @tap="goDetails" data-index="{{index}}" id="myVideo" src="{{requestImgUrl + item.video_path}}" danmu-list="{{danmuList}}" enable-danmu danmu-btn controls></video>
           <view class="articleCon" @tap="goDetails" data-index="{{index}}">
-            <rich-text nodes="{{item.content}}"></rich-text>
+            <rich-text class="richtext" nodes="{{item.content}}"></rich-text>
           </view>
           <view class="operating">
             <text>{{item.user.name}}</text>
@@ -111,7 +111,7 @@
           <view class="title" @tap="goDetails" data-index="{{index}}">{{item.title}}</view>
           <video @tap="goDetails" data-index="{{index}}" id="myVideo" src="{{requestImgUrl + item.video_path}}" danmu-list="{{danmuList}}" enable-danmu danmu-btn controls></video>
           <view class="articleCon">
-            <rich-text nodes="{{item.content}}"></rich-text>
+            <rich-text class="richtext" nodes="{{item.content}}"></rich-text>
           </view>
           <view class="operating">
             <text>{{item.user.name}}</text>
@@ -141,7 +141,7 @@
             </repeat>
           </view>
           <view class="articleCon">
-            <rich-text nodes="{{item.content}}"></rich-text>
+            <rich-text class="richtext" nodes="{{item.content}}"></rich-text>
           </view>
           <view class="operating">
             <text>{{item.user.name}}</text>
@@ -181,7 +181,7 @@
 import configStore from '../store';
   export default class Index extends wepy.page {
     config = {
-      navigationBarTitleText: '丝路首页'
+      navigationBarTitleText: '丝路新梦想'
     }
     components = {
       nav: nav
@@ -409,7 +409,7 @@ import configStore from '../store';
               }
             })
           } else {
-            this.setUserInfo()
+            this.getIndexInfo()
           }
         }
       })
@@ -418,7 +418,6 @@ import configStore from '../store';
     setUserInfo() {
       wx.login({
         success: res => {
-          // console.log(res.code)
           wx.request({
             url: `${this.$parent.globalData.requestUrl}/weapp/authorizations`,
             method: 'POST',
@@ -433,17 +432,21 @@ import configStore from '../store';
             },
             success: data => {
               data = this.$parent.null2str(data)
+              console.log(data)
               wx.hideToast()
-              if (data.statusCode === 201) {
-                let token = data.data.token_type + ' ' + data.data.access_token
+              let token = data.data.token_type + ' ' + data.data.access_token
                 this.$parent.globalData.token = token
                 this.getIndexInfo()
-              } else {
-                wx.showModal({
-                  title: '',
-                  content: data.data.errmsg
-                })
-              }
+              // if (data.statusCode === 201) {
+              //   let token = data.data.token_type + ' ' + data.data.access_token
+              //   this.$parent.globalData.token = token
+              //   this.getIndexInfo()
+              // } else {
+              //   wx.showModal({
+              //     title: '',
+              //     content: data.data.errmsg
+              //   })
+              // }
             }
           })
         }
@@ -529,6 +532,10 @@ import configStore from '../store';
 page {
   position: relative;
   padding-bottom: 300rpx;
+}
+.richtext {
+  width: 90%;
+  // padding: 0 5%;
 }
 .swiper {
   width: 690rpx;
